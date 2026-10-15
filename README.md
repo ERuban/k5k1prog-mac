@@ -1,9 +1,27 @@
-# K5K1 Prog
+<p align="center">
+    <a href="https://github.com/ERuban/k5k1prog-mac/releases/latest"><img alt="K5K1 Prog"
+         src="Resources/AppIcon.iconset/icon_128x128@2x.png" width="128"
+    /></a>
+</p>
 
-[![Downloads](https://img.shields.io/github/downloads/ERuban/k5k1prog-mac/total.svg?style=flat-square)](https://github.com/ERuban/k5k1prog-mac/releases)
-[![Release](https://img.shields.io/github/v/release/ERuban/k5k1prog-mac.svg?style=flat-square)](https://github.com/ERuban/k5k1prog-mac/releases/latest)
-[![Tests](https://img.shields.io/github/actions/workflow/status/ERuban/k5k1prog-mac/tests.yml?branch=main&style=flat-square&label=tests)](https://github.com/ERuban/k5k1prog-mac/actions/workflows/tests.yml)
-[![Donate](https://img.shields.io/badge/Donate-F15F2C?style=flat-square)](https://boosty.to/eruban/donate)
+<h1 align="center">K5K1 Prog</h1>
+
+<p align="center">Back up, restore and flash Quansheng UV-K5 / UV-K5 V3 / UV-K1 radios on macOS</p>
+
+<div align="center">
+
+[![Download](https://img.shields.io/badge/Download-black?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/ERuban/k5k1prog-mac/releases/latest)
+[![Donate](https://img.shields.io/badge/Donate-F15F2C?style=for-the-badge&logo=boosty&logoColor=white)](https://boosty.to/eruban/donate)
+
+[![Release](https://img.shields.io/github/v/release/ERuban/k5k1prog-mac?style=flat)](https://github.com/ERuban/k5k1prog-mac/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/ERuban/k5k1prog-mac/total?style=flat)](https://github.com/ERuban/k5k1prog-mac/releases)
+[![Tests](https://img.shields.io/github/actions/workflow/status/ERuban/k5k1prog-mac/tests.yml?branch=main&style=flat&label=tests)](https://github.com/ERuban/k5k1prog-mac/actions/workflows/tests.yml)
+[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue?style=flat)](LICENSE)
+![macOS 12+](https://img.shields.io/badge/macOS-12%2B-lightgrey?style=flat&logo=apple)
+
+</div>
+
+<br />
 
 macOS port of **k5prog-win v0.1.26** (OneOfEleven), with improvements.
 
