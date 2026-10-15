@@ -1,0 +1,84 @@
+
+'COM6' opened at 38400 Baud
+
+Downloading configuration data from the radio ..
+
+sending k5_hello ..
+
+  firmware version: '*karina-21.08'
+has custom AES key: no
+ is in lock screen: no
+         challenge: 42 3D 28 55
+
+read_config  offset 0000  len 128
+read_config  offset 0080  len 128
+serial error: connect GetCommModemStatus [50] Request not supported.
+
+read_config  offset 0100  len 128
+read_config  offset 0180  len 128
+read_config  offset 0200  len 128
+read_config  offset 0280  len 128
+read_config  offset 0300  len 128
+read_config  offset 0380  len 128
+read_config  offset 0400  len 128
+read_config  offset 0480  len 128
+read_config  offset 0500  len 128
+read_config  offset 0580  len 128
+read_config  offset 0600  len 128
+read_config  offset 0680  len 128
+read_config  offset 0700  len 128
+read_config  offset 0780  len 128
+read_config  offset 0800  len 128
+read_config  offset 0880  len 128
+read_config  offset 0900  len 128
+read_config  offset 0980  len 128
+read_config  offset 0A00  len 128
+read_config  offset 0A80  len 128
+read_config  offset 0B00  len 128
+read_config  offset 0B80  len 128
+read_config  offset 0C00  len 128
+read_config  offset 0C80  len 128
+read_config  offset 0D00  len 128
+read_config  offset 0D80  len 128
+read_config  offset 0E00  len 128
+read_config  offset 0E80  len 128
+read_config  offset 0F00  len 128
+read_config  offset 0F80  len 128
+read_config  offset 1000  len 128
+read_config  offset 1080  len 128
+read_config  offset 1100  len 128
+read_config  offset 1180  len 128
+read_config  offset 1200  len 128
+read_config  offset 1280  len 128
+read_config  offset 1300  len 128
+read_config  offset 1380  len 128
+read_config  offset 1400  len 128
+read_config  offset 1480  len 128
+read_config  offset 1500  len 128
+read_config  offset 1580  len 128
+read_config  offset 1600  len 128
+read_config  offset 1680  len 128
+read_config  offset 1700  len 128
+read_config  offset 1780  len 128
+read_config  offset 1800  len 128
+read_config  offset 1880  len 128
+read_config  offset 1900  len 128
+read_config  offset 1980  len 128
+read_config  offset 1A00  len 128
+read_config  offset 1A80  len 128
+read_config  offset 1B00  len 128
+read_config  offset 1B80  len 128
+read_config  offset 1C00  len 128
+read_config  offset 1C80  len 128
+read CONFIG complete
+
+'COM6' closed
+
+serial error: EscapeCommFunction [50] Request not supported.
+
+serial error: GetCommModemStatus [50] Request not supported.
+
+serial error: EscapeCommFunction [50] Request not supported.
+
+serial error: GetCommModemStatus [50] Request not supported.
+

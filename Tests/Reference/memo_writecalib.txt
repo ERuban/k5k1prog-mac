@@ -1,0 +1,34 @@
+
+Loaded 512 (0x0200) bytes (max 0xF000) from 'C:\k5\29.01.26calib_sql.bin'
+
+'COM6' opened at 38400 Baud
+
+Uploading calibration data to the radio ..
+
+sending k5_hello ..
+
+  firmware version: '*karina-21.08'
+has custom AES key: no
+ is in lock screen: no
+         challenge: 42 3D 28 55
+
+writing config area ..
+write_config  offset 1E00  len 128
+serial error: connect GetCommModemStatus [50] Request not supported.
+
+write_config  offset 1E80  len 128
+write_config  offset 1F00  len 128
+write_config  offset 1F80  len 128
+write CALIBRATION complete
+
+sending reboot radio ..
+
+'COM6' closed
+serial error: EscapeCommFunction [50] Request not supported.
+
+serial error: GetCommModemStatus [50] Request not supported.
+
+serial error: EscapeCommFunction [50] Request not supported.
+
+serial error: GetCommModemStatus [50] Request not supported.
+
