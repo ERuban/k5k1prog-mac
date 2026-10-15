@@ -1,0 +1,4 @@
+# Sparkle EdDSA public key (SUPublicEDKey). Generate once with
+#   .build/artifacts/sparkle/Sparkle/bin/generate_keys
+# (the private key stays in the login keychain) and put the printed public key below.
+rNS/IUG5NzW/rEIqgHXZDpxFanOFLUF71JJCZ1SeZ7g=
