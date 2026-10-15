@@ -75,6 +75,11 @@ Download `K5K1-Prog-<version>.dmg` from [Releases](../../releases), open it and 
 to **Applications**. The app is signed with a Developer ID and notarized by Apple, so it opens
 without warnings. A `.zip` with the same app is attached too.
 
+From version 1.1.0 on the app updates itself: it checks GitHub for a new release once a day (and on
+**K5K1 Prog → Check for Updates…**), shows what's new and installs it with one click
+([Sparkle](https://sparkle-project.org), updates are EdDSA-signed). Version 1.0.0 has no updater, so
+install 1.1.0 by hand once.
+
 Or build from source (needs the Xcode Command Line Tools, Swift 5.9 or newer):
 
 ```sh
@@ -131,7 +136,7 @@ Everything else matches the original: buttons, order of operations, timeouts (he
 write 2 s, flash 3 s), retries, checks, every log line and message box text, the protocol (frames,
 XOR tables, CRC, session id `6A 39 57 64`, 128-byte config blocks, 256-byte flash blocks, the
 bootloader version fix-up `4.00.07` → `*.00.07`), the ini format, the hidden Read ADC / Read RSSI
-buttons, Esc to abort a transfer, and the app icon taken from `k5prog_win.exe`.
+buttons and Esc to abort a transfer.
 
 ## UV-K5 V3 / UV-K1 firmware upload
 
@@ -171,18 +176,22 @@ swift run k5emu --mode boot --bl-version 7.03.01 --link /tmp/k5com   # simulated
 - GitHub Actions (`.github/workflows/tests.yml`) builds, runs the tests and builds the app bundle on
   every push and pull request.
 
-Release: `./scripts/release.sh` runs the tests, builds the universal app, signs it with the
-"Developer ID Application" certificate from the keychain (hardened runtime), notarizes and staples
-the app and the `.dmg`, and writes `dist/K5K1-Prog-<version>.{dmg,zip}` and `SHA256SUMS.txt`. It
-needs a notarytool keychain profile (`xcrun notarytool store-credentials k5k1prog …`, see the
-script header) and publishes nothing. The version comes from `K5.version` in
-`Sources/K5Core/Constants.swift`.
+Release: bump `K5.version` in `Sources/K5Core/Constants.swift`, write `release-notes/<version>.md`,
+then `./scripts/release.sh`. It runs the tests, builds the universal app, signs it and the embedded
+Sparkle framework with the "Developer ID Application" certificate (hardened runtime), notarizes and
+staples the app and the `.dmg`, signs the update `.zip` with the Sparkle EdDSA key and writes
+`dist/` (`.dmg`, `.zip`, `appcast.xml`, `SHA256SUMS.txt`, `RELEASE_NOTES.md`). Attach all of them
+to the GitHub release: installed copies read `releases/latest/download/appcast.xml`. One-time setup
+(notarytool profile, Sparkle key in `Resources/SparklePublicKey.txt`) is in the script header. The
+script publishes nothing.
 
 Test hooks (not needed for normal use):
 
 - `K5PROG_EXTRA_PORTS=/tmp/k5com` adds device paths to the port list (for `k5emu --link /tmp/k5com`).
 - `K5PROG_UITEST=readcalib,writecalib,quit` with `K5PROG_UITEST_OPEN/SAVE/MEMO` drives the real app
   without dialogs.
+- `K5PROG_SPARKLE_FEED=<url>` points the updater at another appcast (local update tests,
+  `open --env K5PROG_SPARKLE_FEED=… "K5K1 Prog.app"`).
 
 ## Support
 
@@ -192,6 +201,7 @@ app signed and notarized, and for testing on real radios.
 
 ## Credits
 
+- K5K1 Prog by [Evgeny Ruban](https://github.com/ERuban).
 - [k5prog-win](https://github.com/OneOfEleven/k5prog-win) by OneOfEleven, the program this app is a
   port of (GPL v3).
 - [k5prog](https://github.com/sq5bpf/k5prog) by Jacek Lipkowski SQ5BPF, whose radio communication
@@ -201,7 +211,7 @@ app signed and notarized, and for testing on real radios.
 
 ## License
 
-GPL v3, same as k5prog-win and k5prog. See [LICENSE](LICENSE).
+GPL v3, same as k5prog-win and k5prog. See [LICENSE](LICENSE). Copyright © 2026 Evgeny Ruban.
 
 K5K1 Prog is a modified version of k5prog-win: the C++/VCL Windows program was rewritten in Swift for
 macOS, and UV-K5 V3 / UV-K1 firmware upload and the safety fixes listed above were added (2026).

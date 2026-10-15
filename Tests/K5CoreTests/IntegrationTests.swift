@@ -5,6 +5,8 @@
 // (https://github.com/sq5bpf/k5prog). Rewritten in Swift for macOS and extended
 // (UV-K5 V3 / UV-K1 firmware upload, safety fixes), 2026.
 //
+// Copyright (C) 2026 Evgeny Ruban (changes and the macOS app).
+//
 // This program is free software: you can redistribute it and/or modify it under the
 // terms of the GNU General Public License as published by the Free Software Foundation,
 // either version 3 of the License, or (at your option) any later version.
