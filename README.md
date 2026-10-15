@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/ERuban/k5k1prog-mac/releases/latest"><img alt="K5K1 Prog"
-         src="Resources/AppIcon.iconset/icon_128x128@2x.png" width="128"
+         src="Resources/logo.svg" width="160"
     /></a>
 </p>
 
