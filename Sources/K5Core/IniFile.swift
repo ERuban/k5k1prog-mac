@@ -103,25 +103,6 @@ public final class IniFile {
         FileManager.default.createFile(atPath: path, contents: Data(text.utf8))
     }
 
-    /// Where the ini lives: `<appDir>/<name>` like the original
-    /// (ChangeFileExt(Application->ExeName, ".ini")), as long as that folder is writable
-    /// (saveSettings() deletes and re-creates the file). Otherwise, for example for an app
-    /// started from a translocated (read-only) path or from /Applications without write
-    /// access, `<supportDir>/<name>`, seeded once from the ini next to the app if there is one.
-    public static func location(appDir: String, name: String, supportDir: String) -> String {
-        let fm = FileManager.default
-        let candidate = (appDir as NSString).appendingPathComponent(name)
-        if !appDir.contains("/AppTranslocation/") && fm.isWritableFile(atPath: appDir) {
-            return candidate
-        }
-        try? fm.createDirectory(atPath: supportDir, withIntermediateDirectories: true)
-        let fallback = (supportDir as NSString).appendingPathComponent(name)
-        if !fm.fileExists(atPath: fallback) && fm.isReadableFile(atPath: candidate) {
-            try? fm.copyItem(atPath: candidate, toPath: fallback)
-        }
-        return fallback
-    }
-
     /// saveSettings() starts with DeleteFile(m_ini_filename).
     public static func fresh(path: String) -> IniFile {
         try? FileManager.default.removeItem(atPath: path)

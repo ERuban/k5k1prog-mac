@@ -53,14 +53,14 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     private var timer: Timer?
 
     // settings / dialogs
-    private let iniPath: String
+    private let settings: AppSettings            // the original's k5prog_win.ini
     private let exeDir: String
-    private var savedPortName = ""               // m_serial.port_name as read from the ini
+    private var savedPortName = ""               // m_serial.port_name as read from the settings
     private var dialogFileNames: [FileDialog: String] = [:]
 
     init() {
-        let (ini, dir) = MainWindowController.locateIni()
-        iniPath = ini
+        let (store, dir) = MainWindowController.makeSettings()
+        settings = store
         exeDir = dir
         let window = KeyWindow(contentRect: NSRect(x: 297, y: 139, width: 900, height: 420),
                                styleMask: [.titled, .closable, .miniaturizable, .resizable],
@@ -79,20 +79,32 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
 
     required init?(coder: NSCoder) { fatalError() }
 
-    // MARK: - ini location ("ChangeFileExt(Application->ExeName, \".ini\")")
+    // MARK: - settings ("ChangeFileExt(Application->ExeName, \".ini\")" in the original)
 
-    /// <dir containing "K5K1 Prog.app">/K5K1Prog.ini (or next to a bare binary); when that
-    /// folder is not writable, ~/Library/Application Support/K5K1 Prog/K5K1Prog.ini.
-    static func locateIni() -> (ini: String, exeDir: String) {
+    /// Settings live in UserDefaults (~/Library/Preferences/io.github.eruban.k5k1prog.plist).
+    /// The K5K1Prog.ini of 1.0 / 1.1 (next to the .app, or in Application Support) is imported
+    /// once and deleted. `K5PROG_SETTINGS_SUITE` gives dev / UI-test runs their own settings.
+    /// File dialogs of the app bundle start in ~/Documents; a bare binary (swift run) keeps
+    /// the original: the folder of the exe.
+    static func makeSettings() -> (AppSettings, exeDir: String) {
+        let fm = FileManager.default
         let bundle = Bundle.main.bundleURL
         let exe = Bundle.main.executableURL ?? URL(fileURLWithPath: CommandLine.arguments[0])
-        let base = exe.deletingPathExtension().lastPathComponent
-        let dir = bundle.pathExtension == "app" ? bundle.deletingLastPathComponent() : exe.deletingLastPathComponent()
-        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let suite = ProcessInfo.processInfo.environment["K5PROG_SETTINGS_SUITE"].flatMap { $0.isEmpty ? nil : $0 }
+        let store = AppSettings(defaults: suite.flatMap { UserDefaults(suiteName: $0) } ?? .standard)
+        guard bundle.pathExtension == "app" else {
+            return (store, exe.deletingLastPathComponent().path)
+        }
+        let iniName = exe.deletingPathExtension().lastPathComponent + ".ini"
+        let support = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent(K5.appTitle)
-        let ini = IniFile.location(appDir: dir.path, name: base + ".ini", supportDir: support.path)
-        let translocated = dir.path.contains("/AppTranslocation/")
-        return (ini, translocated ? NSHomeDirectory() : dir.path)
+        if suite == nil && !bundle.path.contains("/AppTranslocation/") {
+            store.importIni(candidates: [support.appendingPathComponent(iniName).path,
+                                         bundle.deletingLastPathComponent().appendingPathComponent(iniName).path],
+                            removeEmptyDir: support.path)
+        }
+        let documents = fm.urls(for: .documentDirectory, in: .userDomainMask).first?.path
+        return (store, documents ?? NSHomeDirectory())
     }
 
     // MARK: - UI
@@ -263,7 +275,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     }
 
     private func loadSettings() {
-        let ini = IniFile(path: iniPath)
+        let ini = settings
 
         if let w = window, let screen = NSScreen.screens.first {
             let h0 = screen.frame.maxY
@@ -302,7 +314,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     }
 
     private func saveSettings() {
-        let ini = IniFile.fresh(path: iniPath)
+        let ini = settings  // the original deletes and re-writes the ini; here every key is set
         if let w = window, let screen = NSScreen.screens.first {
             let f = w.frame
             if ProcessInfo.processInfo.environment["K5PROG_DEBUG"] != nil {
@@ -316,10 +328,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         ini.writeInteger("GUI", "Verbose", prog.verbose)
         ini.writeString("SerialPort", "Name", currentPortName())
         ini.writeInteger("SerialPort", "Speed", speedPopup.selectedItem?.tag ?? K5.defaultSerialSpeed)
-        ini.save()
     }
 
-    /// m_serial.port_name: the last port that was opened, else what the ini said.
+    /// m_serial.port_name: the last port that was opened, else what the settings said.
     private func currentPortName() -> String {
         prog.portName.isEmpty ? savedPortName : prog.portName
     }
