@@ -246,6 +246,25 @@ final class PY32FlashTests: XCTestCase {
         XCTAssertTrue(sim.flashWritten.isEmpty)
     }
 
+    func testV2BootloaderRefusesV1File() throws {
+        try makeSim(bootloader: "1.02.01")
+        flash(syntheticV1Image())
+        XCTAssertEqual(ui.lines.last, "error: bootloader '1.02.01' is a UV-K5 V2 / K6 V2 (PY32F030) bootloader, firmware upload to this radio is not supported - upload cancelled")
+        XCTAssertFalse(sim.clientPayloads().contains { $0.hasPrefix("C>R 30 05") || $0.hasPrefix("C>R 19 05") })
+        XCTAssertTrue(sim.flashWritten.isEmpty)
+        XCTAssertEqual(ui.errors, ["This radio is a UV-K5 V2 / K6 V2 (bootloader 1.02.01, PY32F030).\n\nFirmware upload to this radio is not supported. Nothing was written."])
+    }
+
+    func testV2BootloaderRefusesPY32File() throws {
+        try makeSim(bootloader: "1.01.07")
+        flash(try k1Raw())
+        XCTAssertEqual(ui.lines.last, "error: bootloader '1.01.07' is a UV-K5 V2 / K6 V2 (PY32F030) bootloader, firmware upload to this radio is not supported - upload cancelled")
+        XCTAssertEqual(ui.errors.count, 1)
+        XCTAssertTrue(handshakePayloads.isEmpty)
+        XCTAssertTrue(pagePayloads.isEmpty)
+        XCTAssertTrue(sim.flashWritten.isEmpty)
+    }
+
     func testOldPY32BootloaderRefused() throws {
         let raw = try k1Raw()
         try makeSim(bootloader: "7.00.06")

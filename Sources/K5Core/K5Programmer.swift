@@ -926,6 +926,9 @@ public final class K5Programmer {
             add("")
         }
 
+        // not in k5prog-win 0.1.26: refuse UV-K5 V2 / K6 V2 (PY32F030) radios
+        if refuseV2Bootloader() { return }
+
         // not in k5prog-win 0.1.26: never send a DP32G030 image to a PY32F071 bootloader
         if bootloaderVer.first == UInt8(ascii: "7") {
             fail("error: bootloader '" + bootloaderVer.latin1 + "' is a UV-K5 V3 / UV-K1 bootloader, this firmware file is for UV-K5 V1 / K6 - upload cancelled")
@@ -986,6 +989,16 @@ public final class K5Programmer {
     //   0x0519 (268):   stamp LE32, page LE16, page count LE16, 4 x 00, 256 data (00 padded)
     //   0x051A (8):     stamp LE32, page LE16, error LE16
     // No 0x05DD at the end: the bootloader starts the new firmware by itself.
+
+    /// Not in k5prog-win 0.1.26. Bootloader 1.xx = UV-K5 V2 / K6 V2 (PY32F030): no V1 or
+    /// V3/K1 firmware runs on it (it starts with a blank screen), so firmware upload is
+    /// refused before anything is sent.
+    private func refuseV2Bootloader() -> Bool {
+        guard bootloaderVer.first == UInt8(ascii: "1") else { return false }
+        fail("error: bootloader '" + bootloaderVer.latin1 + "' is a UV-K5 V2 / K6 V2 (PY32F030) bootloader, firmware upload to this radio is not supported - upload cancelled")
+        ui?.messageBoxError("This radio is a UV-K5 V2 / K6 V2 (bootloader " + bootloaderVer.latin1 + ", PY32F030).\n\nFirmware upload to this radio is not supported. Nothing was written.")
+        return true
+    }
 
     /// Wait for 5 valid beacon intervals (5..1000 ms) in a row.
     private func py32WaitBeacons() -> Bool {
@@ -1112,6 +1125,8 @@ public final class K5Programmer {
         } else {
             add("")
         }
+
+        if refuseV2Bootloader() { return }
 
         let bl = bootloaderVer.latin1
         guard bootloaderVer.first == UInt8(ascii: "7") else {
