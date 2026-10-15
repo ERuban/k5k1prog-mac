@@ -42,9 +42,8 @@ which k5prog-win can't do, plus a few safety fixes
   itself and checked against the bootloader before anything is written.
 - Universal app (Apple Silicon and Intel), macOS 12 or newer. No drivers or extra software needed
   for CH340 cables.
-- Settings are kept in `K5K1Prog.ini` next to the app (same format as `k5prog_win.ini`). When that
-  folder is not writable (for example `/Applications` for a standard user, or an app started
-  directly from a downloaded archive), they go to `~/Library/Application Support/K5K1 Prog/`.
+- Settings (port, speed, verbose level, window position) are kept the macOS way, in
+  `~/Library/Preferences/io.github.eruban.k5k1prog.plist`. Nothing is written next to the app.
 
 ## Supported radios
 
@@ -136,13 +135,15 @@ All on the safe side:
    Here the real calibration value is used when the calibration was read in the same session.
 5. The port list shows `/dev/cu.*` (the macOS equivalent of the COM port list). The status bar has
    no "RX BREAK" indicator.
-6. If the folder of the app is not writable, the ini goes to `~/Library/Application Support/K5K1 Prog/`
-   (copied once from the ini next to the app, if there is one) instead of settings being lost.
+6. **Settings** are kept in macOS preferences (`io.github.eruban.k5k1prog`), not in an ini file next
+   to the app: on a Mac that folder is `/Applications`. The keys are the ones of `k5prog_win.ini`
+   (`MainForm.Top`, `GUI.Verbose`, `SerialPort.Name`, …). Versions 1.0 / 1.1 used `K5K1Prog.ini`; it is
+   imported once and deleted. File dialogs start in `~/Documents`.
 
 Everything else matches the original: buttons, order of operations, timeouts (hello 2×1 s, read 3 s,
 write 2 s, flash 3 s), retries, checks, every log line and message box text, the protocol (frames,
 XOR tables, CRC, session id `6A 39 57 64`, 128-byte config blocks, 256-byte flash blocks, the
-bootloader version fix-up `4.00.07` → `*.00.07`), the ini format, the hidden Read ADC / Read RSSI
+bootloader version fix-up `4.00.07` → `*.00.07`), the settings keys, the hidden Read ADC / Read RSSI
 buttons and Esc to abort a transfer.
 
 ## UV-K5 V3 / UV-K1 firmware upload
@@ -197,6 +198,8 @@ Test hooks (not needed for normal use):
 - `K5PROG_EXTRA_PORTS=/tmp/k5com` adds device paths to the port list (for `k5emu --link /tmp/k5com`).
 - `K5PROG_UITEST=readcalib,writecalib,quit` with `K5PROG_UITEST_OPEN/SAVE/MEMO` drives the real app
   without dialogs.
+- `K5PROG_SETTINGS_SUITE=<name>` keeps the settings of a dev / test run apart from the real ones
+  (and skips the import of an old `K5K1Prog.ini`).
 - `K5PROG_SPARKLE_FEED=<url>` points the updater at another appcast (local update tests,
   `open --env K5PROG_SPARKLE_FEED=… "K5K1 Prog.app"`).
 

@@ -194,35 +194,75 @@ final class IniFileTests: XCTestCase {
         XCTAssertEqual(String(decoding: FileManager.default.contents(atPath: p)!, as: UTF8.self), win)
     }
 
-    func testIniLocationFallsBackWhenAppFolderIsReadOnly() throws {
+    private func tempSettings() -> (AppSettings, cleanup: () -> Void) {
+        let suite = "k5settings-\(UUID().uuidString)"
+        let d = UserDefaults(suiteName: suite)!
+        return (AppSettings(defaults: d), { d.removePersistentDomain(forName: suite) })
+    }
+
+    func testSettingsRoundTripWithIniKeys() {
+        let (s, cleanup) = tempSettings()
+        defer { cleanup() }
+        XCTAssertTrue(s.isEmpty)
+        XCTAssertEqual(s.readInteger("GUI", "Verbose", 1), 1)
+        XCTAssertEqual(s.readString("SerialPort", "Name", "None"), "None")
+        s.writeInteger("GUI", "Verbose", 3)
+        s.writeString("SerialPort", "Name", "/dev/cu.usbserial-110")
+        XCTAssertFalse(s.isEmpty)
+        XCTAssertEqual(s.readInteger("GUI", "Verbose", 1), 3)
+        XCTAssertEqual(s.readString("SerialPort", "Name", "None"), "/dev/cu.usbserial-110")
+        XCTAssertEqual(s.defaults.integer(forKey: "GUI.Verbose"), 3)
+    }
+
+    func testIniOfOldVersionsIsImportedOnceAndDeleted() throws {
         let fm = FileManager.default
-        let root = NSTemporaryDirectory() + "k5iniloc-\(UUID().uuidString)"
+        let root = NSTemporaryDirectory() + "k5iniimport-\(UUID().uuidString)"
         let app = root + "/Applications", support = root + "/Support/K5K1 Prog"
         try fm.createDirectory(atPath: app, withIntermediateDirectories: true)
-        defer {
-            try? fm.setAttributes([.posixPermissions: 0o755], ofItemAtPath: app)
-            try? fm.removeItem(atPath: root)
-        }
-        // writable folder: next to the app, like the original
-        XCTAssertEqual(IniFile.location(appDir: app, name: "K5K1Prog.ini", supportDir: support), app + "/K5K1Prog.ini")
+        defer { try? fm.removeItem(atPath: root) }
+        let (s, cleanup) = tempSettings()
+        defer { cleanup() }
+        let old = app + "/K5K1Prog.ini", supportIni = support + "/K5K1Prog.ini"
+        let cands = [supportIni, old]
+
+        // nothing to import
+        XCTAssertNil(s.importIni(candidates: cands, removeEmptyDir: support))
+        XCTAssertTrue(s.isEmpty)
+
+        // 1.0/1.1 left an ini in /Applications (written by the original's code: CRLF, Win32 keys)
+        fm.createFile(atPath: old, contents: Data(("[MainForm]\r\nTop=120\r\nLeft=80\r\nWidth=900\r\nHeight=420\r\n"
+            + "[GUI]\r\nVerbose=2\r\n[SerialPort]\r\nName=/dev/cu.usbserial-110\r\nSpeed=38400\r\n").utf8))
+        XCTAssertEqual(s.importIni(candidates: cands, removeEmptyDir: support), old)
+        XCTAssertEqual(s.readInteger("MainForm", "Top", 0), 120)
+        XCTAssertEqual(s.readInteger("MainForm", "Height", 0), 420)
+        XCTAssertEqual(s.readInteger("GUI", "Verbose", 0), 2)
+        XCTAssertEqual(s.readString("SerialPort", "Name", ""), "/dev/cu.usbserial-110")
+        XCTAssertEqual(s.readInteger("SerialPort", "Speed", 0), 38400)
+        XCTAssertFalse(fm.fileExists(atPath: old))
+
+        // settings exist: a later ini (an old copy started again) is neither imported nor deleted
+        fm.createFile(atPath: old, contents: Data("[GUI]\r\nVerbose=3\r\n".utf8))
+        XCTAssertNil(s.importIni(candidates: cands, removeEmptyDir: support))
+        XCTAssertEqual(s.readInteger("GUI", "Verbose", 0), 2)
+        XCTAssertTrue(fm.fileExists(atPath: old))
+    }
+
+    func testIniFromApplicationSupportWinsAndFolderIsRemoved() throws {
+        let fm = FileManager.default
+        let root = NSTemporaryDirectory() + "k5inisupport-\(UUID().uuidString)"
+        let app = root + "/Applications", support = root + "/Support/K5K1 Prog"
+        try fm.createDirectory(atPath: app, withIntermediateDirectories: true)
+        try fm.createDirectory(atPath: support, withIntermediateDirectories: true)
+        defer { try? fm.removeItem(atPath: root) }
+        let (s, cleanup) = tempSettings()
+        defer { cleanup() }
+        // read-only app folder in 1.0/1.1: the live ini was the one in Application Support
+        fm.createFile(atPath: support + "/K5K1Prog.ini", contents: Data("[GUI]\r\nVerbose=3\r\n".utf8))
+        fm.createFile(atPath: app + "/K5K1Prog.ini", contents: Data("[GUI]\r\nVerbose=1\r\n".utf8))
+        XCTAssertEqual(s.importIni(candidates: [support + "/K5K1Prog.ini", app + "/K5K1Prog.ini"],
+                                   removeEmptyDir: support), support + "/K5K1Prog.ini")
+        XCTAssertEqual(s.readInteger("GUI", "Verbose", 0), 3)
         XCTAssertFalse(fm.fileExists(atPath: support))
-
-        // read-only folder with an existing ini: fallback, seeded from that ini, and saving works
-        fm.createFile(atPath: app + "/K5K1Prog.ini", contents: Data("[GUI]\r\nVerbose=2\r\n".utf8))
-        try fm.setAttributes([.posixPermissions: 0o555], ofItemAtPath: app)
-        let p = IniFile.location(appDir: app, name: "K5K1Prog.ini", supportDir: support)
-        XCTAssertEqual(p, support + "/K5K1Prog.ini")
-        XCTAssertEqual(IniFile(path: p).readInteger("GUI", "Verbose", 0), 2)
-        let out = IniFile.fresh(path: p)
-        out.writeInteger("GUI", "Verbose", 3)
-        XCTAssertTrue(out.save())
-        XCTAssertEqual(IniFile(path: p).readInteger("GUI", "Verbose", 0), 3)
-        // the seed is copied only once: later runs keep the fallback's own settings
-        XCTAssertEqual(IniFile(path: IniFile.location(appDir: app, name: "K5K1Prog.ini", supportDir: support))
-            .readInteger("GUI", "Verbose", 0), 3)
-
-        // translocated path: always the fallback
-        XCTAssertEqual(IniFile.location(appDir: root + "/AppTranslocation/X/d", name: "K5K1Prog.ini", supportDir: support),
-                       support + "/K5K1Prog.ini")
+        XCTAssertFalse(fm.fileExists(atPath: app + "/K5K1Prog.ini"))
     }
 }
