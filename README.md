@@ -50,17 +50,22 @@ which k5prog-win can't do, plus a few safety fixes
 
 | Radio | MCU | Bootloader | Calibration / config | Firmware |
 |---|---|---|---|---|
-| UV-K5, UV-K5(8), UV-K6, UV-5R Plus ("V1") | DP32G030 | 2.x – 5.x | ✅ | ✅ (k5prog-win protocol) |
+| UV-K5, UV-K5(8), UV-K6, UV-5R Plus ("V1") | DP32G030 | 2.x – 4.x | ✅ | ✅ (k5prog-win protocol) |
 | UV-K5 V3, UV-K1 | PY32F071 | 7.xx (7.00.07 or newer) | ✅ | ✅ |
+| UV-K5 V2, UV-K6 V2 | PY32F030 | 1.xx | ✅ | ❌ refused |
+
+The model is printed under the battery (V2, V3), but the bootloader version is the reliable sign: put the
+radio in bootloader mode and press **Write Firmware**, the log shows `Bootloader version '…'`.
+UV-5R Plus Type-C radios with bootloader 5.x use an encrypted bootloader protocol and are not supported.
 
 Tested on real hardware: a UV-K5 V1 (bootloader 2.00.06) and a UV-K1 (bootloader 7.03.01). Both were
 flashed with K5K1 Prog, calibration and configuration were read from both, and calibration was
 written to the UV-K1 and verified by reading it back.
 
 > [!WARNING]
-> Firmware for V1 and for V3/K1 radios is **not interchangeable**. K5K1 Prog checks this before it
-> sends anything: a V1 image on a 7.xx bootloader and a V3/K1 image on any other bootloader are
-> refused.
+> Firmware for V1, V2 and V3/K1 radios is **not interchangeable**. K5K1 Prog checks this before it
+> sends anything: a V1 image on a 7.xx bootloader, a V3/K1 image on any other bootloader, and any
+> image on a V2 bootloader (1.xx) are refused.
 >
 > It **can't tell a UV-K1 image from a UV-K5 V3 image** (same chip, same bootloader, and the
 > bootloader does not report the model). Pick the file for your model. If you flash the wrong one,
@@ -104,7 +109,7 @@ Calibration and configuration are written back the same way (**Write Calibration
 1. Switch the radio off, hold **PTT** and switch it on. The screen stays blank: the radio is in
    bootloader mode.
 2. **Write Firmware** and choose the `.bin` (or `.packed.bin`) for your model.
-3. Check the log: `Bootloader version '…'` starts with `2`–`5` on V1 radios and with `7` on V3/K1.
+3. Check the log: `Bootloader version '…'` starts with `2`–`4` on V1 radios and with `7` on V3/K1.
 4. Wait for `write FLASH complete`. The radio restarts with the new firmware.
 
 Then follow the instructions of your firmware (memory reset, which calibration files to load, and so
@@ -116,7 +121,9 @@ battery values. Compare a fresh **Read Calibration** with your backup afterwards
 All on the safe side:
 
 1. **UV-K5 V3 / UV-K1 firmware upload** (PY32F071, bootloader 7.xx), see below.
-2. A V1 (DP32G030) firmware file is never sent to a 7.xx bootloader.
+2. A V1 (DP32G030) firmware file is never sent to a 7.xx bootloader, and firmware upload to a
+   UV-K5 V2 / K6 V2 (bootloader 1.xx, PY32F030) is refused: V1 firmware leaves such a radio with a blank
+   screen.
 3. **Configuration file whose size is not a multiple of 128 bytes.** k5prog-win reads past the end of
    its buffer and writes random memory into the radio. Here the rest of the last block keeps the
    radio's own bytes (read back first). Normal files (7424 / 8192 / 512 bytes) are not affected.
@@ -151,13 +158,13 @@ PY32 protocol (as in muzkr's serialtool):
 - no reboot command at the end, the bootloader starts the new firmware itself.
 
 Wrong combinations are refused before anything is written: a V1 file on a 7.xx bootloader, a V3/K1
-file on any other bootloader, a bootloader older than 7.00.07, a too large image, a radio that is not
-in bootloader mode.
+file on any other bootloader, any file on a V2 bootloader (1.xx), a bootloader older than 7.00.07, a
+too large image, a radio that is not in bootloader mode.
 
 ## Development
 
 ```sh
-swift test                    # 50 tests: simulator, protocol, reference comparisons
+swift test                    # 52 tests: simulator, protocol, reference comparisons
 swift run k5emu --mode boot --bl-version 7.03.01 --link /tmp/k5com   # simulated K1 bootloader
 ```
 
