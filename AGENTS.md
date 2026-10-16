@@ -40,7 +40,8 @@ K5PROG_SETTINGS_SUITE=agent K5PROG_UITEST=editor,wait,snap,quit K5PROG_UITEST_SN
 Steps: `readconfig`, `writeconfig`, `readcalib`, `writecalib`, `firmware`, `clear`, `wait` (3 s),
 `snap` (window PNGs into `K5PROG_UITEST_SNAP`), `gauge`, `settings`, `quit`, `probe-quit`, and for
 the editor `editor`, `editor-profile=<karina|stock>.<v1|k1>`, `editor-edit=<column>:<channel>`,
-`editor-set=<column>:<channel>:<text>`, `editor-import` / `editor-export` (`K5PROG_UITEST_OPEN` /
+`editor-set=<column>:<channel>:<text>`, `editor-caret` / `editor-caret-end` (caret checks, logged),
+`editor-import` / `editor-export` (`K5PROG_UITEST_OPEN` /
 `K5PROG_UITEST_SAVE`, a `.bin` needs `K5PROG_UITEST_BIN_PROFILE`), `editor-write`, `editor-close`.
 `K5PROG_UITEST_MEMO` gets the log after every step; editor messages appear there as `[editor] …`.
 Always set `K5PROG_SETTINGS_SUITE` (and `K5PROG_BACKUP_DIR`) so the user's own settings and backups
