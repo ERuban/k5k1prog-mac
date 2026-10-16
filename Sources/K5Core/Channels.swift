@@ -386,6 +386,25 @@ public struct ChannelMemory: Equatable {
         bytes.replaceSubrange(o..<(o + 16), with: field)
     }
 
+    public enum MoveResult: Equatable { case moved, targetsNotEmpty, noRoom }
+
+    /// Moves the channels of `rows` (in this order) to `dest`, `dest + 1`, ...: the old rows are
+    /// freed first, the target rows must then be empty and must exist (nothing is cut off).
+    /// On refusal nothing changes.
+    public mutating func moveChannels(_ rows: [Int], to dest: Int) -> MoveResult {
+        let moving = rows.compactMap { i in channel(i).map { (i, $0) } }
+        guard !moving.isEmpty else { return .moved }
+        guard dest >= 0, dest + moving.count <= Channels.count else { return .noRoom }
+        let before = bytes
+        for (i, _) in moving { setChannel(i, nil) }
+        if (dest..<(dest + moving.count)).contains(where: { channel($0) != nil }) {
+            bytes = before
+            return .targetsNotEmpty
+        }
+        for (k, (_, c)) in moving.enumerated() { setChannel(dest + k, c) }
+        return .moved
+    }
+
     /// 128-byte blocks (start addresses) whose bytes differ from `other`.
     public func changedBlocks(from other: ChannelMemory) -> [Int] {
         stride(from: 0, to: K5.configSize, by: K5.configBlockSize).filter { b in

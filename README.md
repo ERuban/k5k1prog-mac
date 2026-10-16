@@ -219,8 +219,11 @@ too large image, a radio that is not in bootloader mode.
 
 ## Development
 
+Contributions are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) (and [AGENTS.md](AGENTS.md) for AI
+coding agents).
+
 ```sh
-swift test                    # 72 tests: simulator, protocol, reference comparisons, channels
+swift test                    # 76 tests: simulator, protocol, reference comparisons, channels
 swift run k5emu --mode boot --bl-version 7.03.01 --link /tmp/k5com   # simulated K1 bootloader
 ```
 
@@ -251,7 +254,7 @@ Test hooks (not needed for normal use):
 - `K5PROG_EXTRA_PORTS=/tmp/k5com` adds device paths to the port list (for `k5emu --link /tmp/k5com`).
 - `K5PROG_UITEST=readcalib,writecalib,quit` with `K5PROG_UITEST_OPEN/SAVE/MEMO` drives the real app
   without dialogs (also `editor`, `editor-import`, `editor-write`, `editor-export`, `snap` with
-  `K5PROG_UITEST_SNAP=<dir>` for window snapshots, `wait`).
+  `K5PROG_UITEST_SNAP=<dir>` for window snapshots, `wait`; full list in [AGENTS.md](AGENTS.md)).
 - `K5PROG_BACKUP_DIR=<dir>` puts the Memory Editor's backups there.
 - `K5PROG_CHANNEL_DUMPS=<dir>` compares the channel decode of your own dumps with CHIRP's
   (`<name>.<profile>.bin` + `golden.py --decode` output as `.json`).

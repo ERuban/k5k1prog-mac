@@ -48,7 +48,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     private let statusTime = NSTextField(labelWithString: "")
     /// 2.0: which radio is on the cable, found by a quiet check (not in the log)
     private let radioStatus = Pill(compact: false)
-    private let statusBreak = NSTextField(labelWithString: "")
+    private let statusSpacer = NSView()   // pushes the radio pill right while the bar is hidden
     private let gaugeBar = NSProgressIndicator()
     private let gaugeLabel = NSTextField(labelWithString: "")
     private var timer: Timer?
@@ -167,8 +167,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         gaugeBar.isHidden = true
         gaugeLabel.isHidden = true
         gaugeLabel.font = NSFont.boldSystemFont(ofSize: 11)
-        statusTime.font = NSFont.systemFont(ofSize: 12)
-        statusBreak.font = NSFont.systemFont(ofSize: 12)
+        statusTime.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)   // digits don't make the bar jump
 
         // 2.0 layout: port / speed / verbose on top, the log on the left, the buttons in a column
         // on the right (grouped: Clear | configuration | calibration | firmware | editor).
@@ -192,9 +191,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
             v.widthAnchor.constraint(equalTo: column.widthAnchor).isActive = true
             if let b = v as? NSButton { b.alignment = .left; b.controlSize = .large }
         }
-        let status = NSStackView(views: [statusTime, statusBreak, gaugeBar, gaugeLabel, NSView(), radioStatus])
+        let status = NSStackView(views: [statusTime, gaugeBar, gaugeLabel, statusSpacer, radioStatus])
         status.alignment = .centerY
         status.spacing = 12
+        // the bar takes all the room between the clock and the radio pill while it is shown
+        gaugeBar.setContentHuggingPriority(.init(1), for: .horizontal)
+        gaugeBar.setContentCompressionResistancePriority(.init(1), for: .horizontal)
+        gaugeBar.widthAnchor.constraint(greaterThanOrEqualToConstant: 120).isActive = true
 
         memoScroll.borderType = .bezelBorder
         for v in [row1, column, memoScroll, status] as [NSView] {
@@ -204,8 +207,10 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         portPopup.widthAnchor.constraint(greaterThanOrEqualToConstant: 170).isActive = true
         speedPopup.widthAnchor.constraint(equalToConstant: 130).isActive = true
         verboseSlider.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        statusTime.widthAnchor.constraint(equalToConstant: 260).isActive = true
-        statusBreak.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        // as wide as the longest clock text ("Wednesday 30 Sep 2026  00:00:00"), not more
+        let longest = " Wednesday 30 Sep 2026  00:00:00" as NSString
+        let clockWidth = ceil(longest.size(withAttributes: [.font: statusTime.font as Any]).width) + 8
+        statusTime.widthAnchor.constraint(equalToConstant: clockWidth).isActive = true
         gaugeLabel.widthAnchor.constraint(equalToConstant: 44).isActive = true
 
         NSLayoutConstraint.activate([
@@ -300,7 +305,16 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) { self.uiTestStep() }
             return
         case "settings": (NSApp.delegate as? AppDelegate)?.showSettings(nil)
+        case "gauge": gauge(max: 100, progress: 40, visible: true)   // the progress bar as during an operation
         case "quit": window?.performClose(nil); return
+        case "probe-quit":   // close while the quiet radio check holds the port
+            if let p = portPopup.titleOfSelectedItem { _ = runEditorProbe(port: p, blocks: []) { _ in } }
+            func closeWhenOpen(_ n: Int) {
+                if prog.connected || n > 200 { window?.performClose(nil); return }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.005) { closeWhenOpen(n + 1) }
+            }
+            closeWhenOpen(0)
+            return
         default:
             // editor steps: editor-import (K5PROG_UITEST_OPEN, a .bin is read as K5PROG_UITEST_BIN_PROFILE),
             // editor-write (no confirmation), editor-export (K5PROG_UITEST_SAVE)
@@ -546,10 +560,11 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     /// The Memory Editor's quiet radio check. Skipped (false) while anything else runs; the
     /// main window's controls are not touched and nothing goes to the log.
     private(set) var probing = false
+    private var closing = false   // the app is closing: no new radio checks
     var isIdle: Bool { !busy && !probing && !prog.connected }
 
     func runEditorProbe(port: String, blocks: [Int], done: @escaping (K5Programmer.ProbeResult) -> Void) -> Bool {
-        guard isIdle else { return false }
+        guard isIdle, !closing else { return false }
         probing = true
         prog.selectedSpeed = speedPopup.selectedItem?.tag ?? K5.defaultSerialSpeed
         worker.async { [weak self] in
@@ -567,7 +582,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     /// editor's own port. `done` is called on the main thread. False when busy.
     @discardableResult
     func runEditorRead(port: String, done: @escaping ((memory: [UInt8], firmware: String)?) -> Void) -> Bool {
-        runOnPort(port) { p in
+        runOnPort(port, onBusy: { done(nil) }) { p in
             let r = p.editorRead()
             DispatchQueue.main.async { done(r) }
         }
@@ -576,19 +591,24 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     @discardableResult
     func runEditorWrite(port: String, snapshot: [UInt8], edited: [UInt8], firmware: String, backupPath: String,
                         done: @escaping (K5Programmer.EditorResult) -> Void) -> Bool {
-        runOnPort(port) { p in
+        runOnPort(port, onBusy: { done(.failed("Another operation is running. Nothing was written; try again.")) }) { p in
             let r = p.editorWrite(snapshot: snapshot, edited: edited, firmware: firmware, backupPath: backupPath)
             DispatchQueue.main.async { done(r) }
         }
     }
 
-    private func runOnPort(_ port: String, _ handler: @escaping (K5Programmer) -> Void) -> Bool {
+    /// Like `run` on the editor's port. When something else runs, `onBusy` is called (also when
+    /// that is found only after waiting for the quiet radio check), so the caller never waits forever.
+    private func runOnPort(_ port: String, onBusy: @escaping () -> Void, _ handler: @escaping (K5Programmer) -> Void) -> Bool {
         if probing {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in _ = self?.runOnPort(port, handler) }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in _ = self?.runOnPort(port, onBusy: onBusy, handler) }
             return true
         }
         if busy || prog.connected {
             NSSound.beep()
+            memoAdd("")
+            memoAdd("busy: another operation is running, try again when it has finished")
+            DispatchQueue.main.async(execute: onBusy)
             return false
         }
         prog.selectedPort = port
@@ -669,9 +689,15 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     /// FormClose(): ask when busy, then disconnect + saveSettings.
     func formCloseQuery() -> Bool {
         if closeConfirmed { return true }
+        // the quiet radio check (read only, at most ~2 s) is not "busy": let it end, don't ask
+        closing = true
+        let probeDeadline = Date().addingTimeInterval(2.5)
+        while probing && !busy && Date() < probeDeadline {
+            RunLoop.current.run(mode: .default, before: Date().addingTimeInterval(0.05))
+        }
         if prog.connected || busy {
             let yes = alertYesNo("Busy readin/writing from/to the radio.\n\nStill close ?")
-            if !yes { return false }
+            if !yes { closing = false; return false }
             prog.port.requestAbort()
             // let the worker notice and release the port
             let deadline = Date().addingTimeInterval(4)
@@ -749,6 +775,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
             self.gaugeBar.doubleValue = Double(progress)
             self.gaugeBar.isHidden = !visible
             self.gaugeLabel.isHidden = !visible
+            self.statusSpacer.isHidden = visible
             let pct = max > 0 ? Int((Double(progress) * 100 / Double(max)).rounded(.down)) : 0
             self.gaugeLabel.stringValue = "\(Swift.min(pct, 100))%"
         }

@@ -141,6 +141,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
                                                     .foregroundColor: NSColor.labelColor]
         text.append(NSAttributedString(string: "By Evgeny Ruban\n\n", attributes: plain))
         text.append(NSAttributedString(string: "macOS port of k5prog-win by OneOfEleven,\nbased on k5prog by Jacek Lipkowski SQ5BPF.\n\n", attributes: plain))
+        text.append(NSAttributedString(string: "Memory Editor: channel layout from the CHIRP drivers\nby Jacek Lipkowski SQ5BPF, Thibaut Berg and M2Boo.\n\n", attributes: plain))
         var linkAttrs = plain
         linkAttrs[.link] = URL(string: link)
         text.append(NSAttributedString(string: link, attributes: linkAttrs))
