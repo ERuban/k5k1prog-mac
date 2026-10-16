@@ -8,12 +8,18 @@ on:
       - "release-notes/**"
       - "Resources/logo.svg"
       - ".github/FUNDING.yml"
+      - "docs/**"
+      - "scripts/build_site.py"
+      - "scripts/make_site_images.py"
   pull_request:
     paths-ignore:
       - "**.md"
       - "release-notes/**"
       - "Resources/logo.svg"
       - ".github/FUNDING.yml"
+      - "docs/**"
+      - "scripts/build_site.py"
+      - "scripts/make_site_images.py"
   workflow_dispatch:
 
 concurrency:

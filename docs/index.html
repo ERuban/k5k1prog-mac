@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>K5K1 Prog – Quansheng UV-K5 &amp; UV-K1 software for Mac</title>
+  <meta name="description" content="Free Mac app for Quansheng UV-K5, UV-K5 V3 and UV-K1: back up calibration and configuration, flash firmware, edit channels (CHIRP CSV, .img). Open source.">
+  <link rel="canonical" href="https://eruban.github.io/k5k1prog-mac/">
+  <link rel="alternate" hreflang="en" href="https://eruban.github.io/k5k1prog-mac/">
+  <link rel="alternate" hreflang="ru" href="https://eruban.github.io/k5k1prog-mac/ru/">
+  <link rel="alternate" hreflang="es" href="https://eruban.github.io/k5k1prog-mac/es/">
+  <link rel="alternate" hreflang="de" href="https://eruban.github.io/k5k1prog-mac/de/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://eruban.github.io/k5k1prog-mac/zh/">
+  <link rel="alternate" hreflang="x-default" href="https://eruban.github.io/k5k1prog-mac/">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="author" content="Evgeny Ruban">
+  <meta name="theme-color" content="#1e2850">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="K5K1 Prog">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta property="og:locale:alternate" content="es_ES">
+  <meta property="og:locale:alternate" content="de_DE">
+  <meta property="og:locale:alternate" content="zh_CN">
+  <meta property="og:title" content="K5K1 Prog – Quansheng UV-K5 &amp; UV-K1 software for Mac">
+  <meta property="og:description" content="Free Mac app for Quansheng UV-K5, UV-K5 V3 and UV-K1: back up calibration and configuration, flash firmware, edit channels (CHIRP CSV, .img). Open source.">
+  <meta property="og:url" content="https://eruban.github.io/k5k1prog-mac/">
+  <meta property="og:image" content="https://eruban.github.io/k5k1prog-mac/assets/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Back up, restore and flash Quansheng UV-K5 / UV-K5 V3 / UV-K1 radios on your Mac.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="K5K1 Prog – Quansheng UV-K5 &amp; UV-K1 software for Mac">
+  <meta name="twitter:description" content="Free Mac app for Quansheng UV-K5, UV-K5 V3 and UV-K1: back up calibration and configuration, flash firmware, edit channels (CHIRP CSV, .img). Open source.">
+  <meta name="twitter:image" content="https://eruban.github.io/k5k1prog-mac/assets/og-card.png">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/style.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "K5K1 Prog",
+  "url": "https://eruban.github.io/k5k1prog-mac/",
+  "description": "Free Mac app for Quansheng UV-K5, UV-K5 V3 and UV-K1: back up calibration and configuration, flash firmware, edit channels (CHIRP CSV, .img). Open source.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "macOS 12 or later",
+  "softwareVersion": "2.0.2",
+  "downloadUrl": "https://github.com/ERuban/k5k1prog-mac/releases/latest",
+  "installUrl": "https://github.com/ERuban/k5k1prog-mac/releases/latest",
+  "screenshot": [
+    "https://eruban.github.io/k5k1prog-mac/assets/main-window.png",
+    "https://eruban.github.io/k5k1prog-mac/assets/memory-editor.png"
+  ],
+  "image": "https://eruban.github.io/k5k1prog-mac/assets/og-card.png",
+  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Evgeny Ruban",
+    "url": "https://github.com/ERuban"
+  },
+  "codeRepository": "https://github.com/ERuban/k5k1prog-mac",
+  "inLanguage": "en"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I program a Quansheng UV-K5 on a Mac?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. K5K1 Prog runs natively on macOS 12 or newer, on Apple Silicon and Intel, without Windows or a virtual machine. It backs up and restores calibration and configuration, flashes firmware and edits channels."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which radios are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "UV-K5, UV-K5(8), UV-K6 and UV-5R Plus with the DP32G030 chip (V1), and the newer UV-K5 V3 and UV-K1 (PY32F071). On the UV-K5 V2 / UV-K6 V2 backup and restore work; firmware upload is refused."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a driver for the programming cable?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Usually not: the common CH340 cables work on current macOS without extra software. The cable shows up as /dev/cu.usbserial-…"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it an alternative to CHIRP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For channels, yes: the Memory Editor edits the 200 channels of stock and Karina firmware and imports and exports CHIRP CSV and .img files. The radio's menu settings are not edited."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which firmware can I flash?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Any firmware file for your model, .bin or .packed.bin: stock Quansheng, Karina, F4HWN and others. Before sending anything the app checks that the file fits the radio's bootloader."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it free and safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Free and open source under GPL v3. The app is signed and notarized by Apple, has no telemetry and only contacts GitHub to check for updates."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href=""><img src="assets/logo.svg" alt="">K5K1 Prog</a>
+      <nav class="langs" aria-label="Language"><span aria-current="page">English</span> <a href="ru/" hreflang="ru" lang="ru">Русский</a> <a href="es/" hreflang="es" lang="es">Español</a> <a href="de/" hreflang="de" lang="de">Deutsch</a> <a href="zh/" hreflang="zh" lang="zh">中文</a></nav>
+    </header>
+
+    <div class="hero">
+      <img class="logo" src="assets/logo.svg" alt="K5K1 Prog">
+      <h1>K5K1 Prog</h1>
+      <p class="tagline">Back up, restore and flash Quansheng UV-K5 / UV-K5 V3 / UV-K1 radios on your Mac.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/ERuban/k5k1prog-mac/releases/latest"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.14 1.75-3.17 1.83-3.22-1-1.45-2.55-1.65-3.1-1.68-1.32-.13-2.58.78-3.25.78-.67 0-1.7-.76-2.8-.74-1.44.02-2.77.84-3.51 2.13-1.5 2.6-.38 6.44 1.08 8.55.71 1.03 1.56 2.19 2.67 2.15 1.07-.04 1.48-.69 2.77-.69 1.3 0 1.66.69 2.8.67 1.16-.02 1.89-1.05 2.6-2.09.82-1.2 1.15-2.36 1.17-2.42-.03-.01-2.24-.86-2.26-3.42zM14.25 6.3c.59-.72.99-1.71.88-2.7-.85.03-1.88.57-2.49 1.28-.55.63-1.03 1.64-.9 2.61.95.07 1.92-.48 2.51-1.19z"/></svg>Download for macOS</a>
+        <a class="btn" href="https://github.com/ERuban/k5k1prog-mac"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Source on GitHub</a>
+        <a class="btn" href="https://boosty.to/eruban/donate">♥ Donate</a>
+      </div>
+      <p class="brew">or with Homebrew: <code>brew install --cask eruban/tap/k5k1-prog</code></p>
+      <ul class="facts">
+      <li>Free and open source (GPL v3)</li>
+      <li>Signed and notarized by Apple</li>
+      <li>No telemetry</li>
+      <li>macOS 12 or newer, Apple Silicon and Intel</li>
+      </ul>
+    </div>
+
+    <div class="shots">
+      <figure><img src="assets/main-window.png" width="1228" height="842" alt="Main window: the radio on the cable, in normal mode"><figcaption>Main window: the radio on the cable, in normal mode</figcaption></figure>
+      <figure><img src="assets/memory-editor.png" width="1278" height="797" alt="Memory Editor: the radio&#x27;s channels" loading="lazy"><figcaption>Memory Editor: the radio&#x27;s channels</figcaption></figure>
+    </div>
+
+    <section id="features">
+      <h2>What it does</h2>
+      <div class="features">
+      <div class="card"><span class="ico">💾</span><h3>Back up and restore</h3><p>Read and write the radio&#x27;s calibration and configuration. Keep your factory calibration safe before you flash anything.</p></div>
+      <div class="card"><span class="ico">⚡</span><h3>Flash firmware</h3><p>UV-K5 V1 and the newer UV-K5 V3 / UV-K1. The firmware file and the bootloader are checked before a single byte is sent; wrong combinations are refused.</p></div>
+      <div class="card"><span class="ico">📋</span><h3>Edit channels</h3><p>200 channels, stock and Karina firmware. Copy channels between radios, import and export CHIRP CSV and .img. Only the changed channels are written, after a backup, and read back to verify.</p></div>
+      <div class="card"><span class="ico">📡</span><h3>Knows your radio</h3><p>The status bar shows which radio is on the cable, in which mode and with which firmware. The buttons follow it, so the wrong operation can&#x27;t be started.</p></div>
+      <div class="card"><span class="ico">🔁</span><h3>One to one with k5prog-win</h3><p>The same buttons, log and bytes on the wire as the Windows tool k5prog-win, plus a few safety fixes.</p></div>
+      <div class="card"><span class="ico">🔄</span><h3>Stays up to date</h3><p>Updates itself from GitHub releases. With Homebrew, brew upgrade installs new versions.</p></div>
+      </div>
+    </section>
+
+    <section id="radios">
+      <h2>Supported radios</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Radio</th><th>Chip</th><th>Bootloader</th><th>Backup and restore</th><th>Firmware</th></tr></thead>
+          <tbody>
+          <tr><td>UV&#8209;K5, UV&#8209;K5(8), UV&#8209;K6, UV&#8209;5R&nbsp;Plus (V1)</td><td>DP32G030</td><td>2.x – 4.x</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td>UV&#8209;K5 V3, UV&#8209;K1</td><td>PY32F071</td><td>7.xx</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+          <tr><td>UV&#8209;K5 V2, UV&#8209;K6 V2</td><td>PY32F030</td><td>1.xx</td><td class="yes">Yes</td><td class="no">Refused*</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">* V1 firmware leaves a V2 with a blank screen, so the app refuses it. The bootloader version tells the models apart: switch the radio on with PTT held and press Write Firmware, the log shows it.</p>
+    </section>
+
+    <section id="safety">
+      <h2>Before you start</h2>
+      <div class="warn">
+        <ul>
+        <li>Press Read Calibration first and keep the file: it holds your radio&#x27;s own TX power and battery calibration, and you can&#x27;t get it anywhere else.</li>
+        <li>The app can&#x27;t tell a UV-K1 firmware file from a UV-K5 V3 one: pick the file for your model.</li>
+        <li>Flashing is at your own risk.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="install">
+      <h2>Install</h2>
+      <ol class="steps">
+      <li>Download the .dmg, open it and drag K5K1 Prog to Applications.</li>
+      <li>Or with Homebrew: <code>brew install --cask eruban/tap/k5k1-prog</code></li>
+      <li>Connect the radio with a programming cable (2-pin Kenwood plug). It shows up as <code>/dev/cu.usbserial-…</code></li>
+      </ol>
+      <p class="more"><a href="https://github.com/ERuban/k5k1prog-mac/blob/main/README.md">Full guide on GitHub →</a></p>
+    </section>
+
+    <section id="faq">
+      <h2>Questions and answers</h2>
+      <div class="faq">
+      <div class="qa"><h3>Can I program a Quansheng UV-K5 on a Mac?</h3><p>Yes. K5K1 Prog runs natively on macOS 12 or newer, on Apple Silicon and Intel, without Windows or a virtual machine. It backs up and restores calibration and configuration, flashes firmware and edits channels.</p></div>
+      <div class="qa"><h3>Which radios are supported?</h3><p>UV-K5, UV-K5(8), UV-K6 and UV-5R Plus with the DP32G030 chip (V1), and the newer UV-K5 V3 and UV-K1 (PY32F071). On the UV-K5 V2 / UV-K6 V2 backup and restore work; firmware upload is refused.</p></div>
+      <div class="qa"><h3>Do I need a driver for the programming cable?</h3><p>Usually not: the common CH340 cables work on current macOS without extra software. The cable shows up as /dev/cu.usbserial-…</p></div>
+      <div class="qa"><h3>Is it an alternative to CHIRP?</h3><p>For channels, yes: the Memory Editor edits the 200 channels of stock and Karina firmware and imports and exports CHIRP CSV and .img files. The radio&#x27;s menu settings are not edited.</p></div>
+      <div class="qa"><h3>Which firmware can I flash?</h3><p>Any firmware file for your model, .bin or .packed.bin: stock Quansheng, Karina, F4HWN and others. Before sending anything the app checks that the file fits the radio&#x27;s bootloader.</p></div>
+      <div class="qa"><h3>Is it free and safe?</h3><p>Free and open source under GPL v3. The app is signed and notarized by Apple, has no telemetry and only contacts GitHub to check for updates.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <nav><a href="https://github.com/ERuban/k5k1prog-mac">GitHub</a> <a href="https://github.com/ERuban/k5k1prog-mac/releases">Releases</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/README.md">Guide</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/CONTRIBUTING.md">Contributing</a> <a href="https://boosty.to/eruban/donate">Donate</a></nav>
+      <p>Free and open source (GPL v3). macOS port of k5prog-win by OneOfEleven, based on k5prog by Jacek Lipkowski SQ5BPF. Channel layout from the CHIRP drivers.</p>
+      <p>Not affiliated with Quansheng. © 2026 Evgeny Ruban.</p>
+    </footer>
+  </div>
+</body>
+</html>
