@@ -271,4 +271,64 @@ final class ChannelTransferTests: XCTestCase {
         XCTAssertEqual(ChannelConverter.convert(same, from: .init(.stock, .v1), to: .init(.stock, .k1), notes: &notes)?.scrambler, "3")
         XCTAssertEqual(notes, [])
     }
+
+    // 2.0.1: typed / imported numbers that used to crash or wrap
+    func testParseFreqRefusesWhatItCannotStore() {
+        XCTAssertEqual(ChannelFiles.parseFreq("433.125"), 433_125_000)
+        XCTAssertEqual(ChannelFiles.parseFreq(" 433.12500 "), 433_125_000)
+        XCTAssertEqual(ChannelFiles.parseFreq("433"), 433_000_000)
+        XCTAssertEqual(ChannelFiles.parseFreq("433."), 433_000_000)
+        XCTAssertEqual(ChannelFiles.parseFreq(".6"), 600_000)
+        XCTAssertEqual(ChannelFiles.parseFreq("0.000000"), 0)
+        XCTAssertEqual(ChannelFiles.parseFreq("446.0062501"), 446_006_250)   // past 1 Hz: cut
+        for bad in ["", ".", "1e20", "inf", "nan", "-0.6", "+433", "433.1.2", "433,125", "433.١٢٥", "½", "٣", "99999999999.0", "123456.0", "0x10"] {
+            XCTAssertNil(ChannelFiles.parseFreq(bad), bad)
+        }
+    }
+
+    func testCSVKeepsChannelNumbers() throws {
+        var c = Channel(); c.freq = 433_075_000
+        let part = ChannelFiles.csv([(slot: 49, channel: c), (slot: 51, channel: c)])   // channels 50 and 52
+        XCTAssertEqual(try ChannelFiles.readCSV(part).channels.map(\.slot), [49, 51])
+        // CHIRP's scratch memory at location 0 is not a channel: skipped and reported
+        let chirp = ChannelFiles.csvHeader.joined(separator: ",") + "\r\n"
+            + "0,,146.010000,,0.600000,,88.5,88.5,023,NN,023,Tone->Tone,FM,5.00,,50W,,,,,\r\n"
+            + "1,LPD-1,433.075000,,0.000000,,88.5,88.5,023,NN,023,Tone->Tone,FM,6.25,,1.5W,,,,,\r\n"
+        let r = try ChannelFiles.readCSV(chirp)
+        XCTAssertEqual(r.channels.map(\.slot), [0])
+        XCTAssertEqual(r.channels.first?.channel.name, "LPD-1")
+        XCTAssertEqual(r.notes.count, 1)
+        XCTAssertThrowsError(try ChannelFiles.readCSV(chirp.replacingOccurrences(of: "\r\n1,", with: "\r\n-1,")))
+        XCTAssertThrowsError(try ChannelFiles.readCSV(chirp.replacingOccurrences(of: "433.075000", with: "433.١٢٥")))
+        XCTAssertThrowsError(try ChannelFiles.readCSV(chirp.replacingOccurrences(of: "433.075000", with: "99999999999999999.0")))
+    }
+
+    func testMoveChannelsNeverCutsOff() {
+        let p = FirmwareProfile(.karina, .k1)
+        var m = ChannelMemory(bytes: [UInt8](repeating: 0xFF, count: K5.configSize), profile: p)
+        for i in 0..<5 { var c = Channel(); c.freq = 433_000_000 + i * 25_000; c.name = "CH\(i)"; m.setChannel(i, c) }
+        let start = m
+        XCTAssertEqual(m.moveChannels([0, 1, 2, 3, 4], to: 197), .noRoom)          // 197..201: past the end
+        XCTAssertEqual(m.bytes, start.bytes)
+        XCTAssertEqual(m.moveChannels([0, 1], to: 3), .targetsNotEmpty)            // rows 4, 5 are taken
+        XCTAssertEqual(m.bytes, start.bytes)
+        XCTAssertEqual(m.moveChannels([0, 1, 2, 3, 4], to: 195), .moved)           // exactly the last 5 rows
+        XCTAssertEqual((0..<5).map { m.channel($0) }, [nil, nil, nil, nil, nil])
+        XCTAssertEqual((195..<200).map { m.channel($0)?.name }, ["CH0", "CH1", "CH2", "CH3", "CH4"])
+        XCTAssertEqual(m.moveChannels([195, 196], to: 196), .targetsNotEmpty)     // 197 holds CH2
+        XCTAssertEqual(m.moveChannels([199], to: 0), .moved)
+        XCTAssertEqual(m.moveChannels([195, 196, 197, 198], to: 196), .moved)     // overlapping, one row down
+        XCTAssertNil(m.channel(195))
+        XCTAssertEqual((196..<200).map { m.channel($0)?.name }, ["CH0", "CH1", "CH2", "CH3"])
+        XCTAssertEqual(m.channel(0)?.name, "CH4")
+    }
+
+    func testFindCHIRPMagic() {
+        let n: [UInt8] = [1, 2, 3]
+        XCTAssertEqual(ChannelFiles.find(n, in: [0, 1, 2, 3]), 1)
+        XCTAssertEqual(ChannelFiles.find(n, in: [1, 2, 3]), 0)
+        XCTAssertNil(ChannelFiles.find(n, in: [1, 2]))
+        XCTAssertNil(ChannelFiles.find(n, in: [1, 2, 4, 1, 2]))
+        XCTAssertNil(ChannelFiles.find([], in: [1]))
+    }
 }

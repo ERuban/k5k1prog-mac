@@ -66,6 +66,9 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     private let line2 = NSTextField(string: "")
     private let lcd = NSTextField(labelWithString: "")
     private var visibleRows: [Int] = []
+    // decoded once per change instead of once per drawn cell (12 cells a row)
+    private var rows: [Channel?] = Array(repeating: nil, count: Channels.count)
+    private var changedRows = Set<Int>()
 
     // quiet check which radio is on the cable (every 2 s while this window is active)
     private enum RadioState: Equatable { case same, changed, noRadio, noPort, flashMode }
@@ -376,22 +379,38 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
         reloadTable()
     }
 
+    private func refreshCache() {
+        rows = mem.channels
+        let old = ChannelMemory(bytes: snapshot, profile: profile)
+        changedRows = Set((0..<Channels.count).filter { old.channel($0) != rows[$0] })
+    }
+
     private func reloadTable() {
+        refreshCache()
         let f = filter.lowercased()
         visibleRows = (0..<Channels.count).filter { i in
             guard !f.isEmpty else { return true }
-            guard let c = mem.channel(i) else { return false }
+            guard let c = rows[i] else { return false }
             return c.name.lowercased().contains(f) || fmtMHz(c.freq).contains(f)
         }
         table.reloadData()
         updateTitle()
     }
 
+    /// After an edit of `channels`: redraw only their rows (all rows while a search is on,
+    /// the edit may show or hide rows).
+    private func refreshRows(_ channels: Set<Int>) {
+        guard filter.isEmpty else { reloadTable(); return }
+        refreshCache()
+        table.reloadData(forRowIndexes: IndexSet(channels), columnIndexes: IndexSet(0..<table.numberOfColumns))
+        updateTitle()
+    }
+
     private func updateTitle() {
-        let used = (0..<Channels.count).filter { mem.channel($0) != nil }.count
+        let used = rows.filter { $0 != nil }.count
         window?.title = "Memory Editor — \(profile.radio.rawValue) on \(port)"
         window?.isDocumentEdited = dirty
-        let changed = changedChannels().count
+        let changed = changedRows.count
         footer.stringValue = "\(used) of \(Channels.count) channels · \(changed) changed"
             + (table.selectedRowIndexes.count > 1 ? " · \(table.selectedRowIndexes.count) selected" : "")
             + "   —   double-click to edit, drag rows to another window to copy"
@@ -494,8 +513,8 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         guard let id = tableColumn?.identifier.rawValue, let col = Col(rawValue: id) else { return nil }
         let i = visibleRows[row]
-        let c = mem.channel(i)
-        let changed = ChannelMemory(bytes: snapshot, profile: profile).channel(i) != c
+        let c = rows[i]
+        let changed = changedRows.contains(i)
         let label = NSTextField(labelWithString: text(col, c, i))
         label.lineBreakMode = .byTruncatingTail
         if [.n, .freq, .offset, .step].contains(col) { label.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular) }
@@ -553,26 +572,41 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     private func editText(_ col: Col, _ i: Int, row: Int, colIdx: Int) {
         let c = mem.channel(i)
         if c == nil && col == .name { editText(.freq, i, row: row, colIdx: table.column(withIdentifier: .init(Col.freq.rawValue))); return }
-        let rect = table.frameOfCell(atColumn: colIdx, row: row)
-        let field = NSTextField(frame: rect.insetBy(dx: 0, dy: -1))
+        // edit in the cell's own label: same font and text position, nothing drawn on top of it
+        table.scrollRowToVisible(row)
+        guard let field = table.view(atColumn: colIdx, row: row, makeIfNecessary: true) as? NSTextField else { return }
         field.stringValue = c.map { col == .name ? $0.name : (col == .freq ? fmtMHz($0.freq) : String(format: "%.4f", Double($0.offset) / 1e6)) } ?? ""
-        field.font = col == .name ? NSFont.systemFont(ofSize: 12) : NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
+        field.textColor = .labelColor   // the cell's own font stays: the text does not move
+        field.lineBreakMode = .byClipping
+        field.usesSingleLineMode = true
+        field.cell?.wraps = false
+        field.cell?.isScrollable = true
+        field.isEditable = true
+        field.drawsBackground = true
+        field.backgroundColor = .textBackgroundColor
         field.identifier = NSUserInterfaceItemIdentifier("edit.\(col.rawValue).\(i)")
         field.delegate = self
         field.target = self
         field.action = #selector(textCommitted(_:))
-        table.addSubview(field)
         window?.makeFirstResponder(field)
+    }
+
+    /// Ends an in-cell edit and redraws the cell from the memory.
+    private func endCellEdit(_ field: NSTextField) {
+        field.identifier = nil
+        field.isEditable = false
+        field.drawsBackground = false
+        window?.makeFirstResponder(table)
+        let row = table.row(for: field), col = table.column(for: field)
+        if row >= 0, col >= 0 { table.reloadData(forRowIndexes: [row], columnIndexes: [col]) }
     }
 
     @objc private func textCommitted(_ field: NSTextField) {
         guard let id = field.identifier?.rawValue, id.hasPrefix("edit.") else { return }
-        field.identifier = nil
         let parts = id.split(separator: ".")
         let col = Col(rawValue: String(parts[1]))!, i = Int(parts[2])!
         let v = field.stringValue.trimmingCharacters(in: .whitespaces)
-        field.removeFromSuperview()
-        window?.makeFirstResponder(table)
+        endCellEdit(field)
         var c = mem.channel(i)
         switch col {
         case .name:
@@ -590,12 +624,16 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
                 c = n
             } else { c!.freq = hz }
         case .offset:
-            guard c != nil, let hz = parseMHz(v) else { return }
+            guard c != nil else { return }
+            guard let hz = parseMHz(v) else {
+                if !v.isEmpty { alert("\(v) MHz can't be used as the offset", "Type the offset in MHz, for example 0.6 or 5; the direction is set in Duplex.") }
+                return
+            }
             c!.offset = hz
             if hz == 0 { c!.duplex = .none } else if c!.duplex == .none || c!.duplex == .off { c!.duplex = .plus }
         default: return
         }
-        if let ch = c, let tx = ch.txFreq, !profile.isValidFrequency(tx) {
+        if let ch = c, let tx = ch.txFreq, tx != mem.channel(i)?.txFreq, !profile.isValidFrequency(tx) {
             alert(String(format: "Transmit frequency %.5f MHz can't be used", Double(tx) / 1e6), "Check the duplex and the offset.")
             return
         }
@@ -604,9 +642,7 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
 
     func control(_ control: NSControl, textView: NSTextView, doCommandBy sel: Selector) -> Bool {
         if sel == #selector(NSResponder.cancelOperation(_:)), let f = control as? NSTextField, f.identifier?.rawValue.hasPrefix("edit.") == true {
-            f.identifier = nil
-            f.removeFromSuperview()
-            window?.makeFirstResponder(table)
+            endCellEdit(f)
             return true
         }
         return false
@@ -636,9 +672,9 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
         updateTitle()
     }
 
+    /// "433.125" / "433,125" in MHz to Hz; nil for anything that is not a plain non-negative number.
     private func parseMHz(_ s: String) -> Int? {
-        guard let d = Double(s.replacingOccurrences(of: ",", with: ".")) else { return nil }
-        return Int((d * 1_000_000).rounded())
+        ChannelFiles.parseFreq(s.replacingOccurrences(of: ",", with: "."))
     }
 
     private func editPopup(_ col: Col, _ i: Int, row: Int, colIdx: Int) {
@@ -697,17 +733,24 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     @objc private func popupPicked(_ item: NSMenuItem) {
         guard let ch = item.representedObject as? PopupChoice, var c = mem.channel(ch.index) else { return }
         ch.apply(&c)
-        if let tx = c.txFreq, !profile.isValidFrequency(tx) {
-            alert(String(format: "Transmit frequency %.5f MHz can't be used", Double(tx) / 1e6), "Check the duplex and the offset.")
-            return
-        }
         // apply to every selected channel when the clicked one is part of a multi-selection
         let rows = table.selectedRowIndexes.map { visibleRows[$0] }
-        var changes: [Int: Channel?] = [ch.index: c]
+        var changes: [Int: Channel] = [ch.index: c]
         if rows.count > 1 && rows.contains(ch.index) {
             for i in rows where i != ch.index { if var o = mem.channel(i) { ch.apply(&o); changes[i] = o } }
         }
-        apply(changes, actionName: "Edit")
+        // every channel whose transmit frequency changes must still transmit where the radio allows
+        let bad = changes.filter { i, x in
+            guard let tx = x.txFreq, tx != mem.channel(i)?.txFreq else { return false }
+            return !profile.isValidFrequency(tx)
+        }.keys.sorted()
+        if let first = bad.first, let tx = changes[first]?.txFreq {
+            let which = bad.count == 1 ? "channel \(first + 1)" : "\(bad.count) channels (first: \(first + 1))"
+            alert(String(format: "Transmit frequency %.5f MHz can't be used", Double(tx) / 1e6),
+                  "Nothing changed: \(which) would transmit outside the radio's ranges. Check the duplex and the offset.")
+            return
+        }
+        apply(changes.mapValues { Optional($0) }, actionName: "Edit")
     }
 
     @objc private func setPower(_ sender: NSPopUpButton) {
@@ -725,11 +768,14 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     // MARK: - model changes + undo
 
     private func apply(_ changes: [Int: Channel?], actionName: String) {
-        guard editable, !changes.isEmpty else { return }
+        guard editable else { return }
+        // only what really changes (Enter without an edit, the same value picked again: no undo step)
+        let real = changes.filter { mem.channel($0.key) != $0.value }
+        guard !real.isEmpty else { return }
         let before = mem.bytes
-        for (i, c) in changes { mem.setChannel(i, c) }
+        for (i, c) in real { mem.setChannel(i, c) }
         registerUndo(before, name: actionName)
-        reloadTable()
+        refreshRows(Set(real.keys))
     }
 
     private func registerUndo(_ before: [UInt8], name: String) {
@@ -775,14 +821,15 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     /// row, or the first free row) on. With `slots` (import) the source's row layout is kept:
     /// gaps stay gaps, and without a selection the channels keep their own row numbers.
     /// Asks before replacing channels, reports adjusted values.
-    private func insert(_ chans: [Channel], slots: [Int]? = nil, from source: FirmwareProfile?, at: Int?, what: String) {
+    private func insert(_ chans: [Channel], slots: [Int]? = nil, from source: FirmwareProfile?, at: Int?, what: String,
+                        notes fileNotes: [String] = []) {
         guard let w = window else { return }
         guard editable else { alert("This radio is read-only", "Choose the firmware and the radio first."); return }
         let selected = at ?? table.selectedRowIndexes.first.map { visibleRows[$0] }
         let first = slots?.min() ?? 0
         let start = selected ?? (slots != nil ? first : (0..<Channels.count).first { mem.channel($0) == nil } ?? 0)
         let rel = slots.map { $0.map { $0 - first } } ?? Array(0..<chans.count)
-        var notes: [String] = []
+        var notes: [String] = fileNotes
         var placed: [(Int, Channel)] = []
         var dropped = 0
         for (k, c) in chans.enumerated() {
@@ -847,18 +894,18 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
         if (info.draggingSource as? NSTableView) === table {
             // move inside this radio: free the old rows, then place them from the drop row
             let before = mem.bytes
-            let moving = draggedRows.compactMap { i in mem.channel(i).map { (i, $0) } }
-            for (i, _) in moving { mem.setChannel(i, nil) }
-            let targets = dest..<min(Channels.count, dest + moving.count)
-            if targets.contains(where: { mem.channel($0) != nil }) {
-                mem.bytes = before
-                alert("Rows \(dest + 1)–\(dest + moving.count) are not empty", "Move the channels to free rows, or copy and paste to replace channels.")
-                return false
+            let count = draggedRows.filter { mem.channel($0) != nil }.count
+            switch mem.moveChannels(draggedRows, to: dest) {
+            case .moved:
+                registerUndo(before, name: "Move")
+                reloadTable()
+                return true
+            case .targetsNotEmpty:
+                alert("Rows \(dest + 1)–\(dest + count) are not empty", "Move the channels to free rows, or copy and paste to replace channels.")
+            case .noRoom:
+                alert("Not enough rows after row \(dest + 1)", "\(count) channel(s) need rows \(dest + 1)–\(dest + count); the radio has \(Channels.count). Nothing was moved.")
             }
-            for (k, (_, c)) in moving.enumerated() where dest + k < Channels.count { mem.setChannel(dest + k, c) }
-            registerUndo(before, name: "Move")
-            reloadTable()
-            return true
+            return false
         }
         insert(chans, from: clips.first?.profile, at: dest, what: "copied")
         return true
@@ -911,14 +958,21 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
         probeTimer = t
     }
 
+    /// A channel cell or a power-on text line is being typed in: the radio check must not
+    /// redraw the table or the fields now (it would throw the typed text away).
+    private var isTyping: Bool {
+        guard let tv = window?.firstResponder as? NSTextView, let f = tv.delegate as? NSTextField else { return false }
+        return f.identifier?.rawValue.hasPrefix("edit.") == true || f === line1 || f === line2
+    }
+
     private func probe() {
-        guard let w = window, w.isKeyWindow, NSApp.isActive, w.attachedSheet == nil, !reading,
+        guard let w = window, w.isKeyWindow, NSApp.isActive, w.attachedSheet == nil, !reading, !isTyping,
               host?.isIdle == true else { return }
         _ = host?.runEditorProbe(port: port, blocks: Self.probeBlocks) { [weak self] r in self?.probed(r) }
     }
 
     private func probed(_ r: K5Programmer.ProbeResult) {
-        guard !reading, window?.attachedSheet == nil else { return }
+        guard !reading, window?.attachedSheet == nil, !isTyping else { return }   // checked again in 2 s
         if (r == .noRadio || r == .noPort) && Date() < probeQuietUntil { return }
         let state: RadioState
         switch r {
@@ -1094,7 +1148,8 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
                 imported = try ChannelFiles.channels(ofMemory: data, profile: binProfile)
             }
             if imported.channels.isEmpty { alert("No channels in \(url.lastPathComponent)", ""); return }
-            insert(imported.channels.map(\.channel), slots: imported.channels.map(\.slot), from: imported.source, at: nil, what: "imported from \(url.lastPathComponent)")
+            insert(imported.channels.map(\.channel), slots: imported.channels.map(\.slot), from: imported.source, at: nil,
+                   what: "imported from \(url.lastPathComponent)", notes: imported.notes)
         } catch {
             alert("Can't import \(url.lastPathComponent)", "\(error)")
         }
@@ -1122,13 +1177,14 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
         format.target = panel
         panel.allowedContentTypes = [.commaSeparatedText]
         format.action = #selector(NSSavePanel.validateVisibleColumns)
-        NotificationCenter.default.addObserver(forName: NSMenu.didSendActionNotification, object: format.menu, queue: .main) { _ in
+        let observer = NotificationCenter.default.addObserver(forName: NSMenu.didSendActionNotification, object: format.menu, queue: .main) { _ in
             let img = format.indexOfSelectedItem == 1
             panel.allowedContentTypes = [img ? (UTType(filenameExtension: "img") ?? .data) : .commaSeparatedText]
             panel.nameFieldStringValue = base + (img ? ".img" : ".csv")
             note.stringValue = img ? "all channels (a CHIRP image is the whole memory)" : (sel ? "\(list.count) selected channels" : "all \(list.count) channels")
         }
         panel.beginSheetModal(for: w) { r in
+            NotificationCenter.default.removeObserver(observer)
             guard r == .OK, let url = panel.url else { return }
             let bytes: [UInt8] = format.indexOfSelectedItem == 1
                 ? ChannelFiles.chirpImage(self.mem.bytes, profile: self.profile, firmwareString: self.firmware)
@@ -1181,6 +1237,19 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
                 try? Data(path.hasSuffix(".img") ? ChannelFiles.chirpImage(mem.bytes, profile: profile, firmwareString: firmware)
                                                  : Array(ChannelFiles.csv((0..<Channels.count).compactMap { i in mem.channel(i).map { (i, $0) } }).utf8))
                     .write(to: URL(fileURLWithPath: path))
+            }
+        case let x where x.hasPrefix("edit=") || x.hasPrefix("set="):
+            // edit=<column>:<channel number>: as if double-clicked; set=<column>:<channel>:<text>: typed + Enter
+            let p = x.split(separator: "=", maxSplits: 1)[1].split(separator: ":", maxSplits: 2, omittingEmptySubsequences: false)
+            if p.count >= 2, let col = Col(rawValue: String(p[0])), let n = Int(p[1]),
+               let row = visibleRows.firstIndex(of: n - 1) {
+                table.selectRowIndexes([row], byExtendingSelection: false)
+                let colIdx = table.column(withIdentifier: .init(col.rawValue))
+                editText(col, n - 1, row: row, colIdx: colIdx)
+                if p.count == 3, let f = table.view(atColumn: colIdx, row: row, makeIfNecessary: false) as? NSTextField {
+                    f.stringValue = String(p[2])
+                    textCommitted(f)
+                }
             }
         case let x where x.hasPrefix("profile="):   // as if picked with the selectors
             if let p = FirmwareProfile(key: String(x.dropFirst(8))) { setProfile(p, confirm: true) }

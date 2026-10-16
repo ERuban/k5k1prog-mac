@@ -89,6 +89,8 @@ public struct ImportedChannels {
     /// Profile the channels were decoded with; nil for CSV (generic values).
     public var source: FirmwareProfile?
     public var kind: String
+    /// What was left out while reading (shown with the import report).
+    public var notes: [String] = []
 }
 
 public enum ChannelFiles {
@@ -110,8 +112,7 @@ public enum ChannelFiles {
 
     /// Reads a CHIRP .img: raw memory + metadata (vendor / model). Profile from the model, if known.
     public static func readCHIRPImage(_ data: [UInt8]) -> (memory: [UInt8], profile: FirmwareProfile?, model: String?, firmware: String?) {
-        guard let idx = data.indices.first(where: { i in i + chirpMagic.count <= data.count && Array(data[i..<(i + chirpMagic.count)]) == chirpMagic })
-        else { return (data, nil, nil, nil) }
+        guard let idx = find(chirpMagic, in: data) else { return (data, nil, nil, nil) }
         let meta = Array(data[(idx + chirpMagic.count)...])
         var model: String? = nil, fw: String? = nil
         if let d = Data(base64Encoded: Data(meta)), let j = try? JSONSerialization.jsonObject(with: d) as? [String: Any] {
@@ -119,6 +120,16 @@ public enum ChannelFiles {
             fw = j["uvk5_firmware"] as? String
         }
         return (Array(data[..<idx]), model.flatMap(profile(forCHIRPModel:)), model, fw)
+    }
+
+    /// First index of `needle` in `hay` (no copies per position).
+    static func find(_ needle: [UInt8], in hay: [UInt8]) -> Int? {
+        guard !needle.isEmpty, needle.count <= hay.count else { return nil }
+        outer: for i in 0...(hay.count - needle.count) {
+            for k in 0..<needle.count where hay[i + k] != needle[k] { continue outer }
+            return i
+        }
+        return nil
     }
 
     public static func chirpImage(_ memory: [UInt8], profile: FirmwareProfile, firmwareString: String) -> [UInt8] {
@@ -205,15 +216,17 @@ public enum ChannelFiles {
         return out
     }
 
-    static func parseFreq(_ s: String) -> Int? {
+    /// MHz as written in CHIRP files and typed in the editor ("433.125", "433", ".6") to Hz.
+    /// ASCII digits only, at most 5 digits before the point, never negative: anything else
+    /// (signs, exponents, "inf", other scripts' digits) is nil instead of a crash or a wrap.
+    public static func parseFreq(_ s: String) -> Int? {
         let t = s.trimmingCharacters(in: .whitespaces)
-        guard !t.isEmpty else { return nil }
         let parts = t.split(separator: ".", omittingEmptySubsequences: false)
-        guard let mhz = Int(parts[0]) else { return nil }
-        var frac = parts.count > 1 ? String(parts[1]) : ""
-        guard frac.allSatisfy(\.isNumber) else { return nil }
-        frac = String((frac + "000000").prefix(6))
-        return mhz * 1_000_000 + Int(frac)!
+        guard parts.count <= 2 else { return nil }
+        let whole = String(parts[0]), frac = parts.count > 1 ? String(parts[1]) : ""
+        func digits(_ x: String) -> Bool { x.utf8.allSatisfy { $0 >= 0x30 && $0 <= 0x39 } }
+        guard !(whole.isEmpty && frac.isEmpty), whole.utf8.count <= 5, digits(whole), digits(frac) else { return nil }
+        return (Int(whole) ?? 0) * 1_000_000 + Int(String((frac + "000000").prefix(6)))!
     }
 
     public static func readCSV(_ text: String) throws -> ImportedChannels {
@@ -265,8 +278,12 @@ public enum ChannelFiles {
             // CSV has no scan lists: none, as when CHIRP imports a CSV
             out.append((loc, c))
         }
-        // CHIRP CSV locations start at 0 or 1; keep the order, slots are re-assigned on paste
-        let base = out.map(\.0).min() ?? 1
-        return ImportedChannels(channels: out.map { (max(0, $0.0 - base), $0.1) }, source: nil, kind: "CSV")
+        // Location = the channel number (CHIRP numbers these radios 1-200, our export too); a
+        // part of a list (channels 50-60) keeps its numbers. Location 0 is CHIRP's own scratch
+        // memory of its generic CSV (146.01 MHz), not a channel of the radio: skipped, reported.
+        if let bad = out.first(where: { $0.0 < 0 }) { throw ChannelFileError.badCSV("bad location \(bad.0)") }
+        let zero = out.filter { $0.0 == 0 }.count
+        return ImportedChannels(channels: out.filter { $0.0 > 0 }.map { ($0.0 - 1, $0.1) }, source: nil, kind: "CSV",
+                                notes: zero > 0 ? ["location 0 (CHIRP's scratch memory) skipped"] : [])
     }
 }
