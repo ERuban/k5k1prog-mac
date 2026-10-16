@@ -20,7 +20,6 @@
 ![macOS 12+](https://img.shields.io/badge/macOS-12%2B-lightgrey?style=flat&logo=apple)
 ![Signed & Notarized by Apple](https://img.shields.io/badge/Signed%20%26%20Notarized-Apple-success?style=flat)
 ![No telemetry](https://img.shields.io/badge/telemetry-none-success?style=flat)
-[![Stars](https://img.shields.io/github/stars/ERuban/k5k1prog-mac?style=flat)](https://github.com/ERuban/k5k1prog-mac/stargazers)
 
 </div>
 
