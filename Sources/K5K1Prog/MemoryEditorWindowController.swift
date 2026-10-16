@@ -431,7 +431,7 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
     // MARK: - profile
 
     private func askProfileIfNeeded() {
-        guard !confirmed, let w = window else { return }
+        guard !confirmed, let w = window, !Self.uiTesting else { return }   // UI tests pick it with editor-profile=
         let (fam, _) = FirmwareProfile.suggest(firmwareString: firmware)
         guard fam == .karina else { return }   // unknown firmware: the banner says what to do
         let a = NSAlert()
@@ -589,11 +589,41 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
         field.target = self
         field.action = #selector(textCommitted(_:))
         window?.makeFirstResponder(field)
+        hideCaretWhileSelected(field)
+    }
+
+    // The text is selected when a cell edit starts; macOS 26 still draws the caret at the start of
+    // the selection (a bar left of the text). Hide it while something is selected.
+    private var caretObserver: NSObjectProtocol?
+    private var caretColor: NSColor?
+
+    private func hideCaretWhileSelected(_ field: NSTextField) {
+        guard let tv = field.currentEditor() as? NSTextView else { return }
+        let normal = tv.insertionPointColor
+        caretColor = normal
+        let update = { [weak tv] in
+            guard let tv else { return }
+            tv.insertionPointColor = tv.selectedRange().length > 0 ? .clear : normal
+        }
+        update()
+        caretObserver = NotificationCenter.default.addObserver(forName: NSTextView.didChangeSelectionNotification,
+                                                               object: tv, queue: .main) { _ in update() }
+    }
+
+    /// The field editor is shared by the window's fields (search, power-on text): give its caret back.
+    private func restoreCaret(_ field: NSTextField) {
+        if let o = caretObserver { NotificationCenter.default.removeObserver(o) }
+        caretObserver = nil
+        if let c = caretColor, let tv = field.currentEditor() as? NSTextView ?? window?.fieldEditor(false, for: field) as? NSTextView {
+            tv.insertionPointColor = c
+        }
+        caretColor = nil
     }
 
     /// Ends an in-cell edit and redraws the cell from the memory.
     private func endCellEdit(_ field: NSTextField) {
         field.identifier = nil
+        restoreCaret(field)
         field.isEditable = false
         field.drawsBackground = false
         window?.makeFirstResponder(table)
@@ -1246,10 +1276,24 @@ final class MemoryEditorWindowController: NSWindowController, NSWindowDelegate, 
                 table.selectRowIndexes([row], byExtendingSelection: false)
                 let colIdx = table.column(withIdentifier: .init(col.rawValue))
                 editText(col, n - 1, row: row, colIdx: colIdx)
+                if let f = table.view(atColumn: colIdx, row: row, makeIfNecessary: false) as? NSTextField,
+                   let tv = f.currentEditor() as? NSTextView {
+                    host?.memoAdd("[editor] editing \(col.rawValue) \(n): selection \(tv.selectedRange().length) chars, caret alpha \(tv.insertionPointColor.alphaComponent)")
+                }
                 if p.count == 3, let f = table.view(atColumn: colIdx, row: row, makeIfNecessary: false) as? NSTextField {
                     f.stringValue = String(p[2])
                     textCommitted(f)
                 }
+            }
+        case "caret-end":   // collapse the selection of the cell being edited: the caret must show
+            if let tv = window?.firstResponder as? NSTextView {
+                tv.setSelectedRange(NSRange(location: tv.string.utf16.count, length: 0))
+                host?.memoAdd("[editor] no selection: caret alpha \(tv.insertionPointColor.alphaComponent)")
+            }
+        case "caret":   // the shared field editor's caret is back after a cell edit (search field)
+            window?.makeFirstResponder(search)
+            if let tv = search.currentEditor() as? NSTextView {
+                host?.memoAdd("[editor] search caret alpha \(tv.insertionPointColor.alphaComponent)")
             }
         case let x where x.hasPrefix("profile="):   // as if picked with the selectors
             if let p = FirmwareProfile(key: String(x.dropFirst(8))) { setProfile(p, confirm: true) }
