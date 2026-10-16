@@ -30,7 +30,7 @@ A native macOS app to back up, restore and flash **Quansheng UV-K5 / UV-K5(8) / 
 
 It keeps the behaviour of [k5prog-win](https://github.com/OneOfEleven/k5prog-win) one to one (same
 buttons, same log, same bytes on the wire) and adds firmware upload for the newer UV-K5 V3 and UV-K1,
-which k5prog-win can't do, plus a few safety fixes
+which k5prog-win can't do, a channel editor, plus a few safety fixes
 (see [Differences from k5prog-win](#differences-from-k5prog-win)).
 
 ## Features
@@ -40,9 +40,17 @@ which k5prog-win can't do, plus a few safety fixes
 - **Read / write configuration** (channels and settings, `0x0000–0x1CFF`).
 - **Write firmware**, raw `.bin` or vendor `.packed.bin`. The radio type is detected from the image
   itself and checked against the bootloader before anything is written.
+- **Memory Editor** for the radio's 200 channels, stock and Karina firmware, UV-K5 V1 and UV-K1 /
+  UV-K5 V3 (see [Edit channels](#edit-channels)): edit, copy and drag channels between two radios,
+  import / export CHIRP CSV and CHIRP `.img`, power-on text on stock firmware. Writes only the changed
+  channels, after a backup, and reads them back to verify. Settings and calibration are never touched.
+- **Radio status** in the main window: which radio is on the cable, in which mode, and its firmware
+  string, checked quietly every 2 seconds.
+- **Settings** (**K5K1 Prog → Settings…**): light / dark appearance, the folder for the editor's
+  backups.
 - Universal app (Apple Silicon and Intel), macOS 12 or newer. No drivers or extra software needed
   for CH340 cables.
-- Settings (port, speed, verbose level, window position) are kept the macOS way, in
+- Settings (port, speed, verbose level, window position, appearance) are kept the macOS way, in
   `~/Library/Preferences/io.github.eruban.k5k1prog.plist`. Nothing is written next to the app.
 
 ## Supported radios
@@ -75,7 +83,16 @@ written to the UV-K1 and verified by reading it back.
 
 ## Install
 
-Download `K5K1-Prog-<version>.dmg` from [Releases](../../releases), open it and drag **K5K1 Prog**
+With [Homebrew](https://brew.sh):
+
+```sh
+brew install --cask eruban/tap/k5k1-prog
+```
+
+`brew upgrade` installs new versions (the cask in [ERuban/homebrew-tap](https://github.com/ERuban/homebrew-tap)
+follows every release by itself).
+
+Or download `K5K1-Prog-<version>.dmg` from [Releases](../../releases), open it and drag **K5K1 Prog**
 to **Applications**. The app is signed with a Developer ID and notarized by Apple, so it opens
 without warnings. A `.zip` with the same app is attached too.
 
@@ -120,6 +137,37 @@ Then follow the instructions of your firmware (memory reset, which calibration f
 on). Some firmware packages ship a complete calibration file that replaces your factory TX power and
 battery values. Compare a fresh **Read Calibration** with your backup afterwards.
 
+### Edit channels
+
+1. Switch the radio on normally, select its port and press **Memory Editor…** (⌘E). The channels are
+   read from the radio; the window always shows what is in the radio now.
+2. **Firmware** and **Radio** are picked from the radio's firmware string: stock firmware by its
+   version number, Karina by her codename. Karina's string is the same on the UV-K5 V1 and the UV-K1,
+   so the editor asks which radio it is, once. A firmware it does not know opens read-only until you
+   choose. If you choose something the firmware string contradicts, the editor says so in red: the
+   channel values (mode, step, scrambler) would be read and written wrongly.
+3. Double-click a cell to edit it. Select several channels to change them together, **Set Power**,
+   **Delete**, ⌘Z to undo.
+4. **Write to Radio…** lists the changes, saves a backup of the radio's configuration
+   (`~/Documents/K5K1 Prog Backups/`, see Settings), checks that the radio has not changed since it
+   was read, writes only the changed blocks, reads them back and compares. Restore a backup with
+   **Write Configuration**.
+
+Copy channels to another radio: open an editor for each radio (one per port) and drag the channels
+across or use Copy / Paste, or **Export Channels…** on one and **Import Channels…** on the other.
+Values that the other firmware does not have (USB on stock firmware, Karina's scrambler list, fine
+steps) are converted and listed. An import keeps the channel numbers; settings in the file are
+ignored. Formats: CHIRP CSV, CHIRP `.img` (stock or Karina, UV-K5 / UV-K1), and a configuration
+`.bin` from Read Configuration (a `.bin` doesn't say which radio it is from: choose it in the import
+dialog).
+
+The editor checks the radio every 2 seconds while its window is active. If another radio is plugged
+in, it reads that one (or, with unwritten edits, says so and does not write to it).
+
+Only the channel memory is edited (200 channels, the stock layout that stock firmware, Karina and
+F4HWN share). Other firmware, more than 200 channels (F4HWN on the UV-K1) and the radio's settings
+are not supported.
+
 ## Differences from k5prog-win
 
 All on the safe side:
@@ -131,10 +179,13 @@ All on the safe side:
 3. **Configuration file whose size is not a multiple of 128 bytes.** k5prog-win reads past the end of
    its buffer and writes random memory into the radio. Here the rest of the last block keeps the
    radio's own bytes (read back first). Normal files (7424 / 8192 / 512 bytes) are not affected.
-4. **Battery voltage (hidden Read ADC).** k5prog-win reads its reference value from unrelated memory.
-   Here the real calibration value is used when the calibration was read in the same session.
-5. The port list shows `/dev/cu.*` (the macOS equivalent of the COM port list). The status bar has
+4. The port list shows `/dev/cu.*` (the macOS equivalent of the COM port list). The status bar has
    no "RX BREAK" indicator.
+5. The main window does not query the radio into the log on start-up and on a port change ("Fetching
+   radio details .. radio not detected"). The radio status is shown in the status bar instead, and
+   the buttons follow it: configuration, calibration and the editor need the radio in normal mode,
+   Write Firmware needs it in firmware update mode, nothing is enabled without a radio. Long log
+   lines wrap.
 6. **Settings** are kept in macOS preferences (`io.github.eruban.k5k1prog`), not in an ini file next
    to the app: on a Mac that folder is `/Applications`. The keys are the ones of `k5prog_win.ini`
    (`MainForm.Top`, `GUI.Verbose`, `SerialPort.Name`, …). Versions 1.0 / 1.1 used `K5K1Prog.ini`; it is
@@ -143,8 +194,7 @@ All on the safe side:
 Everything else matches the original: buttons, order of operations, timeouts (hello 2×1 s, read 3 s,
 write 2 s, flash 3 s), retries, checks, every log line and message box text, the protocol (frames,
 XOR tables, CRC, session id `6A 39 57 64`, 128-byte config blocks, 256-byte flash blocks, the
-bootloader version fix-up `4.00.07` → `*.00.07`), the settings keys, the hidden Read ADC / Read RSSI
-buttons and Esc to abort a transfer.
+bootloader version fix-up `4.00.07` → `*.00.07`), the settings keys and Esc to abort a transfer.
 
 ## UV-K5 V3 / UV-K1 firmware upload
 
@@ -170,12 +220,15 @@ too large image, a radio that is not in bootloader mode.
 ## Development
 
 ```sh
-swift test                    # 52 tests: simulator, protocol, reference comparisons
+swift test                    # 72 tests: simulator, protocol, reference comparisons, channels
 swift run k5emu --mode boot --bl-version 7.03.01 --link /tmp/k5com   # simulated K1 bootloader
 ```
 
-- `Sources/K5Core`: protocol, firmware file handling, the k5prog-win logic.
+- `Sources/K5Core`: protocol, firmware file handling, the k5prog-win logic; `Channels.swift` and
+  `ChannelTransfer.swift` for the Memory Editor (channel layout, profiles, CSV / `.img`).
 - `Sources/K5K1Prog`: the AppKit app.
+- `scripts/chirp-golden/golden.py`: builds the channel test references with the real CHIRP drivers
+  (synthetic images, no personal data). Only needed when the profiles change.
 - `Sources/K5Sim`, `Sources/k5emu`: a UV-K5 simulator on a pseudo terminal. User mode, V1 bootloader,
   and `--bl-version 7.xx.xx` for the PY32 bootloader. Fault injection for rejected or lost pages in
   `RadioSim.Options`.
@@ -197,7 +250,11 @@ Test hooks (not needed for normal use):
 
 - `K5PROG_EXTRA_PORTS=/tmp/k5com` adds device paths to the port list (for `k5emu --link /tmp/k5com`).
 - `K5PROG_UITEST=readcalib,writecalib,quit` with `K5PROG_UITEST_OPEN/SAVE/MEMO` drives the real app
-  without dialogs.
+  without dialogs (also `editor`, `editor-import`, `editor-write`, `editor-export`, `snap` with
+  `K5PROG_UITEST_SNAP=<dir>` for window snapshots, `wait`).
+- `K5PROG_BACKUP_DIR=<dir>` puts the Memory Editor's backups there.
+- `K5PROG_CHANNEL_DUMPS=<dir>` compares the channel decode of your own dumps with CHIRP's
+  (`<name>.<profile>.bin` + `golden.py --decode` output as `.json`).
 - `K5PROG_SETTINGS_SUITE=<name>` keeps the settings of a dev / test run apart from the real ones
   (and skips the import of an old `K5K1Prog.ini`).
 - `K5PROG_SPARKLE_FEED=<url>` points the updater at another appcast (local update tests,
@@ -218,13 +275,18 @@ app signed and notarized, and for testing on real radios.
   routines k5prog-win is built on (GPL v3).
 - UV-K5 V3 / UV-K1 bootloader protocol as implemented by muzkr's serialtool in
   [armel/uv-k1-k5v3-firmware-custom](https://github.com/armel/uv-k1-k5v3-firmware-custom).
+- Channel layout and value lists of the Memory Editor follow the [CHIRP](https://github.com/kk7ds/chirp)
+  drivers: UV-K5 by Jacek Lipkowski SQ5BPF, UV-K1 by Thibaut Berg, and Karina's CHIRP modules by
+  M2Boo (based on the egzumer / JOC2 / F4HWN drivers), GPLv2 or later. CSV and `.img` are CHIRP's
+  formats.
 
 ## License
 
 GPL v3, same as k5prog-win and k5prog. See [LICENSE](LICENSE). Copyright © 2026 Evgeny Ruban.
 
 K5K1 Prog is a modified version of k5prog-win: the C++/VCL Windows program was rewritten in Swift for
-macOS, and UV-K5 V3 / UV-K1 firmware upload and the safety fixes listed above were added (2026).
+macOS, and UV-K5 V3 / UV-K1 firmware upload, the Memory Editor and the safety fixes listed above were
+added (2026).
 
 This software is not affiliated with Quansheng. Transmit only on frequencies and at power levels you
 are licensed for.

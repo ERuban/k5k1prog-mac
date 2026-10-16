@@ -94,7 +94,9 @@ public final class K5Programmer {
 
     // MARK: - memo helpers
 
-    private func add(_ s: String) { ui?.memoAdd(s) }
+    /// Set while the Memory Editor quietly polls the radio: nothing goes to the log.
+    private var quiet = false
+    private func add(_ s: String) { if !quiet { ui?.memoAdd(s) } }
     private func clearMemo() { ui?.memoClear() }
     private func hdump(_ buf: [UInt8]) { for l in HexDump.lines(buf) { add(l) } }
     private func gauge(_ max: Int, _ progress: Int, _ visible: Bool) { ui?.gauge(max: max, progress: progress, visible: visible) }
@@ -293,7 +295,7 @@ public final class K5Programmer {
     }
 
     /// k5_wait_flash_message()
-    func k5WaitFlashMessage() -> Int {
+    func k5WaitFlashMessage(timeoutMs: Int = 3000) -> Int {
         guard port.connected else { return 0 }
         bootloaderVer = []
         clearRxPacketQueue()
@@ -301,7 +303,7 @@ public final class K5Programmer {
             add("")
             add("listening for firmware update mode packet ..")
         }
-        if let r = waitLoop(3000, {
+        if let r = waitLoop(timeoutMs, {
             let d = rx.queue[0]
             let size = d.count - 2
             rxDebug(d)
@@ -394,7 +396,7 @@ public final class K5Programmer {
     }
 
     /// k5_hello()
-    func k5Hello() -> Int {
+    func k5Hello(timeoutMs: Int = 1000) -> Int {
         guard port.connected else { return 0 }
         firmwareVer = []
         hasCustomAESKey = false
@@ -410,7 +412,7 @@ public final class K5Programmer {
         }
         if k5SendBuf(b) <= 0 { return 0 }
 
-        if let r = waitLoop(1000, {
+        if let r = waitLoop(timeoutMs, {
             let d = rx.queue[0]
             let size = d.count - 2
             rxDebug(d)
@@ -428,85 +430,6 @@ public final class K5Programmer {
             add("has custom AES key: " + (hasCustomAESKey ? "yes" : "no"))
             add(" is in lock screen: " + (isInLockScreen ? "yes" : "no"))
             add(("         challenge: " + challenge.map { String(format: "%02X ", $0) }.joined()).trimmingTrailingSpaces)
-            clearRxPacket0()
-            return 1
-        }) { return r }
-        if verbose > 1 { add("error: no valid packet received") }
-        return 0
-    }
-
-    /// k5_readADC()
-    func k5ReadADC() -> Int {
-        guard port.connected else { return 0 }
-        var b: [UInt8] = [0x29, 0x05, 4, 0]
-        b += K5.sessionID
-        if verbose > 0 {
-            add("")
-            add("sending k5_readADC ..")
-        }
-        if k5SendBuf(b) <= 0 { return 0 }
-
-        if let r = waitLoop(1000, {
-            let d = rx.queue[0]
-            let size = d.count - 2
-            rxDebug(d)
-            if isFlashModePacket(d) { clearRxPacket0(); return -1 }
-            if size < 8 || d[0] != 0x2A || d[1] != 0x05 { clearRxPacket0(); return nil }
-
-            let adcVol = (UInt16(d[5]) << 8) | UInt16(d[4])
-            // battery calibration entry [3] lives at EEPROM 0x1F40 + 6.
-            // The original indexes m_config (only 0x1D00 bytes) with 0x1F46, which
-            // reads past m_config AND m_calib into unrelated memory, so its voltage
-            // output is random. Display-only (nothing is written), so here the
-            // intended value is used: the calibration block read in this session.
-            let adcRef = calibrationValue(eepromAddr: 0x1F40 + 2 * 3)
-            let s: String
-            if adcRef > 1000 && adcRef < 2300 {
-                let v = (Float(7.6) * Float(adcVol)) / Float(adcRef)
-                s = String(format: "battery ADC 0x%04X %u %0.3fV", adcVol, UInt32(adcVol), Double(v))
-            } else {
-                s = String(format: "battery ADC 0x%04X %u", adcVol, UInt32(adcVol))
-            }
-            add("")
-            add(s)
-            clearRxPacket0()
-            return 1
-        }) { return r }
-        if verbose > 1 { add("error: no valid packet received") }
-        return 0
-    }
-
-    /// uint16 LE at an EEPROM address inside the calibration area (0x1E00..0x1FFF).
-    private func calibrationValue(eepromAddr: Int) -> UInt16 {
-        let c = eepromAddr - (K5.maxConfigSize - K5.calibSize)
-        guard c >= 0, c + 1 < calib.count else { return 0 }
-        return (UInt16(calib[c + 1]) << 8) | UInt16(calib[c])
-    }
-
-    /// k5_readRSSI()
-    func k5ReadRSSI() -> Int {
-        guard port.connected else { return 0 }
-        var b: [UInt8] = [0x27, 0x05, 4, 0]
-        b += K5.sessionID
-        if verbose > 0 {
-            add("")
-            add("sending k5_readRSSI ..")
-        }
-        if k5SendBuf(b) <= 0 { return 0 }
-
-        if let r = waitLoop(1000, {
-            let d = rx.queue[0]
-            let size = d.count - 2
-            rxDebug(d)
-            if isFlashModePacket(d) { clearRxPacket0(); return -1 }
-            if size < 8 || d[0] != 0x28 || d[1] != 0x05 { clearRxPacket0(); return nil }
-            let rssiRaw = ((UInt16(d[5]) << 8) | UInt16(d[4])) & 0x01FF
-            let noise = d[6] & 0x7F
-            let glitch = d[7]
-            let rssi = (Float(rssiRaw) / 2) - 160
-            add("")
-            add(String(format: "RSSI %u %0.1fdBm, Noise 0x%02X %u, Glitch 0x%02X %u",
-                       UInt32(rssiRaw), Double(rssi), UInt32(noise), UInt32(noise), UInt32(glitch), UInt32(glitch)))
             clearRxPacket0()
             return 1
         }) { return r }
@@ -1194,40 +1117,6 @@ public final class K5Programmer {
         comboChange()
     }
 
-    /// ReadADCButtonClick()
-    public func readADCButtonClick() {
-        if port.connected { return }
-        add("")
-        if !connect() { return }
-        comboChange()
-        add("")
-        add("Reading ADC ..")
-        let r = k5ReadADC()
-        if r <= 0 {
-            add("error: k5_readADC() [\(r)]")
-            add("")
-        }
-        disconnect()
-        comboChange()
-    }
-
-    /// ReadRSSIButtonClick()
-    public func readRSSIButtonClick() {
-        if port.connected { return }
-        add("")
-        if !connect() { return }
-        comboChange()
-        add("")
-        add("Reading RSSI ..")
-        let r = k5ReadRSSI()
-        if r <= 0 {
-            add("error: k5_readRSSI() [\(r)]")
-            add("")
-        }
-        disconnect()
-        comboChange()
-    }
-
     /// SerialPortComboBoxSelect(): "get radio details" (also on start-up and on speed change).
     public func serialPortComboBoxSelect() {
         guard selectedPort != nil, !port.connected else { return }
@@ -1258,6 +1147,187 @@ public final class K5Programmer {
 
         disconnect()
         comboChange()
+    }
+
+    // MARK: - channel editor (2.0, not in the original)
+
+    public enum ProbeResult: Equatable {
+        case noPort                                         // the USB cable is gone
+        case noRadio                                        // no answer (radio off / not plugged in)
+        case flashMode(bootloader: String)                  // firmware update mode ("" = unknown)
+        case radio(firmware: String, blocks: [Int: [UInt8]])
+    }
+
+    /// Quiet check which radio is on the cable (Memory Editor polling): hello with a short
+    /// timeout, then reads the 128-byte `blocks`. Read only, nothing goes to the log.
+    public func editorProbe(port path: String, blocks: [Int]) -> ProbeResult {
+        if port.connected { return .noRadio }
+        guard FileManager.default.fileExists(atPath: path) else { return .noPort }
+        quiet = true
+        defer { quiet = false }
+        selectedPort = path
+        if !connect() { return .noPort }
+        defer { disconnect() }
+        let r = k5Hello(timeoutMs: 300)
+        if r < 0 {
+            // the bootloader announces its version in the beacon it repeats
+            return .flashMode(bootloader: k5WaitFlashMessage(timeoutMs: 1500) > 0 ? bootloaderVer.latin1 : "")
+        }
+        if r == 0 { return .noRadio }
+        var out: [Int: [UInt8]] = [:]
+        for b in blocks {
+            var buf = [UInt8](repeating: 0, count: K5.configBlockSize)
+            if k5ReadEEPROM(into: &buf, at: 0, len: K5.configBlockSize, offset: b) <= 0 { return .noRadio }
+            out[b] = buf
+        }
+        return .radio(firmware: firmwareVer.latin1, blocks: out)
+    }
+
+    public enum EditorResult: Equatable {
+        case ok
+        case failed(String)
+    }
+
+    /// Reads the whole memory for the channel editor: configuration 0000..1CFF and the rest up
+    /// to 1FFF (calibration area, read only, so a CHIRP .img export is complete).
+    /// Returns the 8 KB image and the firmware string of the hello reply, nil on failure (the
+    /// reason is in the log).
+    public func editorRead() -> (memory: [UInt8], firmware: String)? {
+        if port.connected { return nil }
+        clearMemo()
+        add("")
+        if !connect() { return nil }
+        comboChange()
+        add("")
+        add("Reading channels from the radio ..")
+        var r = helloWithRetries()
+        add("")
+        if r == 0 { fail("radio not detected"); return nil }
+        if r < 0 { fail(K5Programmer.msgFlashModeNotPTT); return nil }
+        let fw = firmwareVer.latin1
+
+        let size = K5.maxConfigSize, blockLen = K5.configBlockSize
+        var mem = [UInt8](repeating: 0xFF, count: size)
+        gauge(size, 0, true)
+        var i = 0
+        while i < size {
+            r = k5ReadEEPROM(into: &mem, at: i, len: blockLen, offset: i)
+            if r <= 0 {
+                add("error: k5_read_eeprom() [\(r)]")
+                gauge(size, i, false)
+                fail("read failed, nothing changed")
+                return nil
+            }
+            gauge(size, i + blockLen, true)
+            i += blockLen
+        }
+        add("read complete")
+        gauge(size, size, false)
+        disconnect()
+        comboChange()
+        return (mem, fw)
+    }
+
+    /// Writes the channel editor's changes. `snapshot` = the configuration as read when the
+    /// editor opened, `edited` = the same with the user's edits (both 0000..1CFF, or longer).
+    /// 1. hello: the firmware string must still be `firmware`;
+    /// 2. read 0000..1CFF and save it to `backupPath` (same format as Read Configuration);
+    /// 3. every block that will be written must still hold the snapshot's bytes
+    ///    (else the radio changed since it was read: nothing is written);
+    /// 4. write only the changed 128-byte blocks (never above 1CFF: calibration is not touched);
+    /// 5. read them back and compare; 6. reboot the radio as Write Configuration does.
+    public func editorWrite(snapshot: [UInt8], edited: [UInt8], firmware: String, backupPath: String) -> EditorResult {
+        if port.connected { return .failed("busy") }
+        let size = K5.configSize, blockLen = K5.configBlockSize
+        guard snapshot.count >= size, edited.count >= size else { return .failed("internal error: image too small") }
+        let blocks = stride(from: 0, to: size, by: blockLen).filter { snapshot[$0..<($0 + blockLen)] != edited[$0..<($0 + blockLen)] }
+        if blocks.isEmpty { return .failed("nothing changed") }
+
+        clearMemo()
+        add("")
+        if !connect() { return .failed("the serial port could not be opened") }
+        comboChange()
+        add("")
+        add("Writing channels to the radio ..")
+        var r = helloWithRetries()
+        add("")
+        if r == 0 { fail("radio not detected"); return .failed("radio not detected") }
+        if r < 0 { fail(K5Programmer.msgFlashModeNotPTT); return .failed("the radio is in firmware update mode") }
+        let fw = firmwareVer.latin1
+        if fw != firmware {
+            let msg = "the radio reports firmware '\(fw)', the editor read '\(firmware)': read the radio again"
+            fail("error: " + msg + ", nothing written")
+            return .failed(msg)
+        }
+
+        // 2. backup
+        add("backup: reading CONFIG 0000 .. 1CFF ..")
+        var current = [UInt8](repeating: 0, count: size)
+        gauge(size, 0, true)
+        var i = 0
+        while i < size {
+            r = k5ReadEEPROM(into: &current, at: i, len: blockLen, offset: i)
+            if r <= 0 {
+                add("error: k5_read_eeprom() [\(r)]")
+                gauge(size, i, false)
+                fail("backup failed, nothing written")
+                return .failed("backup read failed, nothing written")
+            }
+            gauge(size, i + blockLen, true)
+            i += blockLen
+        }
+        let dir = (backupPath as NSString).deletingLastPathComponent
+        try? FileManager.default.createDirectory(atPath: dir, withIntermediateDirectories: true)
+        if let hook = saveFileHook { hook(backupPath, current) }
+        else if !FileManager.default.createFile(atPath: backupPath, contents: Data(current)) {
+            fail("error: backup not saved, nothing written")
+            return .failed("the backup could not be saved to \(backupPath), nothing written")
+        }
+        add("backup saved: " + backupPath)
+
+        // 3. the radio must not have changed where we write
+        let moved = blocks.filter { current[$0..<($0 + blockLen)] != snapshot[$0..<($0 + blockLen)] }
+        if !moved.isEmpty {
+            let list = moved.map { String(format: "%04X", $0) }.joined(separator: " ")
+            fail("error: the radio memory changed since it was read (blocks \(list)), nothing written")
+            return .failed("the radio's memory changed since it was read (blocks \(list)). Read the radio again; nothing was written.")
+        }
+
+        // 4. write
+        add(String(format: "writing %d of %d blocks ..", blocks.count, size / blockLen))
+        gauge(blocks.count * 2, 0, true)
+        for (n, b) in blocks.enumerated() {
+            r = k5WriteEEPROM(Array(edited[b..<(b + blockLen)]), len: blockLen, offset: b)
+            if r <= 0 {
+                add("error: k5_write_eeprom() [\(r)]")
+                gauge(1, 0, false)
+                fail(String(format: "error: write failed at %04X - restore the backup with Write Configuration: ", b) + backupPath)
+                return .failed(String(format: "writing block %04X failed. Restore the backup with Write Configuration:\n", b) + backupPath)
+            }
+            gauge(blocks.count * 2, n + 1, true)
+        }
+
+        // 5. verify
+        add("verifying ..")
+        for (n, b) in blocks.enumerated() {
+            var back = [UInt8](repeating: 0, count: blockLen)
+            r = k5ReadEEPROM(into: &back, at: 0, len: blockLen, offset: b)
+            if r <= 0 || back[...] != edited[b..<(b + blockLen)] {
+                gauge(1, 0, false)
+                fail(String(format: "error: verify failed at %04X - restore the backup with Write Configuration: ", b) + backupPath)
+                return .failed(String(format: "read-back of block %04X does not match. Restore the backup with Write Configuration:\n", b) + backupPath)
+            }
+            gauge(blocks.count * 2, blocks.count + n + 1, true)
+        }
+        add("write CHANNELS complete, verified")
+        gauge(1, 1, false)
+
+        k5Reboot()
+        K5Programmer.sleepMs(300)
+        add("")
+        disconnect()
+        comboChange()
+        return .ok
     }
 }
 

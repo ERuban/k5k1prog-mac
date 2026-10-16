@@ -1,0 +1,98 @@
+[
+{
+"n": 4,
+"op": "set",
+"freq": 446006250,
+"name": "PMR 1",
+"duplex": "",
+"offset": 0,
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 12.5,
+"power": "Low",
+"scrambler": "off",
+"scanlists": "1"
+},
+{
+"n": 1,
+"op": "set",
+"freq": 145600000,
+"name": "R0 TBS",
+"duplex": "-",
+"offset": 600000,
+"tx": [
+"Tone",
+88.5,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 12.5,
+"power": "High",
+"scrambler": "2",
+"scanlists": "1+2"
+},
+{
+"n": 2,
+"op": "set",
+"freq": 438825000,
+"name": "R70",
+"duplex": "+",
+"offset": 7600000,
+"tx": [
+"DTCS",
+23,
+"N"
+],
+"rx": [
+"DTCS",
+23,
+"R"
+],
+"mode": "AM",
+"step": 25.0,
+"power": "Med",
+"scrambler": "off",
+"scanlists": "None"
+},
+{
+"n": 5,
+"op": "delete"
+},
+{
+"n": 160,
+"op": "set",
+"freq": 26965000,
+"name": "CB 1",
+"duplex": "off",
+"offset": 0,
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+67.0,
+null
+],
+"mode": "NAM",
+"step": 5.0,
+"power": "Low",
+"scrambler": "10",
+"scanlists": "2"
+}
+]

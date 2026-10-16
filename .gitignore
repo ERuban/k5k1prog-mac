@@ -1,6 +1,5 @@
 .build/
 *.app/
-*.ini
 /reference/
 .swiftpm/
 # personal radio backups / dumps kept next to the app

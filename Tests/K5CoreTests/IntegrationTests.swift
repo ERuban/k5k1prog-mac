@@ -255,21 +255,14 @@ final class IntegrationTests: XCTestCase {
         XCTAssertEqual(ui.lines.last, "error: radio is in user mode")
     }
 
-    func testADCAndRSSI() throws {
-        try makeSim()
-        prog.readRSSIButtonClick()
-        XCTAssertTrue(ui.lines.contains("RSSI 142 -89.0dBm, Noise 0x50 80, Glitch 0x42 66"), "\(ui.lines)")
-        prog.readADCButtonClick()
-        XCTAssertTrue(ui.lines.contains("battery ADC 0x07AC 1964"), "\(ui.lines)")
-    }
-
     func testVerbose2ShowsTxDump() throws {
         try makeSim()
         prog.verbose = 2
-        prog.readRSSIButtonClick()
+        ui.savePath = "/tmp/x/cal"
+        prog.readCalibrationButtonClick()
         XCTAssertTrue(ui.lines.contains("tx crc_ok 1"))
         XCTAssertTrue(ui.lines.contains { $0.hasPrefix("tx obfuscated [ 16] AB CD 08 00 ") })
-        XCTAssertTrue(ui.lines.contains { $0.hasPrefix("tx clear      [  8]             27 05 04 00 6A 39 57 64 - ") })
+        XCTAssertTrue(ui.lines.contains { $0.hasPrefix("tx clear      [  8]             14 05 04 00 6A 39 57 64 - ") }, "hello")
     }
 
     func testEscapeAbortsWrite() throws {

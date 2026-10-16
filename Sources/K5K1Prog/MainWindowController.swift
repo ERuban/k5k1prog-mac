@@ -37,8 +37,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     private let readCalibButton = NSButton(title: "Read Calibration", target: nil, action: nil)
     private let writeCalibButton = NSButton(title: "Write Calibration", target: nil, action: nil)
     private let writeFirmwareButton = NSButton(title: "Write Firmware", target: nil, action: nil)
-    private let readADCButton = NSButton(title: "Read ADC", target: nil, action: nil)
-    private let readRSSIButton = NSButton(title: "Read RSSI", target: nil, action: nil)
+    private let memoryEditorButton = NSButton(title: "Memory Editor\u{2026}", target: nil, action: nil)
 
     // Memo1
     private let memoScroll = NSTextView.scrollableTextView()
@@ -47,6 +46,8 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
 
     // StatusBar1 + CGauge1
     private let statusTime = NSTextField(labelWithString: "")
+    /// 2.0: which radio is on the cable, found by a quiet check (not in the log)
+    private let radioStatus = Pill(compact: false)
     private let statusBreak = NSTextField(labelWithString: "")
     private let gaugeBar = NSProgressIndicator()
     private let gaugeLabel = NSTextField(labelWithString: "")
@@ -62,10 +63,10 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         let (store, dir) = MainWindowController.makeSettings()
         settings = store
         exeDir = dir
-        let window = KeyWindow(contentRect: NSRect(x: 297, y: 139, width: 900, height: 420),
+        let window = KeyWindow(contentRect: NSRect(x: 297, y: 139, width: 720, height: 480),
                                styleMask: [.titled, .closable, .miniaturizable, .resizable],
                                backing: .buffered, defer: false)
-        window.minSize = NSSize(width: 900, height: 300)
+        window.minSize = NSSize(width: 660, height: 470)
         window.isRestorable = false
         super.init(window: window)
         shouldCascadeWindows = false
@@ -113,7 +114,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         guard let content = window?.contentView else { return }
 
         for b in [clearButton, readConfigButton, writeConfigButton, readCalibButton, writeCalibButton,
-                  writeFirmwareButton, readADCButton, readRSSIButton] {
+                  writeFirmwareButton, memoryEditorButton] {
             b.bezelStyle = .rounded
             b.target = self
         }
@@ -124,8 +125,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         readCalibButton.action = #selector(readCalibClick)
         writeCalibButton.action = #selector(writeCalibClick)
         writeFirmwareButton.action = #selector(writeFirmwareClick)
-        readADCButton.action = #selector(readADCClick)
-        readRSSIButton.action = #selector(readRSSIClick)
+        memoryEditorButton.action = #selector(memoryEditorClick)
+        memoryEditorButton.bezelColor = K5MainWindowStyle.accent
+        memoryEditorButton.toolTip = "Edit channels and settings (2.0, work in progress)"
 
         clearButton.toolTip = "Clear the memo"
         readConfigButton.toolTip = "Download configuration data from radio"
@@ -133,12 +135,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         readCalibButton.toolTip = "Read the radios calibration settings"
         writeCalibButton.toolTip = "Write the radios calibration settings"
         writeFirmwareButton.toolTip = "Upload firmware file to radio"
-        readADCButton.toolTip = "Test only"
-        readRSSIButton.toolTip = "Test only"
         verboseSlider.toolTip = "Verbose level (0..3)"
-        // Visible = False in the original Unit1.dfm
-        readADCButton.isHidden = true
-        readRSSIButton.isHidden = true
 
         portPopup.target = self
         portPopup.action = #selector(serialPortSelect)
@@ -156,10 +153,13 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         memo.font = memoFont
         memo.isRichText = false
         memo.textContainerInset = NSSize(width: 4, height: 4)
-        memoScroll.hasHorizontalScroller = true
-        memo.isHorizontallyResizable = true
-        memo.textContainer?.widthTracksTextView = false
-        memo.textContainer?.containerSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+        // 2.0: long lines wrap at the window edge (the original scrolled sideways). Hex dumps keep
+        // their columns: a wrapped line continues under the first character.
+        memoScroll.hasHorizontalScroller = false
+        memo.isHorizontallyResizable = false
+        memo.autoresizingMask = [.width]
+        memo.textContainer?.widthTracksTextView = true
+        memo.textContainer?.containerSize = NSSize(width: memoScroll.contentSize.width, height: CGFloat.greatestFiniteMagnitude)
 
         gaugeBar.style = .bar
         gaugeBar.isIndeterminate = false
@@ -170,41 +170,60 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         statusTime.font = NSFont.systemFont(ofSize: 12)
         statusBreak.font = NSFont.systemFont(ofSize: 12)
 
+        // 2.0 layout: port / speed / verbose on top, the log on the left, the buttons in a column
+        // on the right (grouped: Clear | configuration | calibration | firmware | editor).
         let row1 = NSStackView(views: [portLabel, portPopup, speedLabel, speedPopup, NSView(), verboseLabel,
-                                       verboseSlider, clearButton, readADCButton])
+                                       verboseSlider])
         row1.spacing = 8
-        let row2 = NSStackView(views: [readConfigButton, writeConfigButton, readCalibButton, writeCalibButton,
-                                       writeFirmwareButton, NSView(), readRSSIButton])
-        row2.spacing = 8
-        let status = NSStackView(views: [statusTime, statusBreak, gaugeBar, gaugeLabel])
+        func separator() -> NSView {
+            let box = NSBox()
+            box.boxType = .separator
+            return box
+        }
+        let column = NSStackView(views: [clearButton, separator(),
+                                         readConfigButton, writeConfigButton, separator(),
+                                         readCalibButton, writeCalibButton, separator(),
+                                         writeFirmwareButton, separator(),
+                                         memoryEditorButton])
+        column.orientation = .vertical
+        column.alignment = .leading
+        column.spacing = 8
+        for v in column.arrangedSubviews {
+            v.widthAnchor.constraint(equalTo: column.widthAnchor).isActive = true
+            if let b = v as? NSButton { b.alignment = .left; b.controlSize = .large }
+        }
+        let status = NSStackView(views: [statusTime, statusBreak, gaugeBar, gaugeLabel, NSView(), radioStatus])
+        status.alignment = .centerY
         status.spacing = 12
 
-        for v in [row1, row2, memoScroll, status] as [NSView] {
+        memoScroll.borderType = .bezelBorder
+        for v in [row1, column, memoScroll, status] as [NSView] {
             v.translatesAutoresizingMaskIntoConstraints = false
             content.addSubview(v)
         }
-        portPopup.widthAnchor.constraint(greaterThanOrEqualToConstant: 200).isActive = true
-        speedPopup.widthAnchor.constraint(equalToConstant: 140).isActive = true
-        verboseSlider.widthAnchor.constraint(equalToConstant: 90).isActive = true
+        portPopup.widthAnchor.constraint(greaterThanOrEqualToConstant: 170).isActive = true
+        speedPopup.widthAnchor.constraint(equalToConstant: 130).isActive = true
+        verboseSlider.widthAnchor.constraint(equalToConstant: 70).isActive = true
         statusTime.widthAnchor.constraint(equalToConstant: 260).isActive = true
         statusBreak.widthAnchor.constraint(equalToConstant: 80).isActive = true
         gaugeLabel.widthAnchor.constraint(equalToConstant: 44).isActive = true
 
         NSLayoutConstraint.activate([
-            row1.topAnchor.constraint(equalTo: content.topAnchor, constant: 10),
-            row1.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
-            row1.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -12),
-            row2.topAnchor.constraint(equalTo: row1.bottomAnchor, constant: 10),
-            row2.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
-            row2.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -12),
-            memoScroll.topAnchor.constraint(equalTo: row2.bottomAnchor, constant: 10),
-            memoScroll.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            memoScroll.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            memoScroll.bottomAnchor.constraint(equalTo: status.topAnchor, constant: -4),
-            status.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 12),
-            status.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -12),
-            status.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -4),
-            status.heightAnchor.constraint(equalToConstant: 22),
+            row1.topAnchor.constraint(equalTo: content.topAnchor, constant: 12),
+            row1.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 14),
+            row1.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -14),
+            column.topAnchor.constraint(equalTo: row1.bottomAnchor, constant: 12),
+            column.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -14),
+            column.widthAnchor.constraint(equalToConstant: 180),
+            column.bottomAnchor.constraint(lessThanOrEqualTo: status.topAnchor, constant: -8),
+            memoScroll.topAnchor.constraint(equalTo: row1.bottomAnchor, constant: 12),
+            memoScroll.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 14),
+            memoScroll.trailingAnchor.constraint(equalTo: column.leadingAnchor, constant: -14),
+            memoScroll.bottomAnchor.constraint(equalTo: status.topAnchor, constant: -8),
+            status.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 14),
+            status.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -14),
+            status.bottomAnchor.constraint(equalTo: content.bottomAnchor, constant: -6),
+            status.heightAnchor.constraint(equalToConstant: 40),   // 2.0: room for the two-line radio pill
         ])
     }
 
@@ -221,6 +240,7 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         }
         speedPopup.selectItem(withTag: K5.defaultSerialSpeed)
 
+        restoreFrame()
         // WM_INIT_GUI
         DispatchQueue.main.async { [weak self] in self?.wmInitGUI() }
     }
@@ -231,6 +251,9 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         let t = Timer(timeInterval: 0.1, repeats: true) { [weak self] _ in self?.timerTick() }
         RunLoop.main.add(t, forMode: .common)
         timer = t
+        let p = Timer(timeInterval: 2, repeats: true) { [weak self] _ in self?.probeRadio() }
+        RunLoop.main.add(p, forMode: .default)
+        probeTimer = p
         serialPortSelect()
         if ProcessInfo.processInfo.environment["K5PROG_UITEST"] != nil { DispatchQueue.main.async { self.uiTestStep() } }
     }
@@ -242,9 +265,12 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     private lazy var uiTestSteps: [String] = (ProcessInfo.processInfo.environment["K5PROG_UITEST"] ?? "")
         .split(separator: ",").map(String.init)
     private var uiTestIndex = 0
+    private var uiTestWaits = 0
 
     private func uiTestStep() {
-        if busy {
+        // wait for the first radio check (the buttons follow it), at most ~5 s
+        if busy || (radioState == nil && portPopup.indexOfSelectedItem > 0 && uiTestWaits < 25) {
+            if !busy { uiTestWaits += 1 }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { self.uiTestStep() }
             return
         }
@@ -268,15 +294,40 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         case "writecalib": writeCalibButton.performClick(nil)
         case "firmware": writeFirmwareButton.performClick(nil)
         case "clear": clearButton.performClick(nil)
+        case "editor": memoryEditorButton.performClick(nil)
+        case "snap": uiTestSnap()
+        case "wait":
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { self.uiTestStep() }
+            return
+        case "settings": (NSApp.delegate as? AppDelegate)?.showSettings(nil)
         case "quit": window?.performClose(nil); return
-        default: break
+        default:
+            // editor steps: editor-import (K5PROG_UITEST_OPEN, a .bin is read as K5PROG_UITEST_BIN_PROFILE),
+            // editor-write (no confirmation), editor-export (K5PROG_UITEST_SAVE)
+            if step.hasPrefix("editor-"), let ed = MemoryEditorWindowController.open.values.first {
+                ed.uiTest(String(step.dropFirst(7)))
+            }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self.uiTestStep() }
     }
 
-    private func loadSettings() {
-        let ini = settings
+    /// Saves every window as PNG into K5PROG_UITEST_SNAP (drawn by the app itself, no screen
+    /// recording permission needed).
+    private func uiTestSnap() {
+        guard let dir = ProcessInfo.processInfo.environment["K5PROG_UITEST_SNAP"] else { return }
+        flushMemo()
+        for (n, w) in NSApp.windows.filter(\.isVisible).enumerated() {
+            guard let v = w.contentView?.superview ?? w.contentView, let rep = v.bitmapImageRepForCachingDisplay(in: v.bounds) else { continue }
+            v.cacheDisplay(in: v.bounds, to: rep)
+            let name = "\(uiTestIndex)-\(n)-" + w.title.replacingOccurrences(of: "/", with: "_") + ".png"
+            try? rep.representation(using: .png, properties: [:])?.write(to: URL(fileURLWithPath: dir).appendingPathComponent(name))
+        }
+    }
 
+    /// The saved window frame. Applied in init, before the window is first shown: on a
+    /// second display the window used to flash at its default place on the main screen first.
+    private func restoreFrame() {
+        let ini = settings
         if let w = window, let screen = NSScreen.screens.first {
             let h0 = screen.frame.maxY
             let f = w.frame
@@ -295,11 +346,15 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
                 nf.size.height = min(nf.height, vf.height)
                 nf.origin = NSPoint(x: vf.midX - nf.width / 2, y: vf.midY - nf.height / 2)
             }
-            w.setFrame(nf, display: true)
+            w.setFrame(nf, display: false)
             if ProcessInfo.processInfo.environment["K5PROG_DEBUG"] != nil {
-                FileHandle.standardError.write("loadSettings frame \(nf) -> \(w.frame)\n".data(using: .utf8)!)
+                FileHandle.standardError.write("restoreFrame \(nf) -> \(w.frame)\n".data(using: .utf8)!)
             }
         }
+    }
+
+    private func loadSettings() {
+        let ini = settings
 
         let i = ini.readInteger("GUI", "Verbose", Int(verboseSlider.integerValue))
         let v = (i < 0) ? 1 : (i > 3) ? 1 : i
@@ -359,22 +414,96 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
         serialPortComboBoxChange()
     }
 
-    /// SerialPortComboBoxChange()
+    /// SerialPortComboBoxChange(). 2.0: the buttons also follow the radio on the cable (quiet
+    /// check): normal mode enables configuration, calibration and the editor, firmware update mode
+    /// only Write Firmware, no radio nothing. The original only looked at the port selection.
     private func serialPortComboBoxChange() {
         let connected = prog.connected
         let enabled = !connected && !busy && portPopup.indexOfSelectedItem > 0
-        for b in [readConfigButton, writeConfigButton, readCalibButton, writeCalibButton,
-                  writeFirmwareButton, readADCButton, readRSSIButton] {
-            b.isEnabled = enabled
+        var normal = false, flash = false
+        switch radioState {
+        case .radio?: normal = true
+        case .flashMode?: flash = true
+        default: break
         }
+        for b in [readConfigButton, writeConfigButton, readCalibButton, writeCalibButton, memoryEditorButton] {
+            b.isEnabled = enabled && normal
+        }
+        writeFirmwareButton.isEnabled = enabled && flash
         portPopup.isEnabled = !connected && !busy
         speedPopup.isEnabled = !connected && !busy
     }
 
+    /// The original fetched the radio details into the log on start-up and on every port /
+    /// speed change ("radio not detected" when the radio was not plugged in yet). 2.0: a quiet
+    /// check every 2 s instead; the result is shown in the status bar, the log is left alone.
     @objc private func serialPortSelect() {
         if portPopup.indexOfSelectedItem > 0, let t = portPopup.titleOfSelectedItem { savedPortName = t }
-        run { $0.serialPortComboBoxSelect() }
+        radioState = nil
+        missed = 0
+        showRadioState()
+        serialPortComboBoxChange()
+        probeRadio()
     }
+
+    private enum RadioOnCable: Equatable { case none, unplugged, flashMode(String), radio(String) }
+    private var radioState: RadioOnCable?
+    private var missed = 0
+    private var probeTimer: Timer?
+
+    private func probeRadio() {
+        guard let w = window, w.isKeyWindow, NSApp.isActive, w.attachedSheet == nil,
+              portPopup.indexOfSelectedItem > 0, let port = portPopup.titleOfSelectedItem else { return }
+        _ = runEditorProbe(port: port, blocks: []) { [weak self] r in
+            guard let self, self.portPopup.titleOfSelectedItem == port else { return }
+            let s: RadioOnCable
+            switch r {
+            case .noPort: s = .unplugged
+            case .noRadio: s = .none
+            case .flashMode(let bl): s = .flashMode(bl)
+            case .radio(let fw, _): s = .radio(fw)
+            }
+            // a radio in firmware update mode only beacons now and then: one miss is not "gone"
+            if s == .none, let cur = self.radioState, cur != .none, cur != .unplugged {
+                self.missed += 1
+                if self.missed < 2 { return }
+            }
+            self.missed = 0
+            if s != self.radioState { self.radioState = s; self.showRadioState(); self.serialPortComboBoxChange() }
+        }
+    }
+
+    private func showRadioState() {
+        guard portPopup.indexOfSelectedItem > 0 else { radioStatus.set("", tint: .systemGray); return }
+        switch radioState {
+        case nil:
+            radioStatus.set("Checking\u{2026}", "hello: —", tint: .systemGray)
+            radioStatus.setToolTip(nil)
+        case .none?:
+            radioStatus.set("No radio", "turn it on, check the cable", tint: .systemGray)
+            radioStatus.setToolTip("No answer: turn the radio on and check the cable")
+        case .unplugged?:
+            radioStatus.set("Cable unplugged", "no serial port", tint: .systemGray)
+            radioStatus.setToolTip(nil)
+        case .flashMode(let bl)?:
+            let model = Self.modelForBootloader(bl)
+            radioStatus.set("Firmware update mode", (bl.isEmpty ? "bootloader ?" : "bootloader " + bl) + (model.map { " · " + $0 } ?? ""),
+                            tint: bl.hasPrefix("1.") ? .systemRed : .systemOrange)
+            radioStatus.setToolTip("Radio started with PTT held: ready for Write Firmware")
+        case .radio(let fw)?:
+            radioStatus.set("Normal mode", "hello: " + fw, tint: .systemGreen)
+            radioStatus.setToolTip("Radio on the cable and its answer to hello (firmware string)")
+        }
+    }
+
+    static func modelForBootloader(_ bl: String) -> String? {
+        if bl.hasPrefix("1.") { return "UV-K5 V2 (not supported)" }
+        if bl.hasPrefix("2.") { return "UV-K5 V1" }
+        if bl.hasPrefix("7.") { return "UV-K1 / K5 V3" }
+        return nil
+    }
+
+    func windowDidBecomeKey(_ notification: Notification) { probeRadio() }
 
     @objc private func serialSpeedSelect() { serialPortSelect() }
 
@@ -394,12 +523,100 @@ final class MainWindowController: NSWindowController, NSWindowDelegate, K5UI {
     @objc private func readCalibClick() { run { $0.readCalibrationButtonClick() } }
     @objc private func writeCalibClick() { run { $0.writeCalibrationButtonClick() } }
     @objc private func writeFirmwareClick() { run { $0.writeFirmwareButtonClick() } }
-    @objc private func readADCClick() { run { $0.readADCButtonClick() } }
-    @objc private func readRSSIClick() { run { $0.readRSSIButtonClick() } }
+    /// Memory Editor (2.0): reads the radio on the selected port, then opens its editor window
+    /// (one window per port; an open one is brought to the front).
+    @objc func memoryEditorClick() {
+        guard portPopup.indexOfSelectedItem > 0, let port = portPopup.titleOfSelectedItem else {
+            NSSound.beep()
+            memoAdd("")
+            memoAdd("select the serial port of the radio first")
+            return
+        }
+        if let w = MemoryEditorWindowController.open[port] { w.showWindow(nil); return }
+        guard memoryEditorButton.isEnabled else { NSSound.beep(); return }   // ⌘E: same rule as the button
+        _ = runEditorRead(port: port) { [weak self] r in
+            guard let self else { return }
+            guard let r else { return }   // the reason is in the log
+            MemoryEditorWindowController.show(host: self, port: port, memory: r.memory, firmware: r.firmware)
+        }
+    }
+
+    var defaults: UserDefaults { settings.defaults }
+
+    /// The Memory Editor's quiet radio check. Skipped (false) while anything else runs; the
+    /// main window's controls are not touched and nothing goes to the log.
+    private(set) var probing = false
+    var isIdle: Bool { !busy && !probing && !prog.connected }
+
+    func runEditorProbe(port: String, blocks: [Int], done: @escaping (K5Programmer.ProbeResult) -> Void) -> Bool {
+        guard isIdle else { return false }
+        probing = true
+        prog.selectedSpeed = speedPopup.selectedItem?.tag ?? K5.defaultSerialSpeed
+        worker.async { [weak self] in
+            guard let self else { return }
+            let r = self.prog.editorProbe(port: port, blocks: blocks)
+            DispatchQueue.main.async {
+                self.probing = false
+                done(r)
+            }
+        }
+        return true
+    }
+
+    /// Editor operations: like `run`, on the worker thread and one at a time, but on the
+    /// editor's own port. `done` is called on the main thread. False when busy.
+    @discardableResult
+    func runEditorRead(port: String, done: @escaping ((memory: [UInt8], firmware: String)?) -> Void) -> Bool {
+        runOnPort(port) { p in
+            let r = p.editorRead()
+            DispatchQueue.main.async { done(r) }
+        }
+    }
+
+    @discardableResult
+    func runEditorWrite(port: String, snapshot: [UInt8], edited: [UInt8], firmware: String, backupPath: String,
+                        done: @escaping (K5Programmer.EditorResult) -> Void) -> Bool {
+        runOnPort(port) { p in
+            let r = p.editorWrite(snapshot: snapshot, edited: edited, firmware: firmware, backupPath: backupPath)
+            DispatchQueue.main.async { done(r) }
+        }
+    }
+
+    private func runOnPort(_ port: String, _ handler: @escaping (K5Programmer) -> Void) -> Bool {
+        if probing {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in _ = self?.runOnPort(port, handler) }
+            return true
+        }
+        if busy || prog.connected {
+            NSSound.beep()
+            return false
+        }
+        prog.selectedPort = port
+        prog.selectedSpeed = speedPopup.selectedItem?.tag ?? K5.defaultSerialSpeed
+        busy = true
+        serialPortComboBoxChange()
+        if NSApp.isActive { window?.orderFront(nil) }   // the log shows what happens; never steal focus
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.worker.async {
+                handler(self.prog)
+                DispatchQueue.main.async {
+                    self.busy = false
+                    self.serialPortComboBoxChange()
+                }
+            }
+        }
+        return true
+    }
+
 
     /// Runs a button handler on the worker thread (the original ran them on the GUI
     /// thread pumping ProcessMessages; one at a time, exactly like there).
     private func run(_ handler: @escaping (K5Programmer) -> Void) {
+        if probing {   // the editor's quiet radio check takes < 0.5 s: run right after it
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in self?.run(handler) }
+            return
+        }
         if busy || prog.connected { return }
         let idx = portPopup.indexOfSelectedItem
         prog.selectedPort = idx > 0 ? portPopup.titleOfSelectedItem : nil
@@ -661,4 +878,10 @@ final class KeyWindow: NSWindow {
         if event.keyCode == 53 { escapeHandler?(); return }
         super.keyDown(with: event)
     }
+}
+
+/// Colours of the 2.0 main window.
+enum K5MainWindowStyle {
+    /// orange of the app logo (#ff8a3d)
+    static let accent = NSColor(srgbRed: 1.0, green: 0x8a / 255.0, blue: 0x3d / 255.0, alpha: 1)
 }
