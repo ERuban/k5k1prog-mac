@@ -59,5 +59,5 @@ public enum K5 {
     public static let py32MaxRetries = 3
 
     public static let appTitle = "K5K1 Prog"
-    public static let version = "1.1.1"
+    public static let version = "2.0.0"
 }

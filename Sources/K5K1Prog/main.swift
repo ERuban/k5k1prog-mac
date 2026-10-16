@@ -39,11 +39,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
         buildMenu()
         let c = MainWindowController()
         controller = c
+        Appearance.apply(c.defaults)
         c.showWindow(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        let unwritten = MemoryEditorWindowController.open.values.filter(\.hasUnwrittenChanges)
+        if !unwritten.isEmpty {
+            unwritten.first?.showWindow(nil)
+            let a = NSAlert()
+            a.messageText = "Quit without writing?"
+            a.informativeText = "The Memory Editor has changes that are not written to the radio: " + unwritten.map(\.port).joined(separator: ", ")
+            a.addButton(withTitle: "Quit")
+            a.addButton(withTitle: "Cancel")
+            if a.runModal() != .alertFirstButtonReturn { return .terminateCancel }
+        }
         guard let c = controller else { return .terminateNow }
         return c.formCloseQuery() ? .terminateNow : .terminateCancel
     }
@@ -63,16 +74,61 @@ final class AppDelegate: NSObject, NSApplicationDelegate, SPUUpdaterDelegate {
             check.target = updater
         }
         appMenu.addItem(.separator())
+        appMenu.addItem(withTitle: "Settings\u{2026}", action: #selector(showSettings(_:)), keyEquivalent: ",").target = self
+        appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Quit \(K5.appTitle)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         appItem.submenu = appMenu
+
+        let fileItem = NSMenuItem()
+        main.addItem(fileItem)
+        let file = NSMenu(title: "File")
+        file.addItem(withTitle: "Import Channels\u{2026}", action: #selector(MemoryEditorWindowController.importChannels(_:)), keyEquivalent: "i").keyEquivalentModifierMask = [.command, .shift]
+        file.addItem(withTitle: "Export Channels\u{2026}", action: #selector(MemoryEditorWindowController.exportChannels(_:)), keyEquivalent: "e").keyEquivalentModifierMask = [.command, .shift]
+        file.addItem(.separator())
+        file.addItem(withTitle: "Close", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")
+        fileItem.submenu = file
 
         let editItem = NSMenuItem()
         main.addItem(editItem)
         let edit = NSMenu(title: "Edit")
+        edit.addItem(withTitle: "Undo", action: Selector(("undo:")), keyEquivalent: "z")
+        edit.addItem(withTitle: "Redo", action: Selector(("redo:")), keyEquivalent: "z").keyEquivalentModifierMask = [.command, .shift]
+        edit.addItem(.separator())
+        edit.addItem(withTitle: "Cut", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
         edit.addItem(withTitle: "Copy", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
+        edit.addItem(withTitle: "Paste", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
+        edit.addItem(withTitle: "Delete", action: #selector(NSText.delete(_:)), keyEquivalent: "\u{8}").keyEquivalentModifierMask = []
         edit.addItem(withTitle: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
         editItem.submenu = edit
+
+        let radioItem = NSMenuItem()
+        main.addItem(radioItem)
+        let radio = NSMenu(title: "Radio")
+        let me = radio.addItem(withTitle: "Memory Editor\u{2026}", action: #selector(openMemoryEditor(_:)), keyEquivalent: "e")
+        me.target = self
+        radioItem.submenu = radio
+
+        let windowItem = NSMenuItem()
+        main.addItem(windowItem)
+        let window = NSMenu(title: "Window")
+        window.addItem(withTitle: "Minimize", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
+        window.addItem(withTitle: "Zoom", action: #selector(NSWindow.performZoom(_:)), keyEquivalent: "")
+        windowItem.submenu = window
+        NSApp.windowsMenu = window
         NSApp.mainMenu = main
+    }
+
+    private var settingsWindow: SettingsWindowController?
+
+    @objc func showSettings(_ sender: Any?) {
+        if settingsWindow == nil, let d = controller?.defaults { settingsWindow = SettingsWindowController(defaults: d) }
+        settingsWindow?.showWindow(nil)
+        settingsWindow?.window?.makeKeyAndOrderFront(nil)
+    }
+
+    @objc func openMemoryEditor(_ sender: Any?) {
+        controller?.showWindow(nil)
+        controller?.memoryEditorClick()
     }
 
     @objc func showAbout(_ sender: Any?) {

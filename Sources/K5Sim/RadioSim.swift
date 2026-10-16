@@ -21,7 +21,7 @@ import K5Core
 /// UV-K5 radio simulator on a pseudo terminal, used to test K5K1 Prog.
 ///
 /// Behaviour follows the stock DP32G030 firmware/bootloader as seen by k5prog:
-/// user mode answers 0x0514/0x051B/0x051D/0x0527/0x0529/0x05DD, bootloader mode
+/// user mode answers 0x0514/0x051B/0x051D/0x05DD, bootloader mode
 /// beacons 0x0518 and accepts 0x0530 + 0x0519.
 ///
 /// A bootloader version starting with "7" switches the bootloader to the UV-K5 V3 /
@@ -46,8 +46,6 @@ public final class RadioSim {
         public var silent = false
         /// Artificial processing delay per command (ms).
         public var responseDelayMs = 0
-        public var adcVoltage: UInt16 = 0x07AC
-        public var rssi: (UInt16, UInt8, UInt8) = (0x008E, 0x50, 0x42)
         /// PY32 bootloader fault injection (page indexes, 0-based).
         public var failPagesOnce: Set<Int> = []
         public var failPagesAlways: Set<Int> = []
@@ -295,12 +293,6 @@ public final class RadioSim {
             guard p.count >= 12 + len, off + len <= eeprom.count else { record("EVT bad write"); return }
             eeprom.replaceSubrange(off..<(off + len), with: p[12..<(12 + len)])
             send([0x1E, 0x05, 0x02, 0x00, p[4], p[5]])
-        case 0x0527:   // stock CMD_0527() takes no timestamp
-            let (rs, n, g) = options.rssi
-            send([0x28, 0x05, 0x04, 0x00, UInt8(rs & 0xFF), UInt8(rs >> 8), n, g])
-        case 0x0529:   // stock CMD_0529() takes no timestamp
-            let v = options.adcVoltage
-            send([0x2A, 0x05, 0x04, 0x00, UInt8(v & 0xFF), UInt8(v >> 8), 0x00, 0x00])
         case 0x05DD:
             rebootCount += 1
             session = nil

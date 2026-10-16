@@ -1,0 +1,3898 @@
+[
+{
+"n": 1,
+"empty": false,
+"name": "PMR 1",
+"freq": 26453000,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"DTCS",
+612,
+"R"
+],
+"rx": [
+"DTCS",
+31,
+"N"
+],
+"mode": "AM",
+"step": 2.5,
+"power": "Med",
+"scrambler": "10",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 2,
+"empty": false,
+"name": "PMR 2",
+"freq": 462931250,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+71.9,
+null
+],
+"rx": [
+"DTCS",
+252,
+"N"
+],
+"mode": "USB",
+"step": 2.5,
+"power": "Low",
+"scrambler": "12",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 3,
+"empty": false,
+"name": "PMR 3",
+"freq": 433281250,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+199.5,
+null
+],
+"rx": [
+"DTCS",
+664,
+"R"
+],
+"mode": "AM",
+"step": 8.33,
+"power": "Low",
+"scrambler": "20",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 4,
+"empty": true
+},
+{
+"n": 5,
+"empty": false,
+"name": "PMR 5",
+"freq": 145307500,
+"offset": 600000,
+"duplex": "-",
+"tx": [
+"DTCS",
+51,
+"N"
+],
+"rx": [
+"DTCS",
+165,
+"R"
+],
+"mode": "NAM",
+"step": 12.5,
+"power": "Med",
+"scrambler": "18",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 6,
+"empty": false,
+"name": "PMR 6",
+"freq": 133727040,
+"offset": 0,
+"duplex": "off",
+"tx": [
+"Tone",
+156.7,
+null
+],
+"rx": [
+"DTCS",
+411,
+"N"
+],
+"mode": "NAM",
+"step": 6.25,
+"power": "Low",
+"scrambler": "13",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 7,
+"empty": false,
+"name": "PMR 7",
+"freq": 145482500,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+712,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 10.0,
+"power": "Med",
+"scrambler": "3",
+"scanlists": "List1+2",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 8,
+"empty": false,
+"name": "PMR 8",
+"freq": 27391000,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"DTCS",
+271,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 2.5,
+"power": "Med",
+"scrambler": "3",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 9,
+"empty": false,
+"name": "LPD-OV",
+"freq": 144831250,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+624,
+"R"
+],
+"rx": [
+"Tone",
+107.2,
+null
+],
+"mode": "NFM",
+"step": 1,
+"power": "Med",
+"scrambler": "2",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 10,
+"empty": false,
+"name": "R0 TBS",
+"freq": 136034450,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 25.0,
+"power": "High",
+"scrambler": "10",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 11,
+"empty": true
+},
+{
+"n": 12,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 26372000,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 0.1,
+"power": "Med",
+"scrambler": "5",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 13,
+"empty": false,
+"name": "MARINE 16",
+"freq": 434900000,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"DTCS",
+244,
+"N"
+],
+"rx": [
+"Tone",
+186.2,
+null
+],
+"mode": "NAM",
+"step": 5.0,
+"power": "Med",
+"scrambler": "3",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 14,
+"empty": false,
+"name": "A",
+"freq": 145000000,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"DTCS",
+516,
+"R"
+],
+"rx": [
+"DTCS",
+306,
+"N"
+],
+"mode": "NAM",
+"step": 25.0,
+"power": "Med",
+"scrambler": "12",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 15,
+"empty": false,
+"name": "1234567890",
+"freq": 134268490,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+265,
+"N"
+],
+"rx": [
+"DTCS",
+306,
+"R"
+],
+"mode": "FM",
+"step": 12.5,
+"power": "High",
+"scrambler": "14",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 16,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 465437500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+325,
+"R"
+],
+"rx": [
+"DTCS",
+23,
+"N"
+],
+"mode": "AM",
+"step": 6.25,
+"power": "High",
+"scrambler": "10",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 17,
+"empty": false,
+"name": "PMR 1",
+"freq": 131861120,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+462,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 0.5,
+"power": "Low",
+"scrambler": "8",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 18,
+"empty": true
+},
+{
+"n": 19,
+"empty": false,
+"name": "PMR 3",
+"freq": 129595360,
+"offset": 600000,
+"duplex": "-",
+"tx": [
+"Tone",
+97.4,
+null
+],
+"rx": [
+"DTCS",
+255,
+"N"
+],
+"mode": "USB",
+"step": 50.0,
+"power": "High",
+"scrambler": "4",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 20,
+"empty": false,
+"name": "PMR 4",
+"freq": 469987500,
+"offset": 7600000,
+"duplex": "-",
+"tx": [
+"Tone",
+199.5,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 10.0,
+"power": "Med",
+"scrambler": "5",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 21,
+"empty": false,
+"name": "PMR 5",
+"freq": 27394000,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+47,
+"R"
+],
+"mode": "NAM",
+"step": 5.0,
+"power": "High",
+"scrambler": "1",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 22,
+"empty": false,
+"name": "PMR 6",
+"freq": 144738750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+331,
+"R"
+],
+"rx": [
+"Tone",
+114.8,
+null
+],
+"mode": "NFM",
+"step": 8.33,
+"power": "Med",
+"scrambler": "16",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 23,
+"empty": false,
+"name": "PMR 7",
+"freq": 144571250,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 25.0,
+"power": "Low",
+"scrambler": "1",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 24,
+"empty": false,
+"name": "PMR 8",
+"freq": 145477500,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+171.3,
+null
+],
+"mode": "NFM",
+"step": 10.0,
+"power": "Low",
+"scrambler": "20",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 25,
+"empty": true
+},
+{
+"n": 26,
+"empty": false,
+"name": "R0 TBS",
+"freq": 144372500,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"DTCS",
+51,
+"R"
+],
+"rx": [
+"DTCS",
+65,
+"R"
+],
+"mode": "USB",
+"step": 50.0,
+"power": "Low",
+"scrambler": "9",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 27,
+"empty": false,
+"name": "TBS TWR",
+"freq": 434168750,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"Tone",
+71.9,
+null
+],
+"rx": [
+"Tone",
+131.8,
+null
+],
+"mode": "FM",
+"step": 100.0,
+"power": "Low",
+"scrambler": "14",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 28,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 434243750,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 1,
+"power": "Low",
+"scrambler": "8",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 29,
+"empty": false,
+"name": "MARINE 16",
+"freq": 467618750,
+"offset": 0,
+"duplex": "off",
+"tx": [
+"DTCS",
+516,
+"N"
+],
+"rx": [
+"Tone",
+146.2,
+null
+],
+"mode": "USB",
+"step": 10.0,
+"power": "Low",
+"scrambler": "12",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 30,
+"empty": false,
+"name": "A",
+"freq": 122123350,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+241.8,
+null
+],
+"rx": [
+"Tone",
+91.5,
+null
+],
+"mode": "FM",
+"step": 0.5,
+"power": "High",
+"scrambler": "2",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 31,
+"empty": false,
+"name": "1234567890",
+"freq": 123539450,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+250.3,
+null
+],
+"rx": [
+"DTCS",
+723,
+"N"
+],
+"mode": "USB",
+"step": 6.25,
+"power": "Low",
+"scrambler": "6",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 32,
+"empty": true
+},
+{
+"n": 33,
+"empty": false,
+"name": "PMR 1",
+"freq": 433618750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+88.5,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 100.0,
+"power": "Low",
+"scrambler": "19",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 34,
+"empty": false,
+"name": "PMR 2",
+"freq": 145581250,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+189.9,
+null
+],
+"rx": [
+"DTCS",
+265,
+"N"
+],
+"mode": "FM",
+"step": 25.0,
+"power": "Med",
+"scrambler": "14",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 35,
+"empty": false,
+"name": "PMR 3",
+"freq": 27328000,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+332,
+"N"
+],
+"rx": [
+"Tone",
+151.4,
+null
+],
+"mode": "FM",
+"step": 12.5,
+"power": "Med",
+"scrambler": "6",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 36,
+"empty": false,
+"name": "PMR 4",
+"freq": 119707650,
+"offset": 7600000,
+"duplex": "-",
+"tx": [
+"DTCS",
+172,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 0.1,
+"power": "High",
+"scrambler": "7",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 37,
+"empty": false,
+"name": "PMR 5",
+"freq": 468456250,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+412,
+"N"
+],
+"rx": [
+"Tone",
+110.9,
+null
+],
+"mode": "FM",
+"step": 6.25,
+"power": "High",
+"scrambler": "7",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 38,
+"empty": false,
+"name": "PMR 6",
+"freq": 465037500,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"Tone",
+91.5,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 0.01,
+"power": "Low",
+"scrambler": "2",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 39,
+"empty": true
+},
+{
+"n": 40,
+"empty": false,
+"name": "PMR 8",
+"freq": 26790000,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"DTCS",
+306,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 6.25,
+"power": "High",
+"scrambler": "17",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 41,
+"empty": false,
+"name": "LPD-OV",
+"freq": 433662500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+159.8,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 12.5,
+"power": "Low",
+"scrambler": "12",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 42,
+"empty": false,
+"name": "R0 TBS",
+"freq": 27824000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+131.8,
+null
+],
+"rx": [
+"DTCS",
+223,
+"R"
+],
+"mode": "FM",
+"step": 50.0,
+"power": "High",
+"scrambler": "5",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 43,
+"empty": false,
+"name": "TBS TWR",
+"freq": 467918750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+47,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 5.0,
+"power": "Low",
+"scrambler": "18",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 44,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 463043750,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+452,
+"N"
+],
+"rx": [
+"DTCS",
+155,
+"N"
+],
+"mode": "NAM",
+"step": 2.5,
+"power": "Med",
+"scrambler": "17",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 45,
+"empty": false,
+"name": "MARINE 16",
+"freq": 144062500,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+731,
+"R"
+],
+"rx": [
+"DTCS",
+261,
+"N"
+],
+"mode": "AM",
+"step": 0.1,
+"power": "Low",
+"scrambler": "2",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 46,
+"empty": true
+},
+{
+"n": 47,
+"empty": false,
+"name": "1234567890",
+"freq": 144780000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+565,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 100.0,
+"power": "Med",
+"scrambler": "10",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 48,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 26039000,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+454,
+"N"
+],
+"rx": [
+"Tone",
+192.8,
+null
+],
+"mode": "NFM",
+"step": 8.33,
+"power": "Low",
+"scrambler": "15",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 49,
+"empty": false,
+"name": "PMR 1",
+"freq": 465075000,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+432,
+"N"
+],
+"rx": [
+"DTCS",
+122,
+"R"
+],
+"mode": "NFM",
+"step": 0.01,
+"power": "Low",
+"scrambler": "10",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 50,
+"empty": false,
+"name": "PMR 2",
+"freq": 27163000,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"DTCS",
+131,
+"N"
+],
+"rx": [
+"Tone",
+118.8,
+null
+],
+"mode": "USB",
+"step": 0.1,
+"power": "Med",
+"scrambler": "14",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 51,
+"empty": false,
+"name": "PMR 3",
+"freq": 439000000,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"DTCS",
+325,
+"N"
+],
+"rx": [
+"DTCS",
+446,
+"R"
+],
+"mode": "FM",
+"step": 0.5,
+"power": "High",
+"scrambler": "4",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 52,
+"empty": false,
+"name": "PMR 4",
+"freq": 433262500,
+"offset": 0,
+"duplex": "off",
+"tx": [
+"DTCS",
+411,
+"R"
+],
+"rx": [
+"DTCS",
+122,
+"R"
+],
+"mode": "NFM",
+"step": 2.5,
+"power": "High",
+"scrambler": "14",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 53,
+"empty": true
+},
+{
+"n": 54,
+"empty": false,
+"name": "PMR 6",
+"freq": 464293750,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"DTCS",
+271,
+"N"
+],
+"rx": [
+"DTCS",
+445,
+"N"
+],
+"mode": "FM",
+"step": 5.0,
+"power": "High",
+"scrambler": "7",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 55,
+"empty": false,
+"name": "PMR 7",
+"freq": 26546000,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+223,
+"N"
+],
+"rx": [
+"Tone",
+186.2,
+null
+],
+"mode": "USB",
+"step": 100.0,
+"power": "Low",
+"scrambler": "7",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 56,
+"empty": false,
+"name": "PMR 8",
+"freq": 144263750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+186.2,
+null
+],
+"rx": [
+"DTCS",
+654,
+"N"
+],
+"mode": "NAM",
+"step": 25.0,
+"power": "High",
+"scrambler": "10",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 57,
+"empty": false,
+"name": "LPD-OV",
+"freq": 433725000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+174,
+"N"
+],
+"rx": [
+"DTCS",
+43,
+"N"
+],
+"mode": "USB",
+"step": 5.0,
+"power": "Med",
+"scrambler": "2",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 58,
+"empty": false,
+"name": "R0 TBS",
+"freq": 431843750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+446,
+"N"
+],
+"rx": [
+"DTCS",
+371,
+"R"
+],
+"mode": "USB",
+"step": 5.0,
+"power": "High",
+"scrambler": "7",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 59,
+"empty": false,
+"name": "TBS TWR",
+"freq": 26122000,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"Tone",
+225.7,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 1,
+"power": "High",
+"scrambler": "12",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 60,
+"empty": true
+},
+{
+"n": 61,
+"empty": false,
+"name": "MARINE 16",
+"freq": 118691390,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+466,
+"R"
+],
+"rx": [
+"Tone",
+183.5,
+null
+],
+"mode": "NFM",
+"step": 0.1,
+"power": "Med",
+"scrambler": "17",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 62,
+"empty": false,
+"name": "A",
+"freq": 26893000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+225.7,
+null
+],
+"mode": "NAM",
+"step": 12.5,
+"power": "High",
+"scrambler": "15",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 63,
+"empty": false,
+"name": "1234567890",
+"freq": 468987500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+162.2,
+null
+],
+"rx": [
+"Tone",
+110.9,
+null
+],
+"mode": "USB",
+"step": 0.5,
+"power": "Low",
+"scrambler": "18",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 64,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 26116000,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 50.0,
+"power": "Low",
+"scrambler": "1",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 65,
+"empty": false,
+"name": "PMR 1",
+"freq": 144472500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+452,
+"R"
+],
+"rx": [
+"DTCS",
+32,
+"R"
+],
+"mode": "NAM",
+"step": 0.01,
+"power": "Med",
+"scrambler": "6",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 66,
+"empty": false,
+"name": "PMR 2",
+"freq": 145892500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+165,
+"R"
+],
+"rx": [
+"DTCS",
+71,
+"R"
+],
+"mode": "NAM",
+"step": 6.25,
+"power": "Med",
+"scrambler": "4",
+"scanlists": "List1+2",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 67,
+"empty": true
+},
+{
+"n": 68,
+"empty": false,
+"name": "PMR 4",
+"freq": 26368000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+412,
+"N"
+],
+"rx": [
+"Tone",
+199.5,
+null
+],
+"mode": "NAM",
+"step": 0.01,
+"power": "Med",
+"scrambler": "1",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 69,
+"empty": false,
+"name": "PMR 5",
+"freq": 439368750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+32,
+"R"
+],
+"mode": "USB",
+"step": 0.5,
+"power": "Low",
+"scrambler": "19",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 70,
+"empty": false,
+"name": "PMR 6",
+"freq": 468368750,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+245,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 2.5,
+"power": "Low",
+"scrambler": "11",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 71,
+"empty": false,
+"name": "PMR 7",
+"freq": 134335130,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+151.4,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 0.01,
+"power": "High",
+"scrambler": "7",
+"scanlists": "List1+2",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 72,
+"empty": false,
+"name": "PMR 8",
+"freq": 118233240,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+332,
+"R"
+],
+"rx": [
+"DTCS",
+116,
+"R"
+],
+"mode": "NAM",
+"step": 0.01,
+"power": "Med",
+"scrambler": "7",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 73,
+"empty": false,
+"name": "LPD-OV",
+"freq": 130628280,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+69.3,
+null
+],
+"mode": "FM",
+"step": 25.0,
+"power": "Low",
+"scrambler": "19",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 74,
+"empty": true
+},
+{
+"n": 75,
+"empty": false,
+"name": "TBS TWR",
+"freq": 27443000,
+"offset": 0,
+"duplex": "off",
+"tx": [
+"DTCS",
+252,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 5.0,
+"power": "Low",
+"scrambler": "13",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 76,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 466312500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+25,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 1,
+"power": "Med",
+"scrambler": "15",
+"scanlists": "List1+2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 77,
+"empty": false,
+"name": "MARINE 16",
+"freq": 118033320,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"Tone",
+173.8,
+null
+],
+"rx": [
+"DTCS",
+723,
+"N"
+],
+"mode": "NFM",
+"step": 0.5,
+"power": "High",
+"scrambler": "1",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 78,
+"empty": false,
+"name": "A",
+"freq": 432512500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+465,
+"R"
+],
+"mode": "USB",
+"step": 8.33,
+"power": "Med",
+"scrambler": "9",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 79,
+"empty": false,
+"name": "1234567890",
+"freq": 119899240,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+210.7,
+null
+],
+"rx": [
+"DTCS",
+223,
+"R"
+],
+"mode": "FM",
+"step": 5.0,
+"power": "High",
+"scrambler": "18",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 80,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 435462500,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+125,
+"N"
+],
+"rx": [
+"Tone",
+118.8,
+null
+],
+"mode": "NFM",
+"step": 50.0,
+"power": "Med",
+"scrambler": "5",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 81,
+"empty": true
+},
+{
+"n": 82,
+"empty": false,
+"name": "PMR 2",
+"freq": 466381250,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+712,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 2.5,
+"power": "Low",
+"scrambler": "3",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 83,
+"empty": false,
+"name": "PMR 3",
+"freq": 145283750,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 0.01,
+"power": "Low",
+"scrambler": "16",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 84,
+"empty": false,
+"name": "PMR 4",
+"freq": 130086830,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+131,
+"N"
+],
+"mode": "FM",
+"step": 25.0,
+"power": "Low",
+"scrambler": "10",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 85,
+"empty": false,
+"name": "PMR 5",
+"freq": 436137500,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"Tone",
+141.3,
+null
+],
+"rx": [
+"DTCS",
+265,
+"N"
+],
+"mode": "USB",
+"step": 0.01,
+"power": "Low",
+"scrambler": "2",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 86,
+"empty": false,
+"name": "PMR 6",
+"freq": 136759160,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 2.5,
+"power": "Med",
+"scrambler": "18",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 87,
+"empty": false,
+"name": "PMR 7",
+"freq": 145625000,
+"offset": 600000,
+"duplex": "-",
+"tx": [
+"DTCS",
+115,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 8.33,
+"power": "Low",
+"scrambler": "11",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 88,
+"empty": true
+},
+{
+"n": 89,
+"empty": false,
+"name": "LPD-OV",
+"freq": 27747000,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 1,
+"power": "High",
+"scrambler": "19",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 90,
+"empty": false,
+"name": "R0 TBS",
+"freq": 464700000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+74,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 6.25,
+"power": "High",
+"scrambler": "20",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 91,
+"empty": false,
+"name": "TBS TWR",
+"freq": 131394640,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+465,
+"R"
+],
+"mode": "NFM",
+"step": 6.25,
+"power": "Med",
+"scrambler": "1",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 92,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 145943750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+263,
+"R"
+],
+"rx": [
+"DTCS",
+205,
+"N"
+],
+"mode": "AM",
+"step": 2.5,
+"power": "Med",
+"scrambler": "3",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 93,
+"empty": false,
+"name": "MARINE 16",
+"freq": 136109420,
+"offset": 600000,
+"duplex": "-",
+"tx": [
+"DTCS",
+54,
+"R"
+],
+"rx": [
+"DTCS",
+565,
+"N"
+],
+"mode": "FM",
+"step": 2.5,
+"power": "Low",
+"scrambler": "4",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 94,
+"empty": false,
+"name": "A",
+"freq": 144262500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+26,
+"R"
+],
+"rx": [
+"Tone",
+85.4,
+null
+],
+"mode": "NFM",
+"step": 100.0,
+"power": "High",
+"scrambler": "9",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 95,
+"empty": true
+},
+{
+"n": 96,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 145357500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+171.3,
+null
+],
+"mode": "USB",
+"step": 10.0,
+"power": "High",
+"scrambler": "8",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 97,
+"empty": false,
+"name": "PMR 1",
+"freq": 127171330,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+246,
+"N"
+],
+"rx": [
+"DTCS",
+464,
+"R"
+],
+"mode": "AM",
+"step": 12.5,
+"power": "Med",
+"scrambler": "7",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 98,
+"empty": false,
+"name": "PMR 2",
+"freq": 26309000,
+"offset": 0,
+"duplex": "off",
+"tx": [
+"Tone",
+192.8,
+null
+],
+"rx": [
+"Tone",
+146.2,
+null
+],
+"mode": "USB",
+"step": 10.0,
+"power": "Low",
+"scrambler": "15",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 99,
+"empty": false,
+"name": "PMR 3",
+"freq": 436700000,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+346,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 0.5,
+"power": "Med",
+"scrambler": "20",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 100,
+"empty": false,
+"name": "PMR 4",
+"freq": 460531250,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+631,
+"R"
+],
+"mode": "USB",
+"step": 1,
+"power": "High",
+"scrambler": "17",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 101,
+"empty": false,
+"name": "PMR 5",
+"freq": 125705250,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"Tone",
+165.5,
+null
+],
+"rx": [
+"DTCS",
+532,
+"R"
+],
+"mode": "NAM",
+"step": 2.5,
+"power": "High",
+"scrambler": "5",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 102,
+"empty": true
+},
+{
+"n": 103,
+"empty": false,
+"name": "PMR 7",
+"freq": 128154270,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+261,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 12.5,
+"power": "High",
+"scrambler": "12",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 104,
+"empty": false,
+"name": "PMR 8",
+"freq": 144525000,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 6.25,
+"power": "High",
+"scrambler": "16",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 105,
+"empty": false,
+"name": "LPD-OV",
+"freq": 435893750,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+25,
+"R"
+],
+"rx": [
+"Tone",
+131.8,
+null
+],
+"mode": "USB",
+"step": 2.5,
+"power": "Med",
+"scrambler": "12",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 106,
+"empty": false,
+"name": "R0 TBS",
+"freq": 144755000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+516,
+"N"
+],
+"rx": [
+"Tone",
+173.8,
+null
+],
+"mode": "USB",
+"step": 100.0,
+"power": "High",
+"scrambler": "2",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 107,
+"empty": false,
+"name": "TBS TWR",
+"freq": 145070000,
+"offset": 5000000,
+"duplex": "-",
+"tx": [
+"DTCS",
+431,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 1,
+"power": "High",
+"scrambler": "6",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 108,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 145795000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+712,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 100.0,
+"power": "Med",
+"scrambler": "16",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 109,
+"empty": true
+},
+{
+"n": 110,
+"empty": false,
+"name": "A",
+"freq": 26975000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+413,
+"N"
+],
+"mode": "USB",
+"step": 0.1,
+"power": "Med",
+"scrambler": "3",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 111,
+"empty": false,
+"name": "1234567890",
+"freq": 462000000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+110.9,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 6.25,
+"power": "Low",
+"scrambler": "9",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 112,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 26250000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+159.8,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 25.0,
+"power": "High",
+"scrambler": "20",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 113,
+"empty": false,
+"name": "PMR 1",
+"freq": 434068750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+250.3,
+null
+],
+"mode": "AM",
+"step": 8.33,
+"power": "High",
+"scrambler": "15",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 114,
+"empty": false,
+"name": "PMR 2",
+"freq": 27140000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+565,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 2.5,
+"power": "Med",
+"scrambler": "9",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 115,
+"empty": false,
+"name": "PMR 3",
+"freq": 145232500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+218.1,
+null
+],
+"mode": "FM",
+"step": 10.0,
+"power": "High",
+"scrambler": "17",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 116,
+"empty": true
+},
+{
+"n": 117,
+"empty": false,
+"name": "PMR 5",
+"freq": 132177660,
+"offset": 7600000,
+"duplex": "-",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 0.01,
+"power": "High",
+"scrambler": "5",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 118,
+"empty": false,
+"name": "PMR 6",
+"freq": 26639000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+225.7,
+null
+],
+"rx": [
+"Tone",
+97.4,
+null
+],
+"mode": "FM",
+"step": 0.1,
+"power": "Med",
+"scrambler": "18",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 119,
+"empty": false,
+"name": "PMR 7",
+"freq": 145620000,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+712,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "AM",
+"step": 25.0,
+"power": "Low",
+"scrambler": "2",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 120,
+"empty": false,
+"name": "PMR 8",
+"freq": 136126080,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+723,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 0.01,
+"power": "High",
+"scrambler": "17",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 121,
+"empty": false,
+"name": "LPD-OV",
+"freq": 145912500,
+"offset": 0,
+"duplex": "off",
+"tx": [
+"DTCS",
+446,
+"R"
+],
+"rx": [
+"Tone",
+171.3,
+null
+],
+"mode": "USB",
+"step": 0.5,
+"power": "High",
+"scrambler": "6",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 122,
+"empty": false,
+"name": "R0 TBS",
+"freq": 120307410,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+36,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 100.0,
+"power": "Med",
+"scrambler": "7",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 123,
+"empty": true
+},
+{
+"n": 124,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 439787500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+455,
+"N"
+],
+"rx": [
+"Tone",
+179.9,
+null
+],
+"mode": "NFM",
+"step": 10.0,
+"power": "High",
+"scrambler": "11",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 125,
+"empty": false,
+"name": "MARINE 16",
+"freq": 145162500,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+94.8,
+null
+],
+"rx": [
+"DTCS",
+32,
+"N"
+],
+"mode": "FM",
+"step": 0.01,
+"power": "Low",
+"scrambler": "16",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 126,
+"empty": false,
+"name": "A",
+"freq": 469868750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+103.5,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 25.0,
+"power": "Med",
+"scrambler": "20",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 127,
+"empty": false,
+"name": "1234567890",
+"freq": 145200000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NAM",
+"step": 6.25,
+"power": "Low",
+"scrambler": "17",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 128,
+"empty": false,
+"name": "x-y_z.!",
+"freq": 118999600,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+107.2,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 8.33,
+"power": "High",
+"scrambler": "17",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 129,
+"empty": false,
+"name": "PMR 1",
+"freq": 135692920,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+192.8,
+null
+],
+"rx": [
+"DTCS",
+155,
+"N"
+],
+"mode": "FM",
+"step": 10.0,
+"power": "Low",
+"scrambler": "3",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 130,
+"empty": true
+},
+{
+"n": 131,
+"empty": false,
+"name": "PMR 3",
+"freq": 144210000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+53,
+"R"
+],
+"rx": [
+"DTCS",
+152,
+"N"
+],
+"mode": "AM",
+"step": 6.25,
+"power": "Low",
+"scrambler": "4",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 132,
+"empty": false,
+"name": "PMR 4",
+"freq": 461681250,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+503,
+"N"
+],
+"rx": [
+"Tone",
+146.2,
+null
+],
+"mode": "NAM",
+"step": 2.5,
+"power": "Low",
+"scrambler": "9",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 133,
+"empty": false,
+"name": "PMR 5",
+"freq": 430818750,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+632,
+"N"
+],
+"rx": [
+"DTCS",
+131,
+"N"
+],
+"mode": "FM",
+"step": 50.0,
+"power": "Low",
+"scrambler": "3",
+"scanlists": "List2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 134,
+"empty": false,
+"name": "PMR 6",
+"freq": 469887500,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+53,
+"R"
+],
+"rx": [
+"Tone",
+82.5,
+null
+],
+"mode": "NFM",
+"step": 2.5,
+"power": "Low",
+"scrambler": "10",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 135,
+"empty": false,
+"name": "PMR 7",
+"freq": 467143750,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+210.7,
+null
+],
+"rx": [
+"Tone",
+131.8,
+null
+],
+"mode": "AM",
+"step": 0.01,
+"power": "High",
+"scrambler": "8",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 136,
+"empty": false,
+"name": "PMR 8",
+"freq": 144861250,
+"offset": 5000000,
+"duplex": "+",
+"tx": [
+"Tone",
+173.8,
+null
+],
+"rx": [
+"DTCS",
+131,
+"N"
+],
+"mode": "AM",
+"step": 100.0,
+"power": "High",
+"scrambler": "14",
+"scanlists": "List1",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "False",
+"compander": "RX"
+},
+{
+"n": 137,
+"empty": true
+},
+{
+"n": 138,
+"empty": false,
+"name": "R0 TBS",
+"freq": 27978000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+371,
+"R"
+],
+"mode": "FM",
+"step": 25.0,
+"power": "Med",
+"scrambler": "12",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 139,
+"empty": false,
+"name": "TBS TWR",
+"freq": 27827000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"Tone",
+94.8,
+null
+],
+"mode": "AM",
+"step": 0.01,
+"power": "High",
+"scrambler": "16",
+"scanlists": "List1+2",
+"busyLock": "False",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 140,
+"empty": false,
+"name": "NOAA WX1",
+"freq": 435218750,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "NFM",
+"step": 100.0,
+"power": "Low",
+"scrambler": "6",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX/RX"
+},
+{
+"n": 141,
+"empty": false,
+"name": "MARINE 16",
+"freq": 430700000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+446,
+"R"
+],
+"rx": [
+"DTCS",
+343,
+"R"
+],
+"mode": "USB",
+"step": 1,
+"power": "Med",
+"scrambler": "1",
+"scanlists": "List1",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 142,
+"empty": false,
+"name": "A",
+"freq": 27321000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+664,
+"R"
+],
+"rx": [
+"Tone",
+107.2,
+null
+],
+"mode": "NFM",
+"step": 0.1,
+"power": "High",
+"scrambler": "2",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 143,
+"empty": false,
+"name": "1234567890",
+"freq": 26007000,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+31,
+"N"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "FM",
+"step": 12.5,
+"power": "Low",
+"scrambler": "5",
+"scanlists": "List2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "TX"
+},
+{
+"n": 144,
+"empty": true
+},
+{
+"n": 145,
+"empty": false,
+"name": "PMR 1",
+"freq": 462568750,
+"offset": 600000,
+"duplex": "-",
+"tx": [
+"Tone",
+91.5,
+null
+],
+"rx": [
+"DTCS",
+25,
+"N"
+],
+"mode": "AM",
+"step": 0.1,
+"power": "High",
+"scrambler": "10",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP CODE",
+"dtmfDecode": "True",
+"compander": "RX"
+},
+{
+"n": 146,
+"empty": false,
+"name": "PMR 2",
+"freq": 144521250,
+"offset": 600000,
+"duplex": "+",
+"tx": [
+"DTCS",
+261,
+"N"
+],
+"rx": [
+"Tone",
+210.7,
+null
+],
+"mode": "FM",
+"step": 12.5,
+"power": "High",
+"scrambler": "9",
+"scanlists": "None",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 147,
+"empty": false,
+"name": "PMR 3",
+"freq": 432025000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"Tone",
+107.2,
+null
+],
+"rx": [
+"DTCS",
+132,
+"R"
+],
+"mode": "AM",
+"step": 50.0,
+"power": "High",
+"scrambler": "4",
+"scanlists": "None",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "False",
+"compander": "OFF"
+},
+{
+"n": 148,
+"empty": false,
+"name": "PMR 4",
+"freq": 433781250,
+"offset": 7600000,
+"duplex": "+",
+"tx": [
+"",
+null,
+null
+],
+"rx": [
+"DTCS",
+606,
+"N"
+],
+"mode": "NFM",
+"step": 8.33,
+"power": "Low",
+"scrambler": "19",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "TX"
+},
+{
+"n": 149,
+"empty": false,
+"name": "PMR 5",
+"freq": 26964000,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+627,
+"R"
+],
+"rx": [
+"",
+null,
+null
+],
+"mode": "USB",
+"step": 0.01,
+"power": "High",
+"scrambler": "9",
+"scanlists": "List1+2",
+"busyLock": "True",
+"reverse": "True",
+"pttid": "UP+DOWN CODE",
+"dtmfDecode": "True",
+"compander": "TX/RX"
+},
+{
+"n": 150,
+"empty": false,
+"name": "PMR 6",
+"freq": 136001130,
+"offset": 0,
+"duplex": "",
+"tx": [
+"DTCS",
+413,
+"N"
+],
+"rx": [
+"Tone",
+110.9,
+null
+],
+"mode": "FM",
+"step": 6.25,
+"power": "Low",
+"scrambler": "2",
+"scanlists": "List1+2",
+"busyLock": "False",
+"reverse": "False",
+"pttid": "OFF",
+"dtmfDecode": "True",
+"compander": "OFF"
+},
+{
+"n": 151,
+"empty": true
+},
+{
+"n": 152,
+"empty": true
+},
+{
+"n": 153,
+"empty": true
+},
+{
+"n": 154,
+"empty": true
+},
+{
+"n": 155,
+"empty": true
+},
+{
+"n": 156,
+"empty": true
+},
+{
+"n": 157,
+"empty": true
+},
+{
+"n": 158,
+"empty": true
+},
+{
+"n": 159,
+"empty": true
+},
+{
+"n": 160,
+"empty": true
+},
+{
+"n": 161,
+"empty": true
+},
+{
+"n": 162,
+"empty": true
+},
+{
+"n": 163,
+"empty": true
+},
+{
+"n": 164,
+"empty": true
+},
+{
+"n": 165,
+"empty": true
+},
+{
+"n": 166,
+"empty": true
+},
+{
+"n": 167,
+"empty": true
+},
+{
+"n": 168,
+"empty": true
+},
+{
+"n": 169,
+"empty": true
+},
+{
+"n": 170,
+"empty": true
+},
+{
+"n": 171,
+"empty": true
+},
+{
+"n": 172,
+"empty": true
+},
+{
+"n": 173,
+"empty": true
+},
+{
+"n": 174,
+"empty": true
+},
+{
+"n": 175,
+"empty": true
+},
+{
+"n": 176,
+"empty": true
+},
+{
+"n": 177,
+"empty": true
+},
+{
+"n": 178,
+"empty": true
+},
+{
+"n": 179,
+"empty": true
+},
+{
+"n": 180,
+"empty": true
+},
+{
+"n": 181,
+"empty": true
+},
+{
+"n": 182,
+"empty": true
+},
+{
+"n": 183,
+"empty": true
+},
+{
+"n": 184,
+"empty": true
+},
+{
+"n": 185,
+"empty": true
+},
+{
+"n": 186,
+"empty": true
+},
+{
+"n": 187,
+"empty": true
+},
+{
+"n": 188,
+"empty": true
+},
+{
+"n": 189,
+"empty": true
+},
+{
+"n": 190,
+"empty": true
+},
+{
+"n": 191,
+"empty": true
+},
+{
+"n": 192,
+"empty": true
+},
+{
+"n": 193,
+"empty": true
+},
+{
+"n": 194,
+"empty": true
+},
+{
+"n": 195,
+"empty": true
+},
+{
+"n": 196,
+"empty": true
+},
+{
+"n": 197,
+"empty": true
+},
+{
+"n": 198,
+"empty": true
+},
+{
+"n": 199,
+"empty": true
+},
+{
+"n": 200,
+"empty": true
+}
+]

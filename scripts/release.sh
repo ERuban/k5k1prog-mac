@@ -30,6 +30,9 @@
 # https://github.com/ERuban/k5k1prog-mac/releases/latest/download/appcast.xml, so publishing the
 # release is what makes installed copies offer the update.
 #
+# Homebrew: the cask lives in github.com/ERuban/homebrew-tap. Its workflow follows the latest release
+# by itself, so nothing to do here for `brew upgrade`.
+#
 # The script does not publish anything. It prints the `gh release create` command at the end.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -212,4 +215,7 @@ Publish (after the commit is pushed):
   git tag v$VERSION && git push origin v$VERSION
   gh release create v$VERSION $DIST/$NAME.dmg $DIST/$NAME.zip $DIST/appcast.xml $DIST/SHA256SUMS.txt \\
       --title "K5K1 Prog $VERSION" --notes-file $DIST/RELEASE_NOTES.md
+
+Homebrew picks the release up by itself within 3 hours; right away:
+  gh workflow run bump.yml -R ERuban/homebrew-tap
 EOF
