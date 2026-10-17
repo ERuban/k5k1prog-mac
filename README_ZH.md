@@ -195,6 +195,7 @@ K5K1 Prog 是免费软件。如果它挽救了你的对讲机或为你节省了�
 - Jacek Lipkowski SQ5BPF 的 [k5prog](https://github.com/sq5bpf/k5prog)，k5prog-win 的对讲机通信例程以它为基础（GPL v3）。
 - UV-K5 V3 / UV-K1 bootloader 协议参照 muzkr 的 serialtool 实现，见 [armel/uv-k1-k5v3-firmware-custom](https://github.com/armel/uv-k1-k5v3-firmware-custom)。
 - Memory Editor 的信道布局和参数列表遵循 [CHIRP](https://github.com/kk7ds/chirp) 驱动：UV-K5 驱动由 Jacek Lipkowski SQ5BPF 编写，UV-K1 驱动由 Thibaut Berg 编写，Karina 的 CHIRP 模块由 M2Boo 编写（基于 egzumer / JOC2 / F4HWN 驱动），采用 GPLv2 或更高版本许可。CSV 和 `.img` 是 CHIRP 的文件格式。
+- Karina 固件作者：autumn1rain；Memory Editor 支持其信道布局。
 
 ## 许可证
 

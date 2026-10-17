@@ -304,6 +304,7 @@ App signiert und notarisiert bleibt, sowie Tests an echten Funkgeräten.
 - Kanal-Layout und Wertelisten des Memory Editors folgen den [CHIRP](https://github.com/kk7ds/chirp)-Treibern:
   UV-K5 von Jacek Lipkowski SQ5BPF, UV-K1 von Thibaut Berg und Karinas CHIRP-Module von M2Boo (basierend auf
   den Treibern von egzumer / JOC2 / F4HWN), GPLv2 oder später. CSV und `.img` sind Formate von CHIRP.
+- Karina-Firmware von autumn1rain; der Memory Editor unterstützt ihr Kanal-Layout.
 
 ## Lizenz
 

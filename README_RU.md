@@ -316,6 +316,7 @@ K5K1 Prog — бесплатная программа. Если она спас�
   UV-K5 — автор Jacek Lipkowski SQ5BPF, UV-K1 — Thibaut Berg, модули CHIRP для Karina — M2Boo (на
   основе драйверов egzumer / JOC2 / F4HWN), GPLv2 или более поздняя версия. CSV и `.img` — форматы
   CHIRP.
+- Прошивка Karina — автор autumn1rain; Memory Editor поддерживает её раскладку каналов.
 
 ## Лицензия
 

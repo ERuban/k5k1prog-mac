@@ -296,6 +296,7 @@ app signed and notarized, and for testing on real radios.
   drivers: UV-K5 by Jacek Lipkowski SQ5BPF, UV-K1 by Thibaut Berg, and Karina's CHIRP modules by
   M2Boo (based on the egzumer / JOC2 / F4HWN drivers), GPLv2 or later. CSV and `.img` are CHIRP's
   formats.
+- Karina firmware by autumn1rain; the Memory Editor supports its channel layout.
 
 ## License
 

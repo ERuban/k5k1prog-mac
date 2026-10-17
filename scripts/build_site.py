@@ -65,7 +65,7 @@ T = {
         ],
         "guide": "Full guide on GitHub →",
         "nav": ["GitHub", "Releases", "Guide", "Contributing", "Donate"],
-        "footer1": "Free and open source (GPL v3). macOS port of k5prog-win by OneOfEleven, based on k5prog by Jacek Lipkowski SQ5BPF. Channel layout from the CHIRP drivers.",
+        "footer1": "Free and open source (GPL v3). macOS port of k5prog-win by OneOfEleven, based on k5prog by Jacek Lipkowski SQ5BPF. Channel layout from the CHIRP drivers. Karina firmware by autumn1rain.",
         "footer2": "Not affiliated with Quansheng.",
     },
     "ru": {
@@ -108,7 +108,7 @@ T = {
         ],
         "guide": "Полное руководство на GitHub →",
         "nav": ["GitHub", "Релизы", "Руководство", "Участие", "Поддержать"],
-        "footer1": "Бесплатно, открытый код (GPL v3). Порт k5prog-win (OneOfEleven) на macOS, основан на k5prog (Jacek Lipkowski SQ5BPF). Раскладка каналов из драйверов CHIRP.",
+        "footer1": "Бесплатно, открытый код (GPL v3). Порт k5prog-win (OneOfEleven) на macOS, основан на k5prog (Jacek Lipkowski SQ5BPF). Раскладка каналов из драйверов CHIRP. Прошивка Karina — автор autumn1rain.",
         "footer2": "Не связано с Quansheng.",
     },
     "es": {
@@ -151,7 +151,7 @@ T = {
         ],
         "guide": "Guía completa en GitHub →",
         "nav": ["GitHub", "Versiones", "Guía", "Contribuir", "Donar"],
-        "footer1": "Gratis y de código abierto (GPL v3). Versión para macOS de k5prog-win de OneOfEleven, basada en k5prog de Jacek Lipkowski SQ5BPF. Estructura de canales según los drivers de CHIRP.",
+        "footer1": "Gratis y de código abierto (GPL v3). Versión para macOS de k5prog-win de OneOfEleven, basada en k5prog de Jacek Lipkowski SQ5BPF. Estructura de canales según los drivers de CHIRP. Firmware Karina de autumn1rain.",
         "footer2": "Sin relación con Quansheng.",
     },
     "de": {
@@ -194,7 +194,7 @@ T = {
         ],
         "guide": "Vollständige Anleitung auf GitHub →",
         "nav": ["GitHub", "Releases", "Anleitung", "Mitmachen", "Spenden"],
-        "footer1": "Kostenlos und Open Source (GPL v3). macOS-Portierung von k5prog-win von OneOfEleven, basierend auf k5prog von Jacek Lipkowski SQ5BPF. Kanalaufbau nach den CHIRP-Treibern.",
+        "footer1": "Kostenlos und Open Source (GPL v3). macOS-Portierung von k5prog-win von OneOfEleven, basierend auf k5prog von Jacek Lipkowski SQ5BPF. Kanalaufbau nach den CHIRP-Treibern. Karina-Firmware von autumn1rain.",
         "footer2": "Keine Verbindung zu Quansheng.",
     },
     "zh": {
@@ -236,7 +236,7 @@ T = {
         ],
         "guide": "GitHub 上的完整指南 →",
         "nav": ["GitHub", "发布版", "指南", "参与贡献", "捐助"],
-        "footer1": "免费开源（GPL v3）。k5prog-win（OneOfEleven）的 macOS 移植版，基于 Jacek Lipkowski SQ5BPF 的 k5prog。信道结构参考 CHIRP 驱动。",
+        "footer1": "免费开源（GPL v3）。k5prog-win（OneOfEleven）的 macOS 移植版，基于 Jacek Lipkowski SQ5BPF 的 k5prog。信道结构参考 CHIRP 驱动。Karina 固件作者为 autumn1rain。",
         "footer2": "与泉盛公司无关。",
     },
 }
