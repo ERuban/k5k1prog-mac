@@ -160,6 +160,10 @@ open "K5K1 Prog.app"
 значения мощности передатчика и аккумулятора. После прошивки сделайте **Read Calibration** и
 сравните результат со своей резервной копией.
 
+Прошивки выкладывают их авторы. Например, Karina от autumn1rain:
+[karina-v1](https://github.com/autumn1rain/karina-v1) для UV-K5 V1 и
+[karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1) для UV-K5 V3 / UV-K1.
+
 ### Редактирование каналов
 
 1. Включите радиостанцию обычным образом, выберите её порт и нажмите **Memory Editor…** (⌘E). Каналы
@@ -316,7 +320,8 @@ K5K1 Prog — бесплатная программа. Если она спас�
   UV-K5 — автор Jacek Lipkowski SQ5BPF, UV-K1 — Thibaut Berg, модули CHIRP для Karina — M2Boo (на
   основе драйверов egzumer / JOC2 / F4HWN), GPLv2 или более поздняя версия. CSV и `.img` — форматы
   CHIRP.
-- Прошивка Karina — автор autumn1rain; Memory Editor поддерживает её раскладку каналов.
+- Прошивка Karina — автор [autumn1rain](https://github.com/autumn1rain): [karina-v1](https://github.com/autumn1rain/karina-v1),
+  [karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1). Memory Editor поддерживает её раскладку каналов.
 
 ## Лицензия
 

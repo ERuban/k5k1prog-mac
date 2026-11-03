@@ -157,6 +157,10 @@ cargar, etc.). Algunos paquetes de firmware incluyen un archivo de calibración 
 los valores de fábrica de potencia de TX y de batería. Al terminar, haz una nueva lectura con
 **Read Calibration** y compárala con tu copia de seguridad.
 
+El firmware lo publican sus autores. Por ejemplo, Karina de autumn1rain:
+[karina-v1](https://github.com/autumn1rain/karina-v1) para la UV-K5 V1 y
+[karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1) para la UV-K5 V3 / UV-K1.
+
 ### Edición de canales
 
 1. Enciende la radio de forma normal, selecciona su puerto y pulsa **Memory Editor…** (⌘E). Los canales
@@ -311,7 +315,8 @@ Apple Developer que mantiene la app firmada y notarizada, y las pruebas con radi
   [CHIRP](https://github.com/kk7ds/chirp): UV-K5, de Jacek Lipkowski SQ5BPF; UV-K1, de Thibaut Berg; y
   los módulos de CHIRP para Karina, de M2Boo (basados en los drivers de egzumer / JOC2 / F4HWN), GPLv2 o
   posterior. CSV e `.img` son formatos de CHIRP.
-- Firmware Karina, de autumn1rain; el Memory Editor admite su estructura de canales.
+- Firmware Karina, de [autumn1rain](https://github.com/autumn1rain): [karina-v1](https://github.com/autumn1rain/karina-v1),
+  [karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1). El Memory Editor admite su estructura de canales.
 
 ## Licencia
 

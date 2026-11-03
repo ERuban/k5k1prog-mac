@@ -149,6 +149,10 @@ Then follow the instructions of your firmware (memory reset, which calibration f
 on). Some firmware packages ship a complete calibration file that replaces your factory TX power and
 battery values. Compare a fresh **Read Calibration** with your backup afterwards.
 
+Firmware is published by its authors, for example Karina by autumn1rain:
+[karina-v1](https://github.com/autumn1rain/karina-v1) for the UV-K5 V1 and
+[karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1) for the UV-K5 V3 / UV-K1.
+
 ### Edit channels
 
 1. Switch the radio on normally, select its port and press **Memory Editor…** (⌘E). The channels are
@@ -296,7 +300,8 @@ app signed and notarized, and for testing on real radios.
   drivers: UV-K5 by Jacek Lipkowski SQ5BPF, UV-K1 by Thibaut Berg, and Karina's CHIRP modules by
   M2Boo (based on the egzumer / JOC2 / F4HWN drivers), GPLv2 or later. CSV and `.img` are CHIRP's
   formats.
-- Karina firmware by autumn1rain; the Memory Editor supports its channel layout.
+- Karina firmware by [autumn1rain](https://github.com/autumn1rain): [karina-v1](https://github.com/autumn1rain/karina-v1),
+  [karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1). The Memory Editor supports its channel layout.
 
 ## License
 

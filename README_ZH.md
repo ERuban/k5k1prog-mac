@@ -116,6 +116,8 @@ open "K5K1 Prog.app"
 
 之后请按照所刷固件的说明操作（重置存储、需要加载哪些校准文件等）。有些固件包附带完整的校准文件，会替换掉你的出厂发射功率和电池校准值。完成后请重新 **Read Calibration**，并与之前的备份进行比较。
 
+固件由各自的作者发布，例如 autumn1rain 的 Karina：[karina-v1](https://github.com/autumn1rain/karina-v1) 适用于 UV-K5 V1，[karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1) 适用于 UV-K5 V3 / UV-K1。
+
 ### 编辑信道
 
 1. 正常开机，选择对应端口，然后点击 **Memory Editor…**（⌘E）。程序会从对讲机读取信道；窗口中显示的始终是对讲机当前的内容。
@@ -195,7 +197,7 @@ K5K1 Prog 是免费软件。如果它挽救了你的对讲机或为你节省了�
 - Jacek Lipkowski SQ5BPF 的 [k5prog](https://github.com/sq5bpf/k5prog)，k5prog-win 的对讲机通信例程以它为基础（GPL v3）。
 - UV-K5 V3 / UV-K1 bootloader 协议参照 muzkr 的 serialtool 实现，见 [armel/uv-k1-k5v3-firmware-custom](https://github.com/armel/uv-k1-k5v3-firmware-custom)。
 - Memory Editor 的信道布局和参数列表遵循 [CHIRP](https://github.com/kk7ds/chirp) 驱动：UV-K5 驱动由 Jacek Lipkowski SQ5BPF 编写，UV-K1 驱动由 Thibaut Berg 编写，Karina 的 CHIRP 模块由 M2Boo 编写（基于 egzumer / JOC2 / F4HWN 驱动），采用 GPLv2 或更高版本许可。CSV 和 `.img` 是 CHIRP 的文件格式。
-- Karina 固件作者：autumn1rain；Memory Editor 支持其信道布局。
+- Karina 固件作者：[autumn1rain](https://github.com/autumn1rain)（[karina-v1](https://github.com/autumn1rain/karina-v1)、[karina-v3-k1](https://github.com/autumn1rain/karina-v3-k1)）；Memory Editor 支持其信道布局。
 
 ## 许可证
 
