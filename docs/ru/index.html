@@ -158,7 +158,7 @@
     </div>
 
     <section id="features">
-      <h2>Что умеет</h2>
+      <h2>Что умеет<a class="anchor" href="#features" aria-label="Ссылка на этот раздел">#</a></h2>
       <div class="features">
       <div class="card"><span class="ico">💾</span><h3>Резервная копия и восстановление</h3><p>Чтение и запись калибровки и конфигурации рации. Сохраните заводскую калибровку до любой прошивки.</p></div>
       <div class="card"><span class="ico">⚡</span><h3>Прошивка</h3><p>UV-K5 V1 и новые UV-K5 V3 / UV-K1. Файл прошивки и загрузчик проверяются до первого отправленного байта, неподходящие сочетания отклоняются.</p></div>
@@ -170,7 +170,7 @@
     </section>
 
     <section id="radios">
-      <h2>Поддерживаемые рации</h2>
+      <h2>Поддерживаемые рации<a class="anchor" href="#radios" aria-label="Ссылка на этот раздел">#</a></h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Рация</th><th>Чип</th><th>Загрузчик</th><th>Бэкап и восстановление</th><th>Прошивка</th></tr></thead>
@@ -185,7 +185,7 @@
     </section>
 
     <section id="safety">
-      <h2>Перед началом</h2>
+      <h2>Перед началом<a class="anchor" href="#safety" aria-label="Ссылка на этот раздел">#</a></h2>
       <div class="warn">
         <ul>
         <li>Сначала нажмите Read Calibration и сохраните файл: в нём калибровка мощности передатчика и батареи именно вашей рации, взять её больше негде.</li>
@@ -196,7 +196,7 @@
     </section>
 
     <section id="install">
-      <h2>Установка</h2>
+      <h2>Установка<a class="anchor" href="#install" aria-label="Ссылка на этот раздел">#</a></h2>
       <ol class="steps">
       <li>Скачайте .dmg, откройте и перетащите K5K1 Prog в «Программы».</li>
       <li>Или через Homebrew: <code>brew install --cask eruban/tap/k5k1-prog</code></li>
@@ -207,20 +207,20 @@
     </section>
 
     <section id="faq">
-      <h2>Вопросы и ответы</h2>
+      <h2>Вопросы и ответы<a class="anchor" href="#faq" aria-label="Ссылка на этот раздел">#</a></h2>
       <div class="faq">
-      <div class="qa"><h3>Можно ли программировать Quansheng UV-K5 на Mac?</h3><p>Да. K5K1 Prog работает на macOS 12 и новее, на Apple Silicon и Intel, без Windows и виртуальных машин. Программа делает резервную копию и восстанавливает калибровку и конфигурацию, прошивает рацию и редактирует каналы.</p></div>
-      <div class="qa"><h3>Какие рации поддерживаются?</h3><p>UV-K5, UV-K5(8), UV-K6 и UV-5R Plus на чипе DP32G030 (V1), а также новые UV-K5 V3 и UV-K1 (PY32F071). На UV-K5 V2 / UV-K6 V2 работают бэкап и восстановление, прошивка отклоняется.</p></div>
-      <div class="qa"><h3>Нужен ли драйвер для кабеля?</h3><p>Обычно нет: распространённые кабели на CH340 работают в современной macOS без дополнительных программ. Кабель появляется как /dev/cu.usbserial-…</p></div>
-      <div class="qa"><h3>Это замена CHIRP?</h3><p>Для каналов да: редактор памяти правит 200 каналов стоковой прошивки и Карины, импортирует и экспортирует CSV и .img от CHIRP. Настройки меню рации не редактируются.</p></div>
-      <div class="qa"><h3>Какую прошивку можно залить?</h3><p>Любой файл прошивки для вашей модели, .bin или .packed.bin: стоковую Quansheng, Карину, F4HWN и другие. Перед отправкой программа проверяет, подходит ли файл к загрузчику рации.</p></div>
-      <div class="qa"><h3>Это бесплатно и безопасно?</h3><p>Бесплатно, открытый код под GPL v3. Приложение подписано и нотаризовано Apple, без телеметрии, в сеть ходит только на GitHub за обновлениями.</p></div>
+      <div class="qa" id="faq-1"><h3>Можно ли программировать Quansheng UV-K5 на Mac?<a class="anchor" href="#faq-1" aria-label="Ссылка на этот раздел">#</a></h3><p>Да. K5K1 Prog работает на macOS 12 и новее, на Apple Silicon и Intel, без Windows и виртуальных машин. Программа делает резервную копию и восстанавливает калибровку и конфигурацию, прошивает рацию и редактирует каналы.</p></div>
+      <div class="qa" id="faq-2"><h3>Какие рации поддерживаются?<a class="anchor" href="#faq-2" aria-label="Ссылка на этот раздел">#</a></h3><p>UV-K5, UV-K5(8), UV-K6 и UV-5R Plus на чипе DP32G030 (V1), а также новые UV-K5 V3 и UV-K1 (PY32F071). На UV-K5 V2 / UV-K6 V2 работают бэкап и восстановление, прошивка отклоняется.</p></div>
+      <div class="qa" id="faq-3"><h3>Нужен ли драйвер для кабеля?<a class="anchor" href="#faq-3" aria-label="Ссылка на этот раздел">#</a></h3><p>Обычно нет: распространённые кабели на CH340 работают в современной macOS без дополнительных программ. Кабель появляется как /dev/cu.usbserial-…</p></div>
+      <div class="qa" id="faq-4"><h3>Это замена CHIRP?<a class="anchor" href="#faq-4" aria-label="Ссылка на этот раздел">#</a></h3><p>Для каналов да: редактор памяти правит 200 каналов стоковой прошивки и Карины, импортирует и экспортирует CSV и .img от CHIRP. Настройки меню рации не редактируются.</p></div>
+      <div class="qa" id="faq-5"><h3>Какую прошивку можно залить?<a class="anchor" href="#faq-5" aria-label="Ссылка на этот раздел">#</a></h3><p>Любой файл прошивки для вашей модели, .bin или .packed.bin: стоковую Quansheng, Карину, F4HWN и другие. Перед отправкой программа проверяет, подходит ли файл к загрузчику рации.</p></div>
+      <div class="qa" id="faq-6"><h3>Это бесплатно и безопасно?<a class="anchor" href="#faq-6" aria-label="Ссылка на этот раздел">#</a></h3><p>Бесплатно, открытый код под GPL v3. Приложение подписано и нотаризовано Apple, без телеметрии, в сеть ходит только на GitHub за обновлениями.</p></div>
       </div>
     </section>
 
     <footer>
       <nav><a href="https://github.com/ERuban/k5k1prog-mac">GitHub</a> <a href="https://github.com/ERuban/k5k1prog-mac/releases">Релизы</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/README_RU.md">Руководство</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/CONTRIBUTING.md">Участие</a> <a href="https://boosty.to/eruban/donate">Поддержать</a></nav>
-      <p>Бесплатно, открытый код (GPL v3). Порт k5prog-win (OneOfEleven) на macOS, основан на k5prog (Jacek Lipkowski SQ5BPF). Раскладка каналов из драйверов CHIRP. Прошивка Karina — автор autumn1rain.</p>
+      <p>Бесплатно, открытый код (GPL v3). Порт k5prog-win (OneOfEleven) на macOS, основан на k5prog (Jacek Lipkowski SQ5BPF). Раскладка каналов из драйверов CHIRP. Прошивка Karina — автор <a href="https://github.com/autumn1rain">autumn1rain</a>.</p>
       <p>Не связано с Quansheng. © 2026 Evgeny Ruban.</p>
     </footer>
   </div>

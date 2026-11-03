@@ -158,7 +158,7 @@
     </div>
 
     <section id="features">
-      <h2>Funktionen</h2>
+      <h2>Funktionen<a class="anchor" href="#features" aria-label="Link zu diesem Abschnitt">#</a></h2>
       <div class="features">
       <div class="card"><span class="ico">💾</span><h3>Sichern und wiederherstellen</h3><p>Kalibrierung und Konfiguration des Funkgeräts lesen und schreiben. Sichern Sie die Werkskalibrierung, bevor Sie etwas flashen.</p></div>
       <div class="card"><span class="ico">⚡</span><h3>Firmware flashen</h3><p>UV-K5 V1 und die neueren UV-K5 V3 / UV-K1. Firmware-Datei und Bootloader werden geprüft, bevor ein einziges Byte gesendet wird; falsche Kombinationen werden abgelehnt.</p></div>
@@ -170,7 +170,7 @@
     </section>
 
     <section id="radios">
-      <h2>Unterstützte Funkgeräte</h2>
+      <h2>Unterstützte Funkgeräte<a class="anchor" href="#radios" aria-label="Link zu diesem Abschnitt">#</a></h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Funkgerät</th><th>Chip</th><th>Bootloader</th><th>Sichern und wiederherstellen</th><th>Firmware</th></tr></thead>
@@ -185,7 +185,7 @@
     </section>
 
     <section id="safety">
-      <h2>Bevor Sie anfangen</h2>
+      <h2>Bevor Sie anfangen<a class="anchor" href="#safety" aria-label="Link zu diesem Abschnitt">#</a></h2>
       <div class="warn">
         <ul>
         <li>Zuerst Read Calibration drücken und die Datei aufheben: Sie enthält die Sendeleistungs- und Akkukalibrierung genau Ihres Geräts, die Sie sonst nirgends bekommen.</li>
@@ -196,7 +196,7 @@
     </section>
 
     <section id="install">
-      <h2>Installation</h2>
+      <h2>Installation<a class="anchor" href="#install" aria-label="Link zu diesem Abschnitt">#</a></h2>
       <ol class="steps">
       <li>.dmg laden, öffnen und K5K1 Prog in den Ordner Programme ziehen.</li>
       <li>Oder mit Homebrew: <code>brew install --cask eruban/tap/k5k1-prog</code></li>
@@ -207,20 +207,20 @@
     </section>
 
     <section id="faq">
-      <h2>Häufige Fragen</h2>
+      <h2>Häufige Fragen<a class="anchor" href="#faq" aria-label="Link zu diesem Abschnitt">#</a></h2>
       <div class="faq">
-      <div class="qa"><h3>Kann ich ein Quansheng UV-K5 am Mac programmieren?</h3><p>Ja. K5K1 Prog läuft nativ unter macOS 12 oder neuer, auf Apple Silicon und Intel, ohne Windows und ohne virtuelle Maschine. Es sichert und schreibt Kalibrierung und Konfiguration, flasht Firmware und bearbeitet Kanäle.</p></div>
-      <div class="qa"><h3>Welche Funkgeräte werden unterstützt?</h3><p>UV-K5, UV-K5(8), UV-K6 und UV-5R Plus mit dem Chip DP32G030 (V1) sowie die neueren UV-K5 V3 und UV-K1 (PY32F071). Beim UV-K5 V2 / UV-K6 V2 funktionieren Sichern und Wiederherstellen; Firmware-Uploads werden abgelehnt.</p></div>
-      <div class="qa"><h3>Brauche ich einen Treiber für das Programmierkabel?</h3><p>Meist nicht: Die üblichen CH340-Kabel funktionieren unter aktuellem macOS ohne Zusatzsoftware. Das Kabel erscheint als /dev/cu.usbserial-…</p></div>
-      <div class="qa"><h3>Ist es eine Alternative zu CHIRP?</h3><p>Für Kanäle ja: Der Speichereditor bearbeitet die 200 Kanäle der Original- und der Karina-Firmware und importiert und exportiert CSV- und .img-Dateien von CHIRP. Die Menüeinstellungen des Funkgeräts werden nicht bearbeitet.</p></div>
-      <div class="qa"><h3>Welche Firmware kann ich flashen?</h3><p>Jede Firmware-Datei für Ihr Modell, .bin oder .packed.bin: Original-Quansheng, Karina, F4HWN und andere. Vor dem Senden prüft die App, ob die Datei zum Bootloader des Funkgeräts passt.</p></div>
-      <div class="qa"><h3>Ist es kostenlos und sicher?</h3><p>Kostenlos und Open Source unter GPL v3. Die App ist von Apple signiert und notarisiert, hat keine Telemetrie und verbindet sich nur mit GitHub, um nach Updates zu suchen.</p></div>
+      <div class="qa" id="faq-1"><h3>Kann ich ein Quansheng UV-K5 am Mac programmieren?<a class="anchor" href="#faq-1" aria-label="Link zu diesem Abschnitt">#</a></h3><p>Ja. K5K1 Prog läuft nativ unter macOS 12 oder neuer, auf Apple Silicon und Intel, ohne Windows und ohne virtuelle Maschine. Es sichert und schreibt Kalibrierung und Konfiguration, flasht Firmware und bearbeitet Kanäle.</p></div>
+      <div class="qa" id="faq-2"><h3>Welche Funkgeräte werden unterstützt?<a class="anchor" href="#faq-2" aria-label="Link zu diesem Abschnitt">#</a></h3><p>UV-K5, UV-K5(8), UV-K6 und UV-5R Plus mit dem Chip DP32G030 (V1) sowie die neueren UV-K5 V3 und UV-K1 (PY32F071). Beim UV-K5 V2 / UV-K6 V2 funktionieren Sichern und Wiederherstellen; Firmware-Uploads werden abgelehnt.</p></div>
+      <div class="qa" id="faq-3"><h3>Brauche ich einen Treiber für das Programmierkabel?<a class="anchor" href="#faq-3" aria-label="Link zu diesem Abschnitt">#</a></h3><p>Meist nicht: Die üblichen CH340-Kabel funktionieren unter aktuellem macOS ohne Zusatzsoftware. Das Kabel erscheint als /dev/cu.usbserial-…</p></div>
+      <div class="qa" id="faq-4"><h3>Ist es eine Alternative zu CHIRP?<a class="anchor" href="#faq-4" aria-label="Link zu diesem Abschnitt">#</a></h3><p>Für Kanäle ja: Der Speichereditor bearbeitet die 200 Kanäle der Original- und der Karina-Firmware und importiert und exportiert CSV- und .img-Dateien von CHIRP. Die Menüeinstellungen des Funkgeräts werden nicht bearbeitet.</p></div>
+      <div class="qa" id="faq-5"><h3>Welche Firmware kann ich flashen?<a class="anchor" href="#faq-5" aria-label="Link zu diesem Abschnitt">#</a></h3><p>Jede Firmware-Datei für Ihr Modell, .bin oder .packed.bin: Original-Quansheng, Karina, F4HWN und andere. Vor dem Senden prüft die App, ob die Datei zum Bootloader des Funkgeräts passt.</p></div>
+      <div class="qa" id="faq-6"><h3>Ist es kostenlos und sicher?<a class="anchor" href="#faq-6" aria-label="Link zu diesem Abschnitt">#</a></h3><p>Kostenlos und Open Source unter GPL v3. Die App ist von Apple signiert und notarisiert, hat keine Telemetrie und verbindet sich nur mit GitHub, um nach Updates zu suchen.</p></div>
       </div>
     </section>
 
     <footer>
       <nav><a href="https://github.com/ERuban/k5k1prog-mac">GitHub</a> <a href="https://github.com/ERuban/k5k1prog-mac/releases">Releases</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/README_DE.md">Anleitung</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/CONTRIBUTING.md">Mitmachen</a> <a href="https://boosty.to/eruban/donate">Spenden</a></nav>
-      <p>Kostenlos und Open Source (GPL v3). macOS-Portierung von k5prog-win von OneOfEleven, basierend auf k5prog von Jacek Lipkowski SQ5BPF. Kanalaufbau nach den CHIRP-Treibern. Karina-Firmware von autumn1rain.</p>
+      <p>Kostenlos und Open Source (GPL v3). macOS-Portierung von k5prog-win von OneOfEleven, basierend auf k5prog von Jacek Lipkowski SQ5BPF. Kanalaufbau nach den CHIRP-Treibern. Karina-Firmware von <a href="https://github.com/autumn1rain">autumn1rain</a>.</p>
       <p>Keine Verbindung zu Quansheng. © 2026 Evgeny Ruban.</p>
     </footer>
   </div>

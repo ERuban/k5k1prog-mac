@@ -13,6 +13,7 @@ SITE = "https://eruban.github.io/k5k1prog-mac/"
 REPO = "https://github.com/ERuban/k5k1prog-mac"
 LATEST = REPO + "/releases/latest"
 DONATE = "https://boosty.to/eruban/donate"
+KARINA = "https://github.com/autumn1rain"
 KARINA_V1 = "https://github.com/autumn1rain/karina-v1"
 KARINA_K1 = "https://github.com/autumn1rain/karina-v3-k1"
 BREW = "brew install --cask eruban/tap/k5k1-prog"
@@ -67,6 +68,7 @@ T = {
         ],
         "guide": "Full guide on GitHub →",
         "firmware": "Karina firmware by autumn1rain:",
+        "anchor": "Link to this section",
         "nav": ["GitHub", "Releases", "Guide", "Contributing", "Donate"],
         "footer1": "Free and open source (GPL v3). macOS port of k5prog-win by OneOfEleven, based on k5prog by Jacek Lipkowski SQ5BPF. Channel layout from the CHIRP drivers. Karina firmware by autumn1rain.",
         "footer2": "Not affiliated with Quansheng.",
@@ -111,6 +113,7 @@ T = {
         ],
         "guide": "Полное руководство на GitHub →",
         "firmware": "Прошивка Karina от autumn1rain:",
+        "anchor": "Ссылка на этот раздел",
         "nav": ["GitHub", "Релизы", "Руководство", "Участие", "Поддержать"],
         "footer1": "Бесплатно, открытый код (GPL v3). Порт k5prog-win (OneOfEleven) на macOS, основан на k5prog (Jacek Lipkowski SQ5BPF). Раскладка каналов из драйверов CHIRP. Прошивка Karina — автор autumn1rain.",
         "footer2": "Не связано с Quansheng.",
@@ -155,6 +158,7 @@ T = {
         ],
         "guide": "Guía completa en GitHub →",
         "firmware": "Firmware Karina de autumn1rain:",
+        "anchor": "Enlace a esta sección",
         "nav": ["GitHub", "Versiones", "Guía", "Contribuir", "Donar"],
         "footer1": "Gratis y de código abierto (GPL v3). Versión para macOS de k5prog-win de OneOfEleven, basada en k5prog de Jacek Lipkowski SQ5BPF. Estructura de canales según los drivers de CHIRP. Firmware Karina de autumn1rain.",
         "footer2": "Sin relación con Quansheng.",
@@ -199,6 +203,7 @@ T = {
         ],
         "guide": "Vollständige Anleitung auf GitHub →",
         "firmware": "Karina-Firmware von autumn1rain:",
+        "anchor": "Link zu diesem Abschnitt",
         "nav": ["GitHub", "Releases", "Anleitung", "Mitmachen", "Spenden"],
         "footer1": "Kostenlos und Open Source (GPL v3). macOS-Portierung von k5prog-win von OneOfEleven, basierend auf k5prog von Jacek Lipkowski SQ5BPF. Kanalaufbau nach den CHIRP-Treibern. Karina-Firmware von autumn1rain.",
         "footer2": "Keine Verbindung zu Quansheng.",
@@ -242,6 +247,7 @@ T = {
         ],
         "guide": "GitHub 上的完整指南 →",
         "firmware": "autumn1rain 的 Karina 固件：",
+        "anchor": "本节链接",
         "nav": ["GitHub", "发布版", "指南", "参与贡献", "捐助"],
         "footer1": "免费开源（GPL v3）。k5prog-win（OneOfEleven）的 macOS 移植版，基于 Jacek Lipkowski SQ5BPF 的 k5prog。信道结构参考 CHIRP 驱动。Karina 固件作者为 autumn1rain。",
         "footer2": "与泉盛公司无关。",
@@ -401,7 +407,20 @@ def page(code, folder, t):
     readme = REPO + "/blob/main/" + README[code]
     nav_links = [REPO, REPO + "/releases", readme, REPO + "/blob/main/CONTRIBUTING.md", DONATE]
     faq_h, faq_items = FAQ[code]
-    faq = "\n".join(f'      <div class="qa"><h3>{e(q)}</h3><p>{e(ans)}</p></div>' for q, ans in faq_items)
+    footer1 = e(t["footer1"]).replace(
+        "autumn1rain", f'<a href="{KARINA}">autumn1rain</a>', 1
+    )
+
+    def anchor(target):
+        return f'<a class="anchor" href="#{target}" aria-label="{e(t["anchor"])}">#</a>'
+
+    def h2(section_id, text):
+        return f'<h2>{e(text)}{anchor(section_id)}</h2>'
+
+    faq = "\n".join(
+        f'      <div class="qa" id="faq-{i}"><h3>{e(q)}{anchor(f"faq-{i}")}</h3><p>{e(ans)}</p></div>'
+        for i, (q, ans) in enumerate(faq_items, 1)
+    )
     og_alt = "\n".join(f'  <meta property="og:locale:alternate" content="{LOCALE[c]}">' for c, _, _, _ in LANGS if c != code)
     nav = " ".join(f'<a href="{u}">{e(n)}</a>' for u, n in zip(nav_links, t["nav"]))
     return f"""<!doctype html>
@@ -466,14 +485,14 @@ def page(code, folder, t):
     </div>
 
     <section id="features">
-      <h2>{e(t["features_h"])}</h2>
+      {h2("features", t["features_h"])}
       <div class="features">
 {features}
       </div>
     </section>
 
     <section id="radios">
-      <h2>{e(t["radios_h"])}</h2>
+      {h2("radios", t["radios_h"])}
       <div class="table-wrap">
         <table>
           <thead><tr>{th}</tr></thead>
@@ -486,7 +505,7 @@ def page(code, folder, t):
     </section>
 
     <section id="safety">
-      <h2>{e(t["safety_h"])}</h2>
+      {h2("safety", t["safety_h"])}
       <div class="warn">
         <ul>
 {safety}
@@ -495,7 +514,7 @@ def page(code, folder, t):
     </section>
 
     <section id="install">
-      <h2>{e(t["install_h"])}</h2>
+      {h2("install", t["install_h"])}
       <ol class="steps">
 {install}
       </ol>
@@ -504,7 +523,7 @@ def page(code, folder, t):
     </section>
 
     <section id="faq">
-      <h2>{e(faq_h)}</h2>
+      {h2("faq", faq_h)}
       <div class="faq">
 {faq}
       </div>
@@ -512,7 +531,7 @@ def page(code, folder, t):
 
     <footer>
       <nav>{nav}</nav>
-      <p>{e(t["footer1"])}</p>
+      <p>{footer1}</p>
       <p>{e(t["footer2"])} © 2026 Evgeny Ruban.</p>
     </footer>
   </div>

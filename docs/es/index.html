@@ -158,7 +158,7 @@
     </div>
 
     <section id="features">
-      <h2>Qué hace</h2>
+      <h2>Qué hace<a class="anchor" href="#features" aria-label="Enlace a esta sección">#</a></h2>
       <div class="features">
       <div class="card"><span class="ico">💾</span><h3>Copia y restauración</h3><p>Lee y escribe la calibración y la configuración de la radio. Guarda la calibración de fábrica antes de instalar cualquier firmware.</p></div>
       <div class="card"><span class="ico">⚡</span><h3>Instalar firmware</h3><p>UV-K5 V1 y los nuevos UV-K5 V3 / UV-K1. El archivo y el bootloader se comprueban antes de enviar un solo byte; las combinaciones incorrectas se rechazan.</p></div>
@@ -170,7 +170,7 @@
     </section>
 
     <section id="radios">
-      <h2>Radios compatibles</h2>
+      <h2>Radios compatibles<a class="anchor" href="#radios" aria-label="Enlace a esta sección">#</a></h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Radio</th><th>Chip</th><th>Bootloader</th><th>Copia y restauración</th><th>Firmware</th></tr></thead>
@@ -185,7 +185,7 @@
     </section>
 
     <section id="safety">
-      <h2>Antes de empezar</h2>
+      <h2>Antes de empezar<a class="anchor" href="#safety" aria-label="Enlace a esta sección">#</a></h2>
       <div class="warn">
         <ul>
         <li>Pulsa primero Read Calibration y guarda el archivo: contiene la calibración de potencia y batería de tu radio, y no podrás conseguirla en otro sitio.</li>
@@ -196,7 +196,7 @@
     </section>
 
     <section id="install">
-      <h2>Instalación</h2>
+      <h2>Instalación<a class="anchor" href="#install" aria-label="Enlace a esta sección">#</a></h2>
       <ol class="steps">
       <li>Descarga el .dmg, ábrelo y arrastra K5K1 Prog a Aplicaciones.</li>
       <li>O con Homebrew: <code>brew install --cask eruban/tap/k5k1-prog</code></li>
@@ -207,20 +207,20 @@
     </section>
 
     <section id="faq">
-      <h2>Preguntas frecuentes</h2>
+      <h2>Preguntas frecuentes<a class="anchor" href="#faq" aria-label="Enlace a esta sección">#</a></h2>
       <div class="faq">
-      <div class="qa"><h3>¿Se puede programar una Quansheng UV-K5 en un Mac?</h3><p>Sí. K5K1 Prog funciona de forma nativa en macOS 12 o posterior, en Apple Silicon e Intel, sin Windows ni máquinas virtuales. Hace copia de seguridad y restaura la calibración y la configuración, instala firmware y edita canales.</p></div>
-      <div class="qa"><h3>¿Qué radios son compatibles?</h3><p>UV-K5, UV-K5(8), UV-K6 y UV-5R Plus con chip DP32G030 (V1), y las nuevas UV-K5 V3 y UV-K1 (PY32F071). En la UV-K5 V2 / UV-K6 V2 funcionan la copia y la restauración; la instalación de firmware se rechaza.</p></div>
-      <div class="qa"><h3>¿Necesito un driver para el cable de programación?</h3><p>Normalmente no: los cables CH340 habituales funcionan en macOS actual sin software adicional. El cable aparece como /dev/cu.usbserial-…</p></div>
-      <div class="qa"><h3>¿Es una alternativa a CHIRP?</h3><p>Para los canales, sí: el editor de memoria edita los 200 canales del firmware original y de Karina, e importa y exporta archivos CSV e .img de CHIRP. Los ajustes del menú de la radio no se editan.</p></div>
-      <div class="qa"><h3>¿Qué firmware puedo instalar?</h3><p>Cualquier archivo de firmware para tu modelo, .bin o .packed.bin: el original de Quansheng, Karina, F4HWN y otros. Antes de enviar nada, la app comprueba que el archivo corresponde al bootloader de la radio.</p></div>
-      <div class="qa"><h3>¿Es gratis y seguro?</h3><p>Gratis y de código abierto con licencia GPL v3. La app está firmada y notarizada por Apple, no tiene telemetría y solo se conecta a GitHub para buscar actualizaciones.</p></div>
+      <div class="qa" id="faq-1"><h3>¿Se puede programar una Quansheng UV-K5 en un Mac?<a class="anchor" href="#faq-1" aria-label="Enlace a esta sección">#</a></h3><p>Sí. K5K1 Prog funciona de forma nativa en macOS 12 o posterior, en Apple Silicon e Intel, sin Windows ni máquinas virtuales. Hace copia de seguridad y restaura la calibración y la configuración, instala firmware y edita canales.</p></div>
+      <div class="qa" id="faq-2"><h3>¿Qué radios son compatibles?<a class="anchor" href="#faq-2" aria-label="Enlace a esta sección">#</a></h3><p>UV-K5, UV-K5(8), UV-K6 y UV-5R Plus con chip DP32G030 (V1), y las nuevas UV-K5 V3 y UV-K1 (PY32F071). En la UV-K5 V2 / UV-K6 V2 funcionan la copia y la restauración; la instalación de firmware se rechaza.</p></div>
+      <div class="qa" id="faq-3"><h3>¿Necesito un driver para el cable de programación?<a class="anchor" href="#faq-3" aria-label="Enlace a esta sección">#</a></h3><p>Normalmente no: los cables CH340 habituales funcionan en macOS actual sin software adicional. El cable aparece como /dev/cu.usbserial-…</p></div>
+      <div class="qa" id="faq-4"><h3>¿Es una alternativa a CHIRP?<a class="anchor" href="#faq-4" aria-label="Enlace a esta sección">#</a></h3><p>Para los canales, sí: el editor de memoria edita los 200 canales del firmware original y de Karina, e importa y exporta archivos CSV e .img de CHIRP. Los ajustes del menú de la radio no se editan.</p></div>
+      <div class="qa" id="faq-5"><h3>¿Qué firmware puedo instalar?<a class="anchor" href="#faq-5" aria-label="Enlace a esta sección">#</a></h3><p>Cualquier archivo de firmware para tu modelo, .bin o .packed.bin: el original de Quansheng, Karina, F4HWN y otros. Antes de enviar nada, la app comprueba que el archivo corresponde al bootloader de la radio.</p></div>
+      <div class="qa" id="faq-6"><h3>¿Es gratis y seguro?<a class="anchor" href="#faq-6" aria-label="Enlace a esta sección">#</a></h3><p>Gratis y de código abierto con licencia GPL v3. La app está firmada y notarizada por Apple, no tiene telemetría y solo se conecta a GitHub para buscar actualizaciones.</p></div>
       </div>
     </section>
 
     <footer>
       <nav><a href="https://github.com/ERuban/k5k1prog-mac">GitHub</a> <a href="https://github.com/ERuban/k5k1prog-mac/releases">Versiones</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/README_ES.md">Guía</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/CONTRIBUTING.md">Contribuir</a> <a href="https://boosty.to/eruban/donate">Donar</a></nav>
-      <p>Gratis y de código abierto (GPL v3). Versión para macOS de k5prog-win de OneOfEleven, basada en k5prog de Jacek Lipkowski SQ5BPF. Estructura de canales según los drivers de CHIRP. Firmware Karina de autumn1rain.</p>
+      <p>Gratis y de código abierto (GPL v3). Versión para macOS de k5prog-win de OneOfEleven, basada en k5prog de Jacek Lipkowski SQ5BPF. Estructura de canales según los drivers de CHIRP. Firmware Karina de <a href="https://github.com/autumn1rain">autumn1rain</a>.</p>
       <p>Sin relación con Quansheng. © 2026 Evgeny Ruban.</p>
     </footer>
   </div>

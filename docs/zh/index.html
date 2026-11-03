@@ -158,7 +158,7 @@
     </div>
 
     <section id="features">
-      <h2>功能</h2>
+      <h2>功能<a class="anchor" href="#features" aria-label="本节链接">#</a></h2>
       <div class="features">
       <div class="card"><span class="ico">💾</span><h3>备份与恢复</h3><p>读取和写入对讲机的校准数据和配置。刷机之前，先保存好出厂校准。</p></div>
       <div class="card"><span class="ico">⚡</span><h3>刷写固件</h3><p>支持 UV-K5 V1 以及较新的 UV-K5 V3 / UV-K1。发送任何数据之前都会检查固件文件和 bootloader，错误的组合会被拒绝。</p></div>
@@ -170,7 +170,7 @@
     </section>
 
     <section id="radios">
-      <h2>支持的对讲机</h2>
+      <h2>支持的对讲机<a class="anchor" href="#radios" aria-label="本节链接">#</a></h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>对讲机</th><th>芯片</th><th>Bootloader</th><th>备份与恢复</th><th>固件</th></tr></thead>
@@ -185,7 +185,7 @@
     </section>
 
     <section id="safety">
-      <h2>开始之前</h2>
+      <h2>开始之前<a class="anchor" href="#safety" aria-label="本节链接">#</a></h2>
       <div class="warn">
         <ul>
         <li>先点 Read Calibration 并保存文件：里面是你这台对讲机自己的发射功率和电池校准，别处无法获得。</li>
@@ -196,7 +196,7 @@
     </section>
 
     <section id="install">
-      <h2>安装</h2>
+      <h2>安装<a class="anchor" href="#install" aria-label="本节链接">#</a></h2>
       <ol class="steps">
       <li>下载 .dmg，打开后把 K5K1 Prog 拖到“应用程序”文件夹。</li>
       <li>或使用 Homebrew：<code>brew install --cask eruban/tap/k5k1-prog</code></li>
@@ -207,20 +207,20 @@
     </section>
 
     <section id="faq">
-      <h2>常见问题</h2>
+      <h2>常见问题<a class="anchor" href="#faq" aria-label="本节链接">#</a></h2>
       <div class="faq">
-      <div class="qa"><h3>能在 Mac 上给泉盛 UV-K5 写频吗？</h3><p>可以。K5K1 Prog 原生运行在 macOS 12 或更高版本上，支持 Apple 芯片和 Intel，无需 Windows 或虚拟机。它可以备份和恢复校准与配置、刷写固件和编辑信道。</p></div>
-      <div class="qa"><h3>支持哪些对讲机？</h3><p>使用 DP32G030 芯片的 UV-K5、UV-K5(8)、UV-K6 和 UV-5R Plus（V1），以及较新的 UV-K5 V3 和 UV-K1（PY32F071）。UV-K5 V2 / UV-K6 V2 可以备份和恢复，但会拒绝刷写固件。</p></div>
-      <div class="qa"><h3>写频线需要装驱动吗？</h3><p>通常不需要：常见的 CH340 写频线在新版 macOS 上无需额外软件即可使用，端口显示为 /dev/cu.usbserial-…</p></div>
-      <div class="qa"><h3>可以代替 CHIRP 吗？</h3><p>编辑信道可以：存储编辑器能编辑原厂固件和 Karina 固件的 200 个信道，并导入导出 CHIRP 的 CSV 和 .img 文件。对讲机的菜单设置不在编辑范围内。</p></div>
-      <div class="qa"><h3>可以刷哪些固件？</h3><p>适用于你型号的任何固件文件，.bin 或 .packed.bin 均可：泉盛原厂、Karina、F4HWN 等。发送前，应用会先检查文件是否与对讲机的 bootloader 匹配。</p></div>
-      <div class="qa"><h3>免费吗？安全吗？</h3><p>免费开源，采用 GPL v3 许可。应用经 Apple 签名和公证，没有遥测，只会连接 GitHub 检查更新。</p></div>
+      <div class="qa" id="faq-1"><h3>能在 Mac 上给泉盛 UV-K5 写频吗？<a class="anchor" href="#faq-1" aria-label="本节链接">#</a></h3><p>可以。K5K1 Prog 原生运行在 macOS 12 或更高版本上，支持 Apple 芯片和 Intel，无需 Windows 或虚拟机。它可以备份和恢复校准与配置、刷写固件和编辑信道。</p></div>
+      <div class="qa" id="faq-2"><h3>支持哪些对讲机？<a class="anchor" href="#faq-2" aria-label="本节链接">#</a></h3><p>使用 DP32G030 芯片的 UV-K5、UV-K5(8)、UV-K6 和 UV-5R Plus（V1），以及较新的 UV-K5 V3 和 UV-K1（PY32F071）。UV-K5 V2 / UV-K6 V2 可以备份和恢复，但会拒绝刷写固件。</p></div>
+      <div class="qa" id="faq-3"><h3>写频线需要装驱动吗？<a class="anchor" href="#faq-3" aria-label="本节链接">#</a></h3><p>通常不需要：常见的 CH340 写频线在新版 macOS 上无需额外软件即可使用，端口显示为 /dev/cu.usbserial-…</p></div>
+      <div class="qa" id="faq-4"><h3>可以代替 CHIRP 吗？<a class="anchor" href="#faq-4" aria-label="本节链接">#</a></h3><p>编辑信道可以：存储编辑器能编辑原厂固件和 Karina 固件的 200 个信道，并导入导出 CHIRP 的 CSV 和 .img 文件。对讲机的菜单设置不在编辑范围内。</p></div>
+      <div class="qa" id="faq-5"><h3>可以刷哪些固件？<a class="anchor" href="#faq-5" aria-label="本节链接">#</a></h3><p>适用于你型号的任何固件文件，.bin 或 .packed.bin 均可：泉盛原厂、Karina、F4HWN 等。发送前，应用会先检查文件是否与对讲机的 bootloader 匹配。</p></div>
+      <div class="qa" id="faq-6"><h3>免费吗？安全吗？<a class="anchor" href="#faq-6" aria-label="本节链接">#</a></h3><p>免费开源，采用 GPL v3 许可。应用经 Apple 签名和公证，没有遥测，只会连接 GitHub 检查更新。</p></div>
       </div>
     </section>
 
     <footer>
       <nav><a href="https://github.com/ERuban/k5k1prog-mac">GitHub</a> <a href="https://github.com/ERuban/k5k1prog-mac/releases">发布版</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/README_ZH.md">指南</a> <a href="https://github.com/ERuban/k5k1prog-mac/blob/main/CONTRIBUTING.md">参与贡献</a> <a href="https://boosty.to/eruban/donate">捐助</a></nav>
-      <p>免费开源（GPL v3）。k5prog-win（OneOfEleven）的 macOS 移植版，基于 Jacek Lipkowski SQ5BPF 的 k5prog。信道结构参考 CHIRP 驱动。Karina 固件作者为 autumn1rain。</p>
+      <p>免费开源（GPL v3）。k5prog-win（OneOfEleven）的 macOS 移植版，基于 Jacek Lipkowski SQ5BPF 的 k5prog。信道结构参考 CHIRP 驱动。Karina 固件作者为 <a href="https://github.com/autumn1rain">autumn1rain</a>。</p>
       <p>与泉盛公司无关。 © 2026 Evgeny Ruban.</p>
     </footer>
   </div>

@@ -152,3 +152,17 @@ footer p { margin: 6px 0; }
 .qa h3 { font-size: 17px; margin: 0 0 4px; }
 .qa p { margin: 0; color: var(--muted); font-size: 15.5px; }
 @media (max-width: 860px) { .faq { grid-template-columns: 1fr; } }
+
+/* Link-to-heading anchors: hidden until the heading is hovered or focused. */
+.anchor {
+  margin-left: 0.35em;
+  color: var(--muted);
+  font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+h2:hover .anchor, h3:hover .anchor { opacity: 0.45; }
+.anchor:hover, .anchor:focus-visible { opacity: 1; color: var(--accent); }
+section[id], .qa[id] { scroll-margin-top: 20px; }
+@media (hover: none) { .anchor { opacity: 0.3; } }
